@@ -15,7 +15,6 @@ import java_cup.runtime.Symbol;
 
 parser code {:
 
- 
 public void getResult() {
 	System.out.println("Le nombre de session : "+action_obj.s.getNbSession()+" , Le duree moyen d'une session : "+ action_obj.s.getAvgTotal());
 }
