@@ -2,89 +2,62 @@
  * analyseur syntaxique du fichier de log
  *
  * auteur : ersagun.yalcintepe@etu.univ-lorraine.fr
- * auteur : julien.remy@etu.univ-lorraine.fr
  * (c) 2015
  */ 
  
 
 package fr.ul.miage.exemple.generated;
-import fr.ul.miage.exemple.Sessions;
 import java.util.Date;
 import java.lang.String;
 import java_cup.runtime.Symbol;
 
 parser code {:
-
-public void getResult() {
-	System.out.println("Le nombre de session : "+action_obj.s.getNbSession()+" , Le duree moyen d'une session : "+ action_obj.s.getAvgTotal());
-}
-
-public void syntax_error(Symbol cur_token){}
-public void unrecovered_syntax_error(Symbol cur_token) throws Exception{
-	throw new Exception("Erreur");	
-}
-
-/* pour transmettre le résultat*/
-public long getTime(){
-	return action_obj.ts.getTime();
- }
- 
 :}
 
 
 action code {: 
-
-public String ip;
-
-public Sessions s=new Sessions();
-
-public Date ts;
 
 :}
 
 
 /* la grammaire */
 
-terminal ACTION,TIRET,SEPARATEUR,FIN;
-terminal CO, CF, SL, DP;
-terminal JAN, FEV, MAR, AVR, MAI, JUIN, JUIL, AOU, SEP, OCT, NOV, DEC;
-terminal Integer DECAL;
-terminal Integer NUM;
-terminal String IP;
+terminal IDENTIFICATEUR,RETURN, AFFECTATION, PV, VIRGULE;
+terminal PO, PF, AO, AF, INT, VOID, CONSTANT, IF, DOUBLE, CMPSUP, CMPINF;
+terminal FOR, WHILE, FINLIGNE, ADD, MUL, SUB, DIV;
 
-non terminal  y,log;
-non terminal String e;
-non terminal  Integer mois;
-non terminal  Date timestamp;
+non terminal  codeMiage;
+non terminal fonction;
+non terminal variable;
+non terminal corps,affectation,ident,expr;
+non terminal x,y,v;
 
-start with log;
+start with codeMiage;
 
 /*------debut-------*/
 
-log ::= log e
-	| /* vide */
+codeMiage ::= codeMiage x
+	|
 	;
-
-e::=IP:ip2 TIRET timestamp:ts ACTION NUM NUM FIN  {: s.add(ip2,ts); :}
+x::=fonction|variable
 	;
-
-y ::= timestamp:d {:ts=d;:}
+fonction ::= VOID IDENTIFICATEUR PO PF AO corps PV AF
+	;			
+corps ::= corps y
 	;
-timestamp::= CO NUM:j SL mois:m SL NUM:a DP NUM:h DP NUM:mn DP NUM:s DECAL:dcl CF {: RESULT = new Date(a.intValue(),m.intValue(),j.intValue(),h+(dcl/100),mn.intValue(),s.intValue());:}
-	;         
-mois 	::= JAN {:RESULT = new Integer(0);:}
-		| FEV 	{:RESULT = new Integer(1);:}
-		| MAR 	{:RESULT = new Integer(2);:}
-		| AVR 	{:RESULT = new Integer(3);:}
-		| MAI 	{:RESULT = new Integer(4);:}
-		| JUIN 	{:RESULT = new Integer(5);:}
-		| JUIL 	{:RESULT = new Integer(6);:}
-		| AOU 	{:RESULT = new Integer(7);:}
-		| SEP 	{:RESULT = new Integer(8);:}
-		| OCT 	{:RESULT = new Integer(9);:}
-		| NOV 	{:RESULT = new Integer(10);:}
-		| DEC 	{:RESULT = new Integer(11);:}
-		;
+y ::= variable|affectation
+	;
+variable::= INT ident VIRGULE PV
+	| INT ident PV
+	;
+ident ::=ident IDENTIFICATEUR
+	;
+affectation ::= INT IDENTIFICATEUR AFFECTATION v PV
+	;
+v ::= v expr
+	;
+expr ::=expr IDENTIFICATEUR|CONSTANT|ADD|MUL|DIV|SUB
+	;
 
 /*------fin--------*/
 

@@ -16,4 +16,3 @@
 	 j = read();
 	 write(f(i+1,j));
  }
- 

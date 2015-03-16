@@ -11,33 +11,44 @@ import fr.ul.miage.exemple.generated.ParserCup;
 import fr.ul.miage.exemple.generated.Yylex;
 
 /**
- * @author Azim Roussanaly
+ * @author Ersagun Yalcintepe
  *
  */
 public class Main {
+	
+	public static String[] listerRepertoire(File repertoire){ 
 
+		String [] listefichiers;
+
+		listefichiers=repertoire.list(); 
+		return listefichiers;
+		} 
+
+	
 	public static void main(String[] args) {
-		File f = new File("./exemple.log");
-		  FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(f);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		  ParserCup parser = new ParserCup(new Yylex(fis));
-		try {
-			System.out.println("Calcul de statistique a commencé, veuillez patienter s'il vous plait :");
-			parser.parse();
-			System.out.println("La calcul est fini.");
-		} catch (Exception e) {
-			System.err.println("...Erreur de syntaxe ");
-			System.exit(1);
-			System.exit(1);
-		}
-		parser.getResult();
-	}
-	
-	
 
+		String[] listefichiers=listerRepertoire(new File("./fichiers"));
+		
+		for(String fichier:listefichiers){
+			 FileInputStream fis = null;
+				try {
+					fis = new FileInputStream("./fichiers/"+fichier);
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+					ParserCup parser = new ParserCup(new Yylex(fis));
+				try {
+					System.out.println("-------------------------------- "+fichier+" est en cours de lecture. ----------------");
+					parser.parse();
+					System.out.println("-------------------------------- Lecture terminé. ----------------");
+				} catch (Exception e) {
+					System.err.println("...Erreur de syntaxe ");
+					System.exit(1);
+					System.exit(1);
+				}
+				//parser.getResult();
+			}
+			
+			
+		}
 }
