@@ -4,6 +4,7 @@
 
 package fr.ul.miage.exemple.generated;
 import java_cup.runtime.Symbol;
+import java.io.IOException;
 
 %%
 
@@ -14,58 +15,53 @@ import java_cup.runtime.Symbol;
 %cup
 %debug
 
+/* champs et méthodes supplémentaires de la classe Yylex */
+%{
+	private void error() throws IOException{
+		throw new IOException("token inconnu à la ligne "+yyline+": "+yytext());
+	}
+	
+	private void echo(){
+	   System.out.print(yytext());
+	}
+%}
+
 /* macros */
-SEPARATEUR     	= [ \t]+ /*espace*/
-CONSTANT		= [0-9]+
-PO				= "("
-PF				= ")"
-AO				= "{"
-AF				= "}"
-IF				= "if"
-WHILE			= "while"
-FOR				= "for"
-RETURN			= "return"
-IDENTIFICATEUR 	= ".*"  
-COMMENTAIRES 	= "/\*.+?\*/"
-VOID			= "void"
-INT 			= "int"
-AFFECTATION		="="
-PV				=";"
-FINLIGNE     		="\n"|"\r\n"
-CMPSUP			="<"
-CMPINF			=">"
-ELSE			="else"
-VIRGULE			=","
-DIV				="/"
-SUB				="-"
-MUL				="*"
-ADD				="+"
+SEP     =   [ \r\t\f\n]
+NUMB    =   [0-9]+
+IDF    =   [a-zA-Z][a-zA-Z0-9_]*
+COMMENT		=	\/\*(([^*])|(\*[^/]))*\*\/
+
 %%
 
-/* regles */
-{INT}				{ return new Symbol(ParserSym.INT);}
-{CONSTANT}  		{ return new Symbol(ParserSym.CONSTANT, new Integer(yytext()));}
-{VOID}				{ return new Symbol(ParserSym.VOID);}
-{PO} 	    		{ return new Symbol(ParserSym.PO);}
-{PF}				{ return new Symbol(ParserSym.PF);}
-{AO}         		{ return new Symbol(ParserSym.AO);}
-{AF}         		{ return new Symbol(ParserSym.AF);}
-{IF}       			{ return new Symbol(ParserSym.IF);}
-{WHILE}       		{ return new Symbol(ParserSym.WHILE);}
-{FOR}       		{ return new Symbol(ParserSym.FOR);}
-{RETURN}       		{ return new Symbol(ParserSym.RETURN);}
-{IDENTIFICATEUR}	{ return new Symbol(ParserSym.IDENTIFICATEUR,new Integer(yytext()));}
-{CMPINF}			{ return new Symbol(ParserSym.CMPINF);}
-{CMPSUP}			{ return new Symbol(ParserSym.CMPSUP);} 
-{COMMENTAIRES}      {;}
-{AFFECTATION}     	{ return new Symbol(ParserSym.AFFECTATION);}
-{PV}		     	{ return new Symbol(ParserSym.PV);}
-{FINLIGNE}			{ return new Symbol(ParserSym.FINLIGNE);}
-{VIRGULE} 			{ return new Symbol(ParserSym.VIRGULE);}
-{DIV}				{ return new Symbol(ParserSym.DIV);}
-{SUB}				{ return new Symbol(ParserSym.SUB);}
-{MUL}				{ return new Symbol(ParserSym.MUL);}
-{ADD}				{ return new Symbol(ParserSym.ADD);}
-{SEPARATEUR}		{ return new Symbol(ParserSym.ADD);}
-{ELSE}				{ return new Symbol(ParserSym.ADD);}
-.					{ return null;}
+/* règles */
+
+"+"         { echo(); return new Symbol(ParserSym.ADD); }
+"-"         { echo(); return new Symbol(ParserSym.SUB); }
+"*"         { echo(); return new Symbol(ParserSym.MUL);  }
+"/"         { echo(); return new Symbol(ParserSym.DIV);  }
+"("         { echo(); return new Symbol(ParserSym.PO);   }
+")"         { echo(); return new Symbol(ParserSym.PF);   }
+";"         { echo(); return new Symbol(ParserSym.PTVIRG);   }
+"="         { echo(); return new Symbol(ParserSym.EGAL);   }
+"read"      { echo(); return new Symbol(ParserSym.READ); }
+"write"     { echo(); return new Symbol(ParserSym.WRITE); }
+"<" 		{ echo(); return new Symbol(ParserSym.INF); }
+"<="		{ echo(); return new Symbol(ParserSym.INFEG); }
+"=="		{ echo(); return new Symbol(ParserSym.EGEG); }
+">="		{ echo(); return new Symbol(ParserSym.SUPEG); }
+">"		    { echo(); return new Symbol(ParserSym.SUP); }
+"!="		{ echo(); return new Symbol(ParserSym.DIF); }
+"{"		    { echo(); return new Symbol(ParserSym.AO); }
+"}" 		{ echo(); return new Symbol(ParserSym.AF); }
+","		    { echo(); return new Symbol(ParserSym.VIRG); }
+"if"		{ echo(); return new Symbol(ParserSym.SI); }
+"else"		{ echo(); return new Symbol(ParserSym.SINON); }
+"while"		{ echo(); return new Symbol(ParserSym.TQUE); }
+"void"		{ echo(); return new Symbol(ParserSym.VOID); }
+"int"		{ echo(); return new Symbol(ParserSym.INT); }
+"return"	{ echo(); return new Symbol(ParserSym.RTN); }
+{NUMB}      { echo(); return new Symbol(ParserSym.NUMB, new Integer(Integer.parseInt(yytext())));}
+{IDF}       { echo(); return new Symbol(ParserSym.IDF, new String(yytext()));}
+{SEP}       { echo(); }
+{COMMENT}	{echo();}

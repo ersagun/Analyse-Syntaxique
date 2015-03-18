@@ -11,53 +11,76 @@ import java.util.Date;
 import java.lang.String;
 import java_cup.runtime.Symbol;
 
-parser code {:
-:}
+
+terminal IDF, PO, PF, PTVIRG,  AO, AF,  EGAL, NUMB, INT, VOID, RTN, VIRG, MUL, DIV, ADD, SUB,READ,WRITE,INF, INFEG, SUP, SUPEG, DIF, ACCO, ACCF,SINON, SI, TQUE, EGEG;
+non terminal OP, type, facteur, affectation, appel_fonct, param_appel_fonct, fonction, instruction_list, instruction, expression, atome, declaration_list, declaration , param_fonct, retour;
 
 
-action code {: 
 
-:}
+/*------debut--------*/
 
+instruction_list  ::= instruction_list instruction
+| 
+;
 
-/* la grammaire */
+instruction ::= affectation PTVIRG
+			| retour PTVIRG
+			| declaration PTVIRG
+			| fonction
+			;
 
-terminal IDENTIFICATEUR,RETURN, AFFECTATION, PV, VIRGULE;
-terminal PO, PF, AO, AF, INT, VOID, CONSTANT, IF, DOUBLE, CMPSUP, CMPINF;
-terminal FOR, WHILE, FINLIGNE, ADD, MUL, SUB, DIV;
+affectation ::=  IDF EGAL expression 
+				| IDF EGAL appel_fonct
+				;
 
-non terminal  codeMiage;
-non terminal fonction;
-non terminal variable;
-non terminal corps,affectation,ident,expr;
-non terminal x,y,v;
+fonction ::= type IDF PO param_fonct PF AO instruction_list AF
+    	| type IDF PO PF AO instruction_list AF
+    	|IDF PO param_fonct PF AO instruction_list AF
+    	|IDF PO PF AO instruction_list AF
+    	;
+param_fonct ::= type IDF
+    	| type IDF VIRG param_fonct
+    	;
+    	
+appel_fonct ::= IDF PO PF
+    	| IDF PO param_appel_fonct PF
+;
 
-start with codeMiage;
+param_appel_fonct ::= param_appel_fonct VIRG IDF
+         	| IDF
+        	;
 
-/*------debut-------*/
-
-codeMiage ::= codeMiage x
-	|
-	;
-x::=fonction|variable
-	;
-fonction ::= VOID IDENTIFICATEUR PO PF AO corps PV AF
-	;			
-corps ::= corps y
-	;
-y ::= variable|affectation
-	;
-variable::= INT ident VIRGULE PV
-	| INT ident PV
-	;
-ident ::=ident IDENTIFICATEUR
-	;
-affectation ::= INT IDENTIFICATEUR AFFECTATION v PV
-	;
-v ::= v expr
-	;
-expr ::=expr IDENTIFICATEUR|CONSTANT|ADD|MUL|DIV|SUB
+retour ::= RTN expression
 	;
 
+expression ::=  expression ADD facteur
+		|  expression SUB facteur
+		| facteur
+		| PO facteur PF
+		;
+facteur ::= facteur MUL atome
+		| facteur DIV atome
+		| atome
+		;
+
+atome ::= IDF
+		| NUMB
+		;
+ 
+declaration  ::= type IDF EGAL expression
+| type IDF VIRG declaration
+|type IDF
+| IDF
+;
+
+declaration_list ::= declaration_list VIRG INT IDF
+;
+
+type ::= INT
+	| VOID
+	;
+
+OP ::= ADD | SUB | MUL | DIV
+	;
 /*------fin--------*/
 
