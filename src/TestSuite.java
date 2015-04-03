@@ -4,8 +4,8 @@ import java.io.FileInputStream;
 
 import org.junit.Test;
 
-import fr.ul.miage.exemple.generated.ParserCup;
-import fr.ul.miage.exemple.generated.Yylex;
+import fr.ul.miage.compilator.generated.ParserCup;
+import fr.ul.miage.compilator.generated.Yylex;
 
 
 public class TestSuite {

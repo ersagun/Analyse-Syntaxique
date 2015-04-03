@@ -1,14 +1,14 @@
 /**
  * La lecture du flux de carractère se fait en lecture de fichier
  */
-package fr.ul.miage.exemple;
+package fr.ul.miage.compilator;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import fr.ul.miage.exemple.generated.ParserCup;
-import fr.ul.miage.exemple.generated.Yylex;
+import fr.ul.miage.compilator.generated.ParserCup;
+import fr.ul.miage.compilator.generated.Yylex;
 
 /**
  * @author Ersagun Yalcintepe
@@ -26,7 +26,7 @@ public class Main {
 
 	
 	public static void main(String[] args) {
-
+		/**
 		String[] listefichiers=listerRepertoire(new File("./fichiers"));
 		
 		for(String fichier:listefichiers){
@@ -48,7 +48,15 @@ public class Main {
 				}
 				//parser.getResult();
 			}
-			
-			
+			**/
+		
+		ParserCup parser;
+		try {
+			parser = new ParserCup(new Yylex(new FileInputStream("./fichiers/05-expression.miage")));
+			parser.parse();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
 		}
 }

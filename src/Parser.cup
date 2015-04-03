@@ -11,11 +11,54 @@ import java.util.Date;
 import java.lang.String;
 import java_cup.runtime.Symbol;
 
+parser code {: 
+
+public void generer_code(Noeud ast){
+
+
+}
+public static String generer_fonction(Noeud ast){}
+
+public static String generer_expression(Noeud ast){
+String asm;
+	switch (ast.type) {
+    	case constant:  asm="CMOVE("+tds.search(ast.idf,constant).val+",R0)
+    						 PUSH(R0)";
+                     	break;
+                     	
+        case idf:  		asm="";
+                     	break;
+        case +:  		asm=generer_addition(ast);
+                     	break;
+       	case -:  		asm="";
+                     	break;
+      	case /:  		asm="";
+                     	break;
+    	case *:  		asm="";
+                    	break;
+      	case fonction:  asm="";
+                     	break;
+      	default: 		asm="";
+                     	break;
+        }
+        return asm;
+}
+
+public static String generer_affectation(Noeud ast){}
+public static String generer_addition(Noeud ast){}
+
+:}
+action code {: 
+
+Noeud ast=new Noeud();
+TDS tds=new TDS();
+
+:}
 
 terminal IDF, PO, PF, PTVIRG,  AO, AF,  EGAL, NUMB, INT, VOID, RTN, VIRG, MUL, DIV, ADD, SUB,READ,WRITE,INF, INFEG, SUP, SUPEG, DIF, ACCO, ACCF,SINON, SI, TQUE, EGEG;
 non terminal OP, type, facteur, affectation, appel_fonct, param_appel_fonct, fonction, instruction_list, instruction, expression, atome, declaration_list, declaration , param_fonct, retour;
 
-
+start with instruction_list;
 
 /*------debut--------*/
 
@@ -82,5 +125,6 @@ type ::= INT
 
 OP ::= ADD | SUB | MUL | DIV
 	;
+	
 /*------fin--------*/
 
