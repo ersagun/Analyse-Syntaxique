@@ -1,4 +1,4 @@
-package TDS;
+package fr.ul.miage.projet;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,14 +12,14 @@ import java.io.IOException;
  * 
  * 	- Conventions ASM :
  * 		* R10 sert de stockage au retour des fonctions
- * 		* R2 sert de stockage au resultat d'une opï¿½ration
+ * 		* R2 sert de stockage au resultat d'une opération
  * 
- * 	- Fichiers gï¿½rï¿½s : 	01.miage, 02.miage, 03.miage, 04.miage
+ * 	- Fichiers gérés : 	01.miage, 02.miage, 03.miage, 04.miage
  * 						05.miage, 06.miage, 07.miage, 08.miage, 11.miage
  * 
  * @todo:
- * 	Gï¿½rer le cas ou une fonction ne retourne rien ex f( m() ); et m est de type void
- * 
+ * 	Gérer le cas ou une fonction ne retourne rien ex f( m() ); et m est de type void
+ * @author Maxime
  *
  */
 public class ASMGenerator {
@@ -35,7 +35,7 @@ public class ASMGenerator {
 	}
 
 	/**
-	 * Retourne la gï¿½nï¿½ration ASM sous une chaine
+	 * Retourne la génération ASM sous une chaine
 	 * 
 	 * @return
 	 */
@@ -63,7 +63,7 @@ public class ASMGenerator {
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Impossible de crï¿½er le fichier demandï¿½\n");
+			System.out.println("Impossible de créer le fichier demandé\n");
 			System.exit(0);
 			e.printStackTrace();
 		}
@@ -75,8 +75,8 @@ public class ASMGenerator {
 		}
 	}
 	/**
-	 * Gï¿½nï¿½re la base du programme ASM
-	 * 	- Fait un appel ï¿½ main directement
+	 * Génère la base du programme ASM
+	 * 	- Fait un appel à main directement
 	 * 
 	 * @param node
 	 * @param buff
@@ -89,7 +89,7 @@ public class ASMGenerator {
 		this._generateGlobal(buff);
 		this._generateProgramm(node, buff, 0);
 		
-		buff.append("|============ Dï¿½but programme ================|\n");
+		buff.append("|============ Début programme ================|\n");
 		buff.append("start:\n");
 		buff.append("\tCMOVE(stack, SP)\n");
 		buff.append("\tCALL(main)\n");
@@ -98,8 +98,8 @@ public class ASMGenerator {
 	}
 	
 	/**
-	 * Dï¿½claration des variables globales
-	 * Dï¿½claration en mï¿½moire centrale au niveau ASM
+	 * Déclaration des variables globales
+	 * Déclaration en mémoire centrale au niveau ASM
 	 * 
 	 */
 	private void _generateGlobal(StringBuffer buf){
@@ -112,8 +112,8 @@ public class ASMGenerator {
 	}
 
 	/**
-	 * Dï¿½but de la gï¿½nï¿½ration ASM
-	 * 	- Demande la gï¿½nï¿½ration de chaques fonctions
+	 * Début de la génération ASM
+	 * 	- Demande la génération de chaques fonctions
 	 * 
 	 * @param node
 	 * @param buff
@@ -126,10 +126,10 @@ public class ASMGenerator {
 	}
 	
 	/**
-	 * Gï¿½nï¿½re la structure de base d'une fonction
-	 * 	- Les variables locales sont dï¿½clarï¿½es en allouant la place nï¿½cessaire en pile
+	 * Génére la structure de base d'une fonction
+	 * 	- Les variables locales sont déclarées en allouant la place nécessaire en pile
 	 * 
-	 * @param node On rï¿½cupï¿½re un noeud FONCTION
+	 * @param node On récupère un noeud FONCTION
 	 * @param buff
 	 */
 	private void _generateFunction(Node<NodeContenuFonction> node, StringBuffer buff, int indent){
@@ -160,7 +160,7 @@ public class ASMGenerator {
 	}
 	
 	/**
-	 * Gï¿½nï¿½re une instruction.
+	 * Génère une instruction.
 	 * L'instruction est une ligne par defaut dans une fonction
 	 * @todo
 	 */
@@ -206,9 +206,9 @@ public class ASMGenerator {
 	}
 	
 	/**
-	 * Affecte une partie droite ï¿½ une variable
-	 * La variable peut ï¿½tre globale / locale / paramï¿½tre
-	 * Le code ASM gï¿½nï¿½rï¿½ est different
+	 * Affecte une partie droite à une variable
+	 * La variable peut être globale / locale / paramètre
+	 * Le code ASM généré est different
 	 * 
 	 * 	IDF = expression
 	 * 	IDF 
@@ -232,20 +232,20 @@ public class ASMGenerator {
 		}
 		
 		/**
-		 * Affectation du resultat ï¿½ la partie gauche
+		 * Affectation du resultat à la partie gauche
 		 */
-		// Si le resultat de droite vient d'une fonction Il est stockï¿½ dans R0
+		// Si le resultat de droite vient d'une fonction Il est stocké dans R0
 		if(node.getChildren().get(1).getContent() instanceof NodeContentAppel){
 			this._generateIndent(indent, buff);
-			buff.append("PUSH(R10) | retour fonction placï¿½ dans la pile\n");
+			buff.append("PUSH(R10) | retour fonction placé dans la pile\n");
 		}
 		
-		// Rï¿½cuperation du resultat
+		// Récuperation du resultat
 		this._generateIndent(indent, buff);
-		buff.append("POP(R0) | valeur ï¿½ insï¿½rer dans l'IDF\n");
+		buff.append("POP(R0) | valeur à insérer dans l'IDF\n");
 		
 		//System.out.println(node.getChildren().get(0).getContent() instanceof Element);System.exit(0);
-		// ï¿½ gauche d'une affectation c'est un IDF
+		// à gauche d'une affectation c'est un IDF
 		Element elt = (Element)(node.getChildren().get(0).getContent());
 		
 		switch(elt.getPortee()){
@@ -261,7 +261,7 @@ public class ASMGenerator {
 				switch(elt.getCategorie()){
 				
 					// Variable locale on change la valeur dans la pile
-					// Sa place a ï¿½tï¿½ allouï¿½ en dï¿½but de fonction normalement
+					// Sa place a été alloué en début de fonction normalement
 					case "variable":
 						this._generateIndent(indent, buff);buff.append("PUTFRAME(R0, 4 * " + elt.getIndiceVar() + ")\n");
 					break;
@@ -269,7 +269,7 @@ public class ASMGenerator {
 				/*
 				switch(n.filsG.categorie){
 					case 'param'
-						>> PUTFRAME(R0, -(3 + elt.index)*4) // 0 premier parametre envoyï¿½
+						>> PUTFRAME(R0, -(3 + elt.index)*4) // 0 premier parametre envoyé
 				}
 				*/
 			break;
@@ -280,7 +280,7 @@ public class ASMGenerator {
 	
 	
 	/**
-	 * Gï¿½nï¿½re une expression
+	 * Génère une expression
 	 * - Une expression est une partie d'instruction
 	 * - ADD     / SUB     / facteur
 	 * - .. + .. / .. - .. / facteur
@@ -299,10 +299,10 @@ public class ASMGenerator {
 					// Facteur droit
 					this._generateFacteur(node.getChildren().get(1), buff, indent + 1);
 					
-					// Si l'expr de droite est un appel on doit rï¿½cuperer le resultat
+					// Si l'expr de droite est un appel on doit récuperer le resultat
 					if(node.getChildren().get(1).getContent() instanceof NodeContentAppel){
 						this._generateIndent(indent, buff);
-						buff.append("PUSH(R10) | retour fonction placï¿½ dans la pile\n");
+						buff.append("PUSH(R10) | retour fonction placé dans la pile\n");
 					}
 					
 					this._generateIndent(indent, buff);buff.append("POP(R1)\n");
@@ -318,10 +318,10 @@ public class ASMGenerator {
 					this._generateExpression(node.getChildren().get(0), buff, indent + 1);
 					this._generateFacteur(node.getChildren().get(1), buff, indent + 1);
 					
-					// Si l'expr de droite est un appel on doit rï¿½cuperer le resultat
+					// Si l'expr de droite est un appel on doit récuperer le resultat
 					if(node.getChildren().get(1).getContent() instanceof NodeContentAppel){
 						this._generateIndent(indent, buff);
-						buff.append("PUSH(R10) | retour fonction placï¿½ dans la pile\n");
+						buff.append("PUSH(R10) | retour fonction placé dans la pile\n");
 					}
 					this._generateIndent(indent, buff);buff.append("POP(R1)\n");
 					this._generateIndent(indent, buff);buff.append("POP(R0)\n");
@@ -330,7 +330,7 @@ public class ASMGenerator {
 					this._generateIndent(indent, buff);buff.append("|== Fin (-) ==|\n");
 					break;
 				
-				// ï¿½a peut ï¿½tre "*"
+				// ça peut être "*"
 				default:
 					this._generateFacteur(node, buff, indent);
 					break;
@@ -353,7 +353,7 @@ public class ASMGenerator {
 	}
 	
 	/**
-	 * Gï¿½nï¿½re un facteur
+	 * Génère un facteur
 	 * - Un facteur est une expression ou partie d'expression
 	 * - DIV     / MUL     / atome
 	 * - .. / .. / .. * .. / atome
@@ -390,7 +390,7 @@ public class ASMGenerator {
 					this._generateIndent(indent, buff);buff.append("|== Fin (/) ==|\n");
 					break;
 				default:
-					// ï¿½a peut ï¿½tre un + donc on va vers atome
+					// ça peut être un + donc on va vers atome
 					this._generateAtome(node, buff, indent);
 					break;
 			}
@@ -404,7 +404,7 @@ public class ASMGenerator {
 	
 	
 	/**
-	 * Gï¿½nï¿½re un atome
+	 * Génère un atome
 	 * - Un atome est un facteur ou partie de facteur
 	 * - IDF / NUM / appel / (expression)
 	 * - x / 5 / f() / (..)
@@ -436,7 +436,7 @@ public class ASMGenerator {
 	}
 	
 	/**
-	 * Gï¿½nï¿½re la mise en pile de l'identifiant demandï¿½
+	 * Génère la mise en pile de l'identifiant demandé
 	 * 
 	 * @param node
 	 * @param buff
@@ -459,13 +459,13 @@ public class ASMGenerator {
 				
 				switch(elt.getCategorie()){
 				
-					// Variable locale on rï¿½cupï¿½re la valeur dans la pile
+					// Variable locale on récupère la valeur dans la pile
 					case "variable":
 						this._generateIndent(indent, buff);
 						buff.append("GETFRAME(R0, 4 * " + elt.getIndiceVar() + ")\n");
 					break;
 					
-					// IDF parametre ï¿½ la fonction
+					// IDF parametre à la fonction
 					case "parametre":
 						this._generateIndent(indent, buff);
 						buff.append("GETFRAME(R0, - (3 + " + elt.getIndiceVar() + ") * 4)\n");
@@ -487,7 +487,7 @@ public class ASMGenerator {
 		
 		// Remplissage de la pile parametre
 		this._generateIndent(indent+1, buff);
-		buff.append("|== Envoi des paramï¿½tres ==|\n");
+		buff.append("|== Envoi des paramètres ==|\n");
 		for (Node<?> child : node.getChildren()){
 			
 			this._generateExpression( child, buff, indent+1);
@@ -499,7 +499,7 @@ public class ASMGenerator {
 		
 		// Vidage de la pile parametre
 		for (int i = 0; i < childs; i++){
-			this._generateIndent(indent, buff);buff.append("POP(R1) | dï¿½pilement arguments\n");
+			this._generateIndent(indent, buff);buff.append("POP(R1) | dépilement arguments\n");
 		}
 		
 		// Si la fonction a un retour on push le retour (contenu dans R0)
@@ -516,7 +516,7 @@ public class ASMGenerator {
 		
 		this._generateExpression(node.getChildren().get(0), buff, indent+1);
 		
-		// Rï¿½cuperation du resultat de l'expression dans R0
+		// Récuperation du resultat de l'expression dans R0
 		this._generateIndent(indent, buff);
 		buff.append("POP(R0)\n");
 		this._generateIndent(indent, buff);
@@ -547,14 +547,14 @@ public class ASMGenerator {
 		
 		this._generateExpression(node.getChildren().get(0), buff, indent+1);
 		
-		// Si le resultat de droite vient d'une fonction Il est rï¿½cupï¿½rï¿½ de R10
+		// Si le resultat de droite vient d'une fonction Il est récupéré de R10
 		if(node.getChildren().get(0).getContent() instanceof NodeContentAppel){
 			this._generateIndent(indent, buff);
-			buff.append("PUSH(R10) | retour fonction placï¿½ dans la pile\n");
+			buff.append("PUSH(R10) | retour fonction placé dans la pile\n");
 		}
 				
 		this._generateIndent(indent, buff);
-		buff.append("POP(R0)\n"); // Rï¿½cupï¿½ration de l'expression
+		buff.append("POP(R0)\n"); // Récupération de l'expression
 		this._generateIndent(indent, buff);
 		buff.append("Something is writing with R0...\n");
 		this._generateIndent(indent, buff);
@@ -578,7 +578,7 @@ public class ASMGenerator {
 		this._generateIndent(indent, buff);buff.append("|== Debut (if) ==|\n");
 		this._generateIndent(indent, buff);buff.append("if:\n");
 		
-		// Gï¿½nï¿½ration de la condition
+		// Génération de la condition
 		this._generateCondition((Node<NodeContentCondition>)node.getChildren().get(0), buff, indent+1);
 		
 		// Si y'a un bloc else
@@ -587,11 +587,11 @@ public class ASMGenerator {
 			this._generateIndent(indent+1, buff);buff.append("BEQ(R2, else) | condition fausse\n");
 		}
 		else{
-			// Sinon on saute ï¿½ la fin si la condition est fausse
+			// Sinon on saute à la fin si la condition est fausse
 			this._generateIndent(indent+1, buff);buff.append("BEQ(R2, endif) | condition fausse\n");
 		}
 				
-		// Gï¿½nï¿½ration du bloc
+		// Génération du bloc
 		this._generateIndent(indent+1, buff);buff.append("|== Debut (bloc if) ==|\n");
 		
 		this._generateBloc(node.getChildren().get(1), buff, indent+1);
@@ -607,7 +607,7 @@ public class ASMGenerator {
 			
 			this._generateBloc(node.getChildren().get(2), buff, indent+1);
 		}
-		// Gï¿½nï¿½ration du then ou else
+		// Génération du then ou else
 		/*String childContent = (String)(node.getChildren().get(2).getContent());
 		switch (childContent){
 			case "then":
@@ -630,13 +630,13 @@ public class ASMGenerator {
 		this._generateIndent(indent, buff);buff.append("|== Debut (while) ==|\n");
 		this._generateIndent(indent, buff);buff.append("while:\n");
 		
-		// Gï¿½nï¿½ration de la condition
+		// Génération de la condition
 		this._generateCondition((Node<NodeContentCondition>)node.getChildren().get(0), buff, indent+1);
 		
 		
 		this._generateIndent(indent+1, buff);buff.append("BEQ(R2, endwhile) | condition fausse\n");
 				
-		// Gï¿½nï¿½ration du bloc
+		// Génération du bloc
 		this._generateIndent(indent+1, buff);buff.append("|== Debut (bloc while) ==|\n");
 		
 		this._generateBloc(node.getChildren().get(1), buff, indent+1);
