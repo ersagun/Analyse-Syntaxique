@@ -1,4 +1,4 @@
-package fr.ul.miage.projet;
+package version_bis;
 
 public class Element {
 
@@ -7,7 +7,7 @@ public class Element {
 	//variable ou fonction ou parametre ou main
 	private String categorie;
 
-	// globale ou nom de la fonction correspondant à la var ou au param
+	// globale ou nom de la fonction correspondant ï¿½ la var ou au param
 	private String portee;
 
 	//nb param si type = fonction
@@ -19,14 +19,14 @@ public class Element {
 	//type, int ou void(seulement pour les fonctions)
 	private String type;
 
-	//valeur associée à la variable
+	//valeur associï¿½e ï¿½ la variable
 	private int valeur;
 
 	//
 	private int indiceVar;
 
 
-	//constructeur pour un élément variable
+	//constructeur pour un ï¿½lï¿½ment variable
 	public Element(String i, String c, String p, String t, int val,int ind){
 		id=i;
 		type=t;
@@ -38,7 +38,7 @@ public class Element {
 		indiceVar=ind;
 	}
 
-	//constructeur pour un élément paramètre
+	//constructeur pour un ï¿½lï¿½ment paramï¿½tre
 	public Element(String i, String c, String p, String t,int ind){
 		id=i;
 		type=t;
@@ -50,7 +50,7 @@ public class Element {
 
 	}
 
-	//constructeur pour un élément fonction
+	//constructeur pour un ï¿½lï¿½ment fonction
 	public Element(String i, String c, String p,int nbp, int nbv, String t){
 		id=i;
 		type=t; 
@@ -85,11 +85,11 @@ public class Element {
 	public String toString(){
 		String s="";
 		if(categorie.compareTo("fonction")==0 || categorie.compareTo("main")==0){
-			s = "clé : "+idUnique()+" "+id+" de catégorie : "+categorie+" de portee : "+portee+" de type : "+type+" nombre de parametres : "+nbParam+" nombre de variables locales : "+nbVarLoc;
+			s = "clï¿½ : "+idUnique()+" "+id+" de catï¿½gorie : "+categorie+" de portee : "+portee+" de type : "+type+" nombre de parametres : "+nbParam+" nombre de variables locales : "+nbVarLoc;
 		}else if(categorie.compareTo("parametre")==0){
-			s = "clé : "+idUnique()+" "+id+" de catégorie : "+categorie+" de portee : "+portee+" de type : "+type+" valeur associée : "+valeur+" indice du paramètre : "+indiceVar;
+			s = "clï¿½ : "+idUnique()+" "+id+" de catï¿½gorie : "+categorie+" de portee : "+portee+" de type : "+type+" valeur associï¿½e : "+valeur+" indice du paramï¿½tre : "+indiceVar;
 		}else{
-			s = "clé : "+idUnique()+" "+id+" de catégorie : "+categorie+" de portee : "+portee+" de type : "+type+" valeur associée : "+valeur+" indice de la variable : "+indiceVar;
+			s = "clï¿½ : "+idUnique()+" "+id+" de catï¿½gorie : "+categorie+" de portee : "+portee+" de type : "+type+" valeur associï¿½e : "+valeur+" indice de la variable : "+indiceVar;
 		}	
 			return s;
 		}

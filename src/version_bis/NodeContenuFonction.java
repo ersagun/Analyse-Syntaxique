@@ -1,4 +1,4 @@
-package fr.ul.miage.projet;
+package version_bis;
  
 import java.util.HashMap;
  

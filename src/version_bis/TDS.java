@@ -1,4 +1,5 @@
-package fr.ul.miage.projet;
+package version_bis;
+
 import java.util.ArrayList;
 import java.util.HashMap;
  
@@ -41,7 +42,6 @@ public class TDS{
                 if(table.containsKey(cle)){
                         retour = true;
                 }
- 
                 return retour;
         }
  
@@ -50,7 +50,7 @@ public class TDS{
                         double cle = e.idUnique();
                         table.put(cle, e);
                 }else{
-                		throw new MonException("erreur : double définition");
+                		throw new MonException("erreur : double dï¿½finition");
                 }
         }
  
@@ -70,6 +70,5 @@ public class TDS{
                         }
                 }
                 return list;
- 
         }
 }
