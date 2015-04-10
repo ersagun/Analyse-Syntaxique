@@ -10,19 +10,19 @@ import java.util.ArrayList;
  */
 public class TDS {
 
-	ArrayList<TdsElement> table;
+	ArrayList<TdsElement> table=new ArrayList<TdsElement>();
 	  
 	
 	public TDS(){
-		ArrayList<TdsElement> table=new ArrayList<TdsElement>();
+		ArrayList<TdsElement> table;
 	}
 	
 	
-	public void add(TdsElement te){
+	public void ajoute(TdsElement te){
 		table.add(te);
 	}
 	
-	public TdsElement search(String idfp,String scopep){
+	public TdsElement search(int idfp,String scopep){
 		int taille=this.table.size();
 		int i=0;
 		TdsElement a=null;

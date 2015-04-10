@@ -1,15 +1,15 @@
+
 import static org.junit.Assert.*;
 
 import java.io.FileInputStream;
 
 import org.junit.Test;
 
-import fr.ul.miage.compilator.generated.ParserCup;
-import fr.ul.miage.compilator.generated.Yylex;
+import fr.ul.miage.exemple.generated.*;
 
 
 public class TestSuite {
-
+/**
 	@Test
 	public void test_00() throws Exception {	
 		ParserCup parser = new ParserCup(new Yylex(new FileInputStream("./fichiers/00-minimal.miage")));
@@ -117,5 +117,6 @@ public class TestSuite {
 		ParserCup parser = new ParserCup(new Yylex(new FileInputStream("./fichiers/17-err5.miage")));
 		parser.parse();
 	}
-	
+**/	
 }
+

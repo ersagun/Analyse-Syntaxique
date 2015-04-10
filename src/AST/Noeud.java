@@ -5,12 +5,13 @@ import java.util.ArrayList;
 public class Noeud {
 
 	String type;
-	String ref;
+	int ref;
+	//Variable utilisé seulement quand un noeud contient une constante
+	int valeur;
 	ArrayList<Noeud> listeNoeud;
-	Noeud filsGauche;
-	Noeud filsDroite;
+
 	
-	public Noeud(String typep,String refp){
+	public Noeud(String typep,int refp){
 		this.type=typep;
 		this.ref=refp;
 		listeNoeud=new ArrayList<Noeud>();
@@ -18,7 +19,15 @@ public class Noeud {
 	
 	public Noeud(){
 		this.type="racine";
-		this.ref="";
+		listeNoeud=new ArrayList<Noeud>();
+	}
+	
+	public Noeud(int v){
+		this.valeur=v;
+	}
+	
+	public Noeud(String typep){
+		this.type=typep;
 		listeNoeud=new ArrayList<Noeud>();
 	}
 	
@@ -39,6 +48,14 @@ public class Noeud {
 	public void ajouterFD(Noeud n){
 		listeNoeud.add(n);
 	}
+	
+	public Noeud getFG(){
+		return listeNoeud.get(0);
+	}
+	public Noeud getFD(){
+		return listeNoeud.get(1);
+	}
+	
 	
 	
 }

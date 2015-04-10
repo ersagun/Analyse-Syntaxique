@@ -4,20 +4,21 @@ package TDS;
  * @author Ersagun
  *
  */
-public class TdsElement {
-	String idf;
+public abstract class TdsElement {
+	int idf;
 	String cat;
 	String type;
 	String scope;
+	String nom;
 
 
-	public TdsElement(String idfp,String catp,String typep,String scopep){
+	public TdsElement(int idfp,String catp,String nomp,String typep,String scopep){
 		this.idf=idfp;
 		this.cat=catp;
+		this.nom=nomp;
 		this.type=typep;
 		this.scope=scopep;
-	}
-	
+	}	
 }
 
 

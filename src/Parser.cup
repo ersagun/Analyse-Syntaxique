@@ -10,121 +10,30 @@ package fr.ul.miage.exemple.generated;
 import java.util.Date;
 import java.lang.String;
 import java_cup.runtime.Symbol;
+import AST.*;
+import TDS.*;
 
 parser code {: 
-
-public void generer_code(Noeud ast){
-
-
-}
-public static String generer_fonction(Noeud ast){}
-
-public static String generer_expression(Noeud ast){
-String asm;
-	switch (ast.type) {
-    	case constant:  asm="CMOVE("+tds.search(ast.idf,constant).val+",R0)
-    						 PUSH(R0)";
-                     	break;
-                     	
-        case idf:  		asm="";
-                     	break;
-        case +:  		asm=generer_addition(ast);
-                     	break;
-       	case -:  		asm="";
-                     	break;
-      	case /:  		asm="";
-                     	break;
-    	case *:  		asm="";
-                    	break;
-      	case fonction:  asm="";
-                     	break;
-      	default: 		asm="";
-                     	break;
-        }
-        return asm;
-}
-
-public static String generer_affectation(Noeud ast){}
-public static String generer_addition(Noeud ast){}
-
 :}
-action code {: 
 
+action code {: 
 Noeud ast=new Noeud();
 TDS tds=new TDS();
-
+/** faut incrementer cela a chaquer creation d'un objet tdsElement et ca correspond a l'id de tds element. **/
+int cptTdsElem=0;
 :}
 
 terminal IDF, PO, PF, PTVIRG,  AO, AF,  EGAL, NUMB, INT, VOID, RTN, VIRG, MUL, DIV, ADD, SUB,READ,WRITE,INF, INFEG, SUP, SUPEG, DIF, ACCO, ACCF,SINON, SI, TQUE, EGEG;
-non terminal OP, type, facteur, affectation, appel_fonct, param_appel_fonct, fonction, instruction_list, instruction, expression, atome, declaration_list, declaration , param_fonct, retour;
+non terminal OP, type, facteur, affectation, appel_fonct, param_appel_fonct, fonction, instruction_list, instruction, expression, atome, declaration_list, declaration , param_fonct,param,suite_param, retour;
 
 start with instruction_list;
 
 /*------debut--------*/
 
 instruction_list  ::= instruction_list instruction
-| 
-;
-
-instruction ::= affectation PTVIRG
-			| retour PTVIRG
-			| declaration PTVIRG
-			| fonction
-			;
-
-affectation ::=  IDF EGAL expression 
-				| IDF EGAL appel_fonct
-				;
-
-fonction ::= type IDF PO param_fonct PF AO instruction_list AF
-    	| type IDF PO PF AO instruction_list AF
-    	|IDF PO param_fonct PF AO instruction_list AF
-    	|IDF PO PF AO instruction_list AF
-    	;
-param_fonct ::= type IDF
-    	| type IDF VIRG param_fonct
-    	;
-    	
-appel_fonct ::= IDF PO PF
-    	| IDF PO param_appel_fonct PF
-;
-
-param_appel_fonct ::= param_appel_fonct VIRG IDF
-         	| IDF
-        	;
-
-retour ::= RTN expression
+	| 
 	;
 
-expression ::=  expression ADD facteur
-		|  expression SUB facteur
-		| facteur
-		| PO facteur PF
-		;
-facteur ::= facteur MUL atome
-		| facteur DIV atome
-		| atome
-		;
-
-atome ::= IDF
-		| NUMB
-		;
- 
-declaration  ::= type IDF EGAL expression
-| type IDF VIRG declaration
-|type IDF
-| IDF
-;
-
-declaration_list ::= declaration_list VIRG INT IDF
-;
-
-type ::= INT
-	| VOID
-	;
-
-OP ::= ADD | SUB | MUL | DIV
-	;
 	
 /*------fin--------*/
 

@@ -4,12 +4,11 @@ public class Fonction extends TdsElement {
 
 	int nbParam;
 	int nbLoc;
-	int rang;
 	
-	public Fonction(String idf,String cat,String type,String scopep,int nbParamp,int nbLocp, int rangp){
-		super(idf, cat, type,scopep);
+	
+	public Fonction(int idf,String cat,String nomp,String type,String scopep,int nbParamp,int nbLocp){
+		super(idf, cat,nomp, type,scopep);
 		this.nbParam=nbParamp;
 		this.nbLoc=nbLocp;
-		this.rang=rangp;
 	}
 }
