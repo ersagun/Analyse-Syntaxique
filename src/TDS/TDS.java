@@ -10,11 +10,10 @@ import java.util.ArrayList;
  */
 public class TDS {
 
-	ArrayList<TdsElement> table=new ArrayList<TdsElement>();
-	  
+	ArrayList<TdsElement> table;
 	
 	public TDS(){
-		ArrayList<TdsElement> table;
+		table=new ArrayList<TdsElement>();
 	}
 	
 	
@@ -55,5 +54,82 @@ public class TDS {
 		}
 		
 		return a;
+	}
+	
+	public TdsElement search(int idfp){
+		int taille=this.table.size();
+		int i=0;
+		TdsElement a=null;
+		boolean trouve=false;
+		
+		for(TdsElement n:this.table){
+			if(n.idf==idfp){
+				a=n;
+				trouve=true;
+				break;
+			}
+		}
+		
+		if(trouve==false){
+			for(TdsElement n:this.table){
+				if(n.idf==idfp){
+					a=n;
+					trouve=true;
+					break;
+				}
+			}
+		}
+		if(trouve==false){
+			 try {
+				throw new Exception();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return a;
+	}
+	
+	
+	
+	
+	public static TdsElement search(ArrayList<TdsElement> t,int idfp,String scopep){
+		int taille=t.size();
+		int i=0;
+		TdsElement a=null;
+		boolean trouve=false;
+		
+		for(TdsElement n:t){
+			if(n.idf==idfp && n.scope==scopep){
+				a=n;
+				trouve=true;
+				break;
+			}
+		}
+		
+		if(trouve==false){
+			for(TdsElement n:t){
+				if(n.idf==idfp){
+					a=n;
+					trouve=true;
+					break;
+				}
+			}
+		}
+		if(trouve==false){
+			 try {
+				throw new Exception();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return a;
+	}
+	
+	public String afficheInformation(){
+		return this.toString();
 	}
 }

@@ -11,4 +11,8 @@ public class Fonction extends TdsElement {
 		this.nbParam=nbParamp;
 		this.nbLoc=nbLocp;
 	}
+	
+	public String toString(){
+		return "idf : "+this.idf+" , cat : "+this.cat+" , nom : "+this.nom+", type : "+this.type+" , scope : "+this.scope+" , nbParam : "+this.nbParam+" , nbLoc : "+this.nbLoc;
+	}
 }

@@ -1,9 +1,11 @@
 /*
- * analyseur syntaxique du fichier de log
+ * analyseur syntaxique  du :
+ * Projet interpreteur
+ * 
  *
- * auteur : ersagun.yalcintepe@etu.univ-lorraine.fr
  * (c) 2015
  */ 
+<<<<<<< HEAD
  
 
 package fr.ul.miage.exemple.generated;
@@ -36,4 +38,289 @@ instruction_list  ::= instruction_list instruction
 
 	
 /*------fin--------*/
+=======
 
+package analyse.generated;
+
+import syntaxe.*;
+import java.util.ArrayList;
+
+
+
+action code {: 
+                Programme l = new Programme();
+                int rang = -1;              // Initialisation du  rang d'une variable locale de fonction
+                int nb_param = 0;           // Nombre de parametre local d'une fonction
+                int nb_var_locale = 0;      // nombre de variable locale
+                public static String resultat;
+
+                int numeroIF = 0;           // Numero du IF   
+                int numeroWHILE = 0;           // Numero du WHILE
+              
+                
+           
+                public void analyserFonction(String type, String nomFonct, ArrayList<Noeud> listInstr){
+                    nb_var_locale = rang+1;
+                    l.ajouter_SymboleFonction(type, nomFonct, nb_param, nb_var_locale); 
+                    l.setLesFonctionsVariablesLocales(nomFonct);
+                    l.vider_Liste_des_variables_locales_de_une_Fonction();
+
+                    Fonction fonc = new Fonction( nomFonct, listInstr, nb_param, nb_var_locale);
+                    l.ajouterFonction(fonc);
+
+                    listInstr = new ArrayList();
+                    nb_param = 0;
+                    nb_var_locale = 0;
+                    rang = -1;
+                }
+	    :};
+
+
+
+/* la grammaire */
+
+terminal Symbol ADD, MUL, PO, PF, EGAL, PV, SUB, DIV, ACCO, ACCF, VIRG;
+terminal Integer NUM;
+terminal String IDF, INT, VOID, RETURN, WRITE, READ;
+terminal String WHILE, IF, ELSE, BOOLEEN, NOT, OPERATEURCOMPARAISON;
+
+non terminal Expression expression, facteur, atome;
+non terminal Expression expressionGLOBALE, facteurGLOBALE, atomeGLOBALE;
+non terminal Noeud  affectation;
+non terminal Noeud instruction;
+non terminal Noeud ecriture;
+non terminal ArrayList<Noeud> listinstruction, listparametre;
+non terminal ExpressionBooleenne expressionbooleenne;
+non terminal Noeud conditionnelle, iteration;
+non terminal Noeud ensembledeclaration, suitedeclaration;
+non terminal Expression appelfonction;
+
+
+non terminal  fonction;
+non terminal listcommande, commande;
+non terminal listdeclarationparametre;
+non terminal ensembledeclarationGLOBALE, suitedeclarationGLOBALE;
+
+non terminal Programme programme;
+
+
+programme       ::= listcommande
+                    {:  RESULT = l; 
+                        l.resultatAnalyse = l.generer();
+                    :}
+                    ;
+          
+listcommande    ::= commande listcommande
+                  |
+                  ;
+
+commande ::=    fonction
+            |   ensembledeclarationGLOBALE
+            ;
+
+ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE PV
+                                   {:  l.declarerAffecter(Noeud.GLOBALE,null, t, i, 0, rang);  :}
+                              |    INT:t IDF:i PV
+                                   {:  l.declarerAffecter(Noeud.GLOBALE,null, t, i, 0, rang);  :}
+
+                              |    INT:t IDF:i EGAL expressionGLOBALE:e PV
+                                   {:  l.declarerAffecter(Noeud.GLOBALE, null, t, i, e.valeur(), rang); :}
+                              ;
+
+suitedeclarationGLOBALE   ::=   IDF:i VIRG suitedeclarationGLOBALE 
+                                {:  l.declarerAffecter(Noeud.GLOBALE, null, Noeud.INT, i, 0, rang); :}
+                            |   IDF:i EGAL expressionGLOBALE:e
+                                {:  l.declarerAffecter(Noeud.GLOBALE, null, Noeud.INT, i, e.valeur(), rang); :}
+                            |   IDF:i
+                                {:  l.declarerAffecter(Noeud.GLOBALE, null, Noeud.INT, i, 0, rang); :}
+                            ;
+
+expressionGLOBALE      ::=  expressionGLOBALE:e1  ADD facteurGLOBALE:e2
+                            {:  RESULT= new ExpressionNumerique(e1,"+",e2);   :}
+                        |   expressionGLOBALE:e1  SUB  facteurGLOBALE:e2 
+                            {:  RESULT= new ExpressionNumerique(e1,"-",e2);   :}
+                        |   facteurGLOBALE:e 
+                            {:  RESULT=e;  :}
+                        ;
+
+facteurGLOBALE         ::=  facteurGLOBALE:e1  MUL  atomeGLOBALE:e2 
+                            {:  RESULT= new ExpressionNumerique(e1,"*",e2);   :}
+                        |   facteurGLOBALE:e1  DIV  atomeGLOBALE:e2
+                            {:  RESULT= new ExpressionNumerique(e1,"/",e2);   :}
+                        |   atomeGLOBALE:e
+                            {:  RESULT=e;  :}
+                        ;
+
+atomeGLOBALE           ::=  NUM:e
+                            {:  RESULT=new Constante(e); :}
+                        |   IDF:e
+                            {:  RESULT = new Identifiant(e,l); :}
+                        |   PO expressionGLOBALE:e PF
+                            {:  RESULT=e; :}
+                        ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  listinstruction:l  ACCF
+             {: analyserFonction(t, nomFonct, l); :}
+          |  VOID:v IDF:nomFonct PO listdeclarationparametre PF ACCO listinstruction:l ACCF
+             {: analyserFonction(v, nomFonct, l); :}
+          |  IDF:nomFonct PO listdeclarationparametre PF ACCO listinstruction:l ACCF
+             {: analyserFonction(Noeud.VOID, nomFonct, l); :}
+          ;
+
+listdeclarationparametre ::= INT IDF VIRG listdeclarationparametre
+                             {: nb_param++; :}
+                           |  INT IDF
+                             {: nb_param++; :}
+                           |  
+                           ;
+
+listinstruction ::= instruction:inst listinstruction:l
+                    {: l.add(0,inst);
+                       RESULT = l; 
+                    :}
+                 |  RETURN expression:e PV
+                    {: ArrayList<Noeud> list = new ArrayList();
+                       list.add(0,new Return(e));
+                       RESULT = list;       
+                    :}
+                 |  
+                    {: RESULT = new ArrayList(); :}
+                 ;
+
+instruction     ::= affectation:aff
+                    {: RESULT = aff; :}
+                  | ecriture:ec
+                    {: RESULT = ec; :}
+                  | ensembledeclaration:decl
+                    {: RESULT = decl; :}
+                  | conditionnelle:cond
+                    {: RESULT = cond; :}
+                  | iteration:it
+                    {: RESULT = it; :}
+                  | appelfonction:ap PV
+                    {: RESULT = ap;  :}
+                  ;
+
+conditionnelle ::= IF PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF
+                   {:   numeroIF++;
+                        RESULT = new InstructionIF(numeroIF, expBool, l, null); :}
+                 | IF PO expressionbooleenne:expBool PF ACCO listinstruction:l1 ACCF ELSE ACCO listinstruction:l2 ACCF
+                   {:   numeroIF++;
+                        RESULT = new InstructionIF(numeroIF, expBool, l1, l2); :}
+                 ;
+
+iteration ::= WHILE PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF
+            {:  numeroWHILE++;
+                RESULT = new InstructionWHILE(numeroWHILE, expBool, l);  
+            :}
+            ;
+
+
+expressionbooleenne ::= expression:e1 OPERATEURCOMPARAISON:comp expression:e2
+                        {: RESULT = new ExpressionBooleenne(e1,comp,e2); :}
+                      | NOT expressionbooleenne
+                      | BOOLEEN:b
+                        {: RESULT = new ExpressionBooleenne(b); :}
+                      ;
+
+ensembledeclaration  ::=    INT:t  IDF:i  VIRG suitedeclaration PV
+                            {:  rang++;
+                                l.declarerAffecter(Noeud.LOCALE, null, t, i, 0, rang); 
+                                RESULT = new Constante(0);
+                            :}
+                       |    INT:t IDF:i PV
+                            {:  rang++;
+                                l.declarerAffecter(Noeud.LOCALE, null, t, i, 0, rang); 
+                                RESULT = new Constante(0);
+                            :}
+                       ;
+
+suitedeclaration ::=    IDF:i VIRG suitedeclaration 
+                        {:  rang++;
+                            l.declarerAffecter(Noeud.LOCALE, null, Noeud.INT, i, 0, rang); 
+                            RESULT = new Constante(0);
+                        :}
+                    |   IDF:i EGAL expression:e
+                        {:  rang++;
+                            l.declarerAffecter(Noeud.LOCALE, null, Noeud.INT, i, e.valeur(), rang); 
+                            RESULT = new ExpressionNumerique(e);
+                        :}
+                    |   IDF:i
+                        {:  rang++;
+                            l.declarerAffecter(Noeud.LOCALE, null, Noeud.INT, i, 0, rang); 
+                            RESULT = new Constante(0);
+                        :}
+                    ;
+            
+affectation   ::=   IDF:i  EGAL expression:e PV
+                    {:  RESULT = new Affectation(i,e);  :}
+               |    INT IDF:i  EGAL expression:e PV
+                    {:  rang++;
+                        l.declarerAffecter(Noeud.LOCALE, null, Noeud.INT, i, e.valeur(), rang); 
+                        RESULT = new Affectation(i,e);  
+                    :}
+                  ;
+
+appelfonction ::=  IDF:nomFonct PO listparametre:l PF
+                   {: RESULT = new AppelFonction(nomFonct, l);  :}
+                 | IDF:nomFonct PO PF
+                   {: RESULT = new AppelFonction(nomFonct, new ArrayList()); :}
+                  ;
+
+listparametre ::=  expression:e VIRG listparametre:l
+                   {: l.add(e); 
+                       RESULT = l;
+                   :}
+                |  expression:e  
+                   {: ArrayList<Noeud> l = new ArrayList();
+                      l.add(e);
+                      RESULT = l;
+                   :}
+                ;
+          
+ecriture        ::= WRITE PO expression:e PF PV
+                    {: RESULT = new Write(e);  :}
+                ;
+
+            
+expression      ::= expression:e1  ADD facteur:e2
+                    {:  RESULT = new ExpressionNumerique(e1,"+",e2); :}
+                  | expression:e1  SUB  facteur:e2 
+                    {:  RESULT= new ExpressionNumerique(e1,"-",e2); :}
+                  | facteur:e 
+                    {:  RESULT=e;  :}
+                  ;
+
+facteur         ::= facteur:e1  MUL  atome:e2 
+                    {:  RESULT= new ExpressionNumerique(e1,"*",e2);  :}
+                  | facteur:e1  DIV  atome:e2
+                    {:  RESULT= new ExpressionNumerique(e1,"/",e2);  :}
+                  | atome:e
+                    {:  RESULT = e; :}
+                  | appelfonction:ap
+                    {: RESULT=new AppelFonction(ap); :}
+                  ;
+>>>>>>> origin/master
+
+atome           ::= NUM:e
+                    {: RESULT=new Constante(e); :}
+                  | IDF:e
+                    {: RESULT = new Identifiant(e,l);  :}
+                  | READ PO PF
+                    {:  RESULT=new Read(); :}
+                  | PO expression:e PF
+                    {:  RESULT=e;  :}
+                  ;

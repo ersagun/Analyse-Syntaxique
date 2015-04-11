@@ -18,7 +18,10 @@ public abstract class TdsElement {
 		this.nom=nomp;
 		this.type=typep;
 		this.scope=scopep;
-	}	
+	}
+	
+	public abstract String toString();
+	
 }
 
 
