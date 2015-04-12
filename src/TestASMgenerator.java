@@ -8,12 +8,18 @@ public class TestASMgenerator {
 		
 		/*
 		 * test 1 just pour verifier generer_code sur un AST et Noeud vide
+		 * TDS tds= new TDS();
+		 * Noeud ast=new Noeud();
+		 * ASMgenerator asm= new ASMgenerator(tds,ast);
+		 *asm.generateToFile("Code_ASM");
+		 *test 2 pour generer programm
 		 */
 
 		//TDS
 		TDS tds= new TDS();
 		//AST
-		Noeud ast=new Noeud("function",1);
+		NoeudElement ast=new NRacine();
+		
 		//ASMGenerator
 		ASMgenerator asm= new ASMgenerator(tds,ast);
 		asm.generateToFile("Code_ASM");

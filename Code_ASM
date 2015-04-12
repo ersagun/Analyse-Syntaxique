@@ -2,6 +2,7 @@
 .include beta.uasm
 	CMOVE(stack, SP)
 BR(start)
+|Generation du programme: appel de 0 fontion(s)|
 |============ Début programme ================|
 start:
 	CALL(main)

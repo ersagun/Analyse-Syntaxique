@@ -41,4 +41,9 @@ public abstract class NoeudElement {
 	public NoeudElement getFD() {
 		return listeNoeud.get(1);
 	}
+	
+	public ArrayList<NoeudElement> getChildren()
+	{
+		return this.listeNoeud;
+	}
 }

@@ -10,13 +10,13 @@ import java.io.IOException;
 public class ASMgenerator {
 
 	public TDS tds;
-	public Noeud node;
+	public NoeudElement node;
 	
 	
 	/*
 	 * CONSTRUCTORS
 	 */
-	public ASMgenerator(TDS tds, Noeud node) {
+	public ASMgenerator(TDS tds, NoeudElement node) {
 		super();
 		this.tds = tds;
 		this.node = node;
@@ -27,8 +27,8 @@ public class ASMgenerator {
 	 */
 	
 	/**
-	 * Retourne la génération ASM sous une chaine
-	 * 
+	 * Retourne la génération ASM sous une chaine et dans un fichier
+	 * generer indent permet de gerer  les indentations
 	 * @return
 	 */
 	
@@ -64,36 +64,50 @@ public class ASMgenerator {
 	}
 	
 	
+	private void _generateIndent(int indent, StringBuffer buff){
+		for (int i = 0; i < indent; i++) {
+			buff.append("\t");
+		}
+	}
+	
 	/**
 	 * Génère la base du programme ASM
 	 * 	- Fait un appel à main directement
-	 * 
+	 * Generer code sert a afficher en ASM la base du fichier.uasm selon l'algorihtme vu en cours.
+	Un test a été effectué sur des AST et TSD vides,
+	La sortie ASM est dans un fichier: 
 	 * @param node
 	 * @param buff
 	 */
-	public void generated_Code(Noeud node, StringBuffer buff){
+	public void generated_Code(NoeudElement node, StringBuffer buff){
 		buff.append("|============ Header ================|\n");
 		buff.append(".include beta.uasm\n");
 		buff.append("\tCMOVE(stack, SP)\n");
 		buff.append("BR(start)\n");
 		
 		this.generated_Data(node,buff);
+		this.generated_Program(node, buff, 0);
 		
 		buff.append("|============ Début programme ================|\n");
 		
 		buff.append("start:\n");
 		buff.append("\tCALL(main)\n");
 		buff.append("\tHALT()\n");
-		
-		this.generated_Function(node,buff);
-		
 		buff.append("stack:\n");
 	}
 	
-	public void generated_Data(Noeud node, StringBuffer buff){
+	public void generated_Data(NoeudElement node, StringBuffer buff){
 	}
 	
-	public void generated_Function(Noeud node, StringBuffer buff){
+	public void generated_Program(NoeudElement node, StringBuffer buff,int indent){
+		buff.append("|Generation du programme: appel de "+node.getChildren().size()+" fontion(s)|\n");
+		for (NoeudElement child : node.getChildren()) {
+			this.generated_Function( child, buff, indent);
+		}
+	}
+	
+	
+	public void generated_Function(NoeudElement node, StringBuffer buff, int indent){
 	}
 	
 	
