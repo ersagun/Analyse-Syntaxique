@@ -2,6 +2,7 @@ package TDS;
 
 import java.util.ArrayList;
 
+import Exception.VarExiste;
 import Exception.VarUndefinedException;
 
 /**
@@ -20,8 +21,20 @@ public class TDS {
 	
 	
 	public void ajoute(TdsElement te){
+		if (this.table.contains(te)) {
+		    try {
+				throw new VarExiste();
+			} catch (VarExiste e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			table.add(te);
+		}
 		table.add(te);
 	}
+	
+	
 	
 	public TdsElement search(int idfp,int scopep){
 		int taille=this.table.size();

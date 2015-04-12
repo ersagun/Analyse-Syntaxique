@@ -27,6 +27,10 @@ public class TestAst {
 		TdsElement a=new Variable(cpt,"i",-1,0,"int");
 		tds.ajoute(a);
 		cpt++;
+		//TdsElement a_bis=new Variable(cpt,"i",-1,0,"int");
+		//tds.ajoute(a_bis);
+		//cpt++;
+		
 		//cpt=1
 		TdsElement b=new Variable(cpt,"j",-1,0,"int");
 		tds.ajoute(b);
