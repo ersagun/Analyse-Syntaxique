@@ -80,6 +80,7 @@ public class ASMgenerator {
 	 * @param buff
 	 */
 	public void generated_Code(NoeudElement node, StringBuffer buff){
+		System.out.println("Génration du programme\n");
 		buff.append("|============ Header ================|\n");
 		buff.append(".include beta.uasm\n");
 		buff.append("\tCMOVE(stack, SP)\n");
@@ -97,9 +98,12 @@ public class ASMgenerator {
 	}
 	
 	public void generated_Data(NoeudElement node, StringBuffer buff){
-		for(TdsElement element : this.tds.getTable()){
-			if ((element.getCat()==("variable")) && (((Variable)element).getScope()==-1) && (((Variable)element).getType()=="int") ){
-				buff.append("\t"+element.getNom()+":LONG("+((Variable)element).getVal()+")");
+		System.out.println("Géneration des données\n");
+		TdsElement element;
+		for(int i=0; i< this.tds.getTable().size();i++){
+			element=this.tds.getTable().get(i);
+			if ((element.getCat()==("identificateur")) && (((Variable)element).getScope()==-1) && (((Variable)element).getType()=="int") ){
+				buff.append("\t"+element.getNom()+":LONG("+((Variable)element).getVal()+")\n");
 			}
 		}
 	}

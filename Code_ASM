@@ -2,6 +2,8 @@
 .include beta.uasm
 	CMOVE(stack, SP)
 BR(start)
+	i:LONG(0)
+	j:LONG(0)
 |Generation du programme: appel de 1 fontion(s)|
 main:
 	PUSH(LP)

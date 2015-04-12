@@ -31,7 +31,6 @@ public class TDS {
 		} else {
 			table.add(te);
 		}
-		table.add(te);
 	}
 	
 	
