@@ -4,7 +4,10 @@ import TDS.*;
 import AST.*;
 public class TestAst {
 
-	
+	// ATTENTION : 
+	// les remarques importantes, une variable globale c'est a dire une var declaré en dehors d'une fonction a une scope -1
+	//dans les fonctions, type est le type de retour. Dans les variables type est le type de variable.
+	//
 	public static void main(String[]Args){
 		/**
 		int i, j;
@@ -21,15 +24,15 @@ public class TestAst {
 		 */
 		TDS tds=new TDS();
 		//cpt=0
-		TdsElement a=new Variable(cpt,"var","i","variable","globale",0);
+		TdsElement a=new Variable(cpt,"i",-1,0,"int");
 		tds.ajoute(a);
 		cpt++;
 		//cpt=1
-		TdsElement b=new Variable(cpt,"var","j","variable","globale",0);
+		TdsElement b=new Variable(cpt,"j",-1,0,"int");
 		tds.ajoute(b);
 		cpt++;
 		//cpt=2
-		TdsElement c=new Fonction(cpt,"fonct","main","fonction","globale",0,0);
+		TdsElement c=new Fonction(cpt,"main",0,0,"void");
 		tds.ajoute(c);
 		cpt++;
 		//cpt=3
@@ -37,42 +40,42 @@ public class TestAst {
 		
 		
 		//creation racine
-		Noeud racine= new Noeud();
+		NoeudElement racine= new NRacine();
 		//creation de noeud fonction main
-		Noeud fonction_main=new Noeud("fonction",3);
+		NoeudElement fonction_main=new NFonction(2);
 		//affectation un i=0
 		//creation de noeud affectation
-		Noeud affect=new Noeud("=");
+		NoeudElement affect=new NOperation("=");
 		//fils gauche de affectation var i
-		Noeud var=new Noeud("identificateur",0,"globale");
+		NoeudElement var=new NVariable(0,3);
 		//fils droite de affectation val 0
-		Noeud val=new Noeud(0);
+		NoeudElement val=new NConstant(0);
 		//ajouter les fils a affectation
 
 		
 		//affectation deux j = (2+i) - (3+i)
 		//creation de noeud daffectation 2
-		Noeud affect2=new Noeud("="); 
+		NoeudElement affect2=new NOperation("="); 
 		//recuperation de la variable j
-		Noeud varj=new Noeud("identificateur",1,"globale");
+		NoeudElement varj=new NVariable(1,3);
 		
 		//creation du fils droite de l'affectation donc le moins 
-		Noeud moins = new Noeud("-");
+		NoeudElement moins = new NOperation("-");
 		//fils du moins plus1 et plus2
-		Noeud plus1 = new Noeud("+");
-		Noeud plus2 = new Noeud("+");
+		NoeudElement plus1 = new NOperation("+");
+		NoeudElement plus2 = new NOperation("+");
 		//ajouter le fils plus1 du  moins
 	
 		
 		//preparation de noeud de plus1
-		Noeud const2=new Noeud(2);
+		NoeudElement const2=new NConstant(2);
 		//recuperation de i
-		Noeud vari=new Noeud("identificateur",0,"globale");
+		NoeudElement vari=new NVariable(0,3);
 		//ajouter noeud const 2 a plus1, fils gauche
 	
 		//la meme chose pour noeud plus2
-		Noeud const3=new Noeud(3);
-		Noeud vari2=new Noeud("identificateur",0,"globale");
+		NoeudElement const3=new NConstant(3);
+		NoeudElement vari2=new NVariable(0,3);
 	
 
 		
@@ -102,7 +105,7 @@ public class TestAst {
 		//voila affichage alors, j'aai du mal pour faire la fonction recursive qui parcours du coup j'ai fait a la main ^^ pour toute question sur l'arbe ou tds n'hesitez pas
 		
 		System.out.println(racine.afficherNoeud(tds));
-		System.out.println(racine.listeNoeud.get(0));
+		System.out.println(racine.listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(0).listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(0).listeNoeud.get(1).afficherNoeud(tds));
@@ -116,10 +119,6 @@ public class TestAst {
 		
 		
 		
-		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(0).afficherNoeud(tds));
-		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(1).afficherNoeud(tds));
-		
-	
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(0).listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(0).listeNoeud.get(1).afficherNoeud(tds));

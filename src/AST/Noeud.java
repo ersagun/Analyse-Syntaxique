@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import TDS.TDS;
 
 public class Noeud {
-
+/**
 	String type;
 	int ref;
 	// Variable utilisé seulement quand un noeud contient une constante
@@ -34,7 +34,7 @@ public class Noeud {
 
 	//creation de noeud de constant
 	public Noeud(int v) {
-		this.type = "";
+		this.type = "constant";
 		this.ref = -1;
 		this.valeur = v;
 		listeNoeud = new ArrayList<Noeud>();
@@ -59,33 +59,9 @@ public class Noeud {
 		this.scope="";
 	}
 
-	public void ajouter1fils(Noeud n) {
-		listeNoeud.add(n);
-	}
+	**/
 
-	public void ajouterNFils(Noeud[] nNoeud) {
-		for (int i = 0; i <= nNoeud.length; i++) {
-			listeNoeud.add(nNoeud[i]);
-		}
-	}
-
-	public void ajouterFG(Noeud n) {
-		listeNoeud.add(n);
-	}
-
-	public void ajouterFD(Noeud n) {
-		listeNoeud.add(n);
-	}
-
-	public Noeud getFG() {
-		return listeNoeud.get(0);
-	}
-
-	public Noeud getFD() {
-		return listeNoeud.get(1);
-	}
-
-
+/**
 	public String toString() {
 		String v = "";
 		// verification du type de noeud
@@ -128,7 +104,7 @@ public class Noeud {
 		return v;
 	}
 	
-	
+	**/
 	
 /**
 	public static String afficheLesFilsDunNoeud(ArrayList<Noeud> l) {

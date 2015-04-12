@@ -2,6 +2,8 @@ package TDS;
 
 import java.util.ArrayList;
 
+import Exception.VarUndefinedException;
+
 /**
  * Cette classe nous permets de stocker toutes les informations 
  * concernant les variables locales, globales, les parametres effectifs, parametres normales, les fonctions etc..
@@ -21,14 +23,14 @@ public class TDS {
 		table.add(te);
 	}
 	
-	public TdsElement search(int idfp,String scopep){
+	public TdsElement search(int idfp,int scopep){
 		int taille=this.table.size();
 		int i=0;
 		TdsElement a=null;
 		boolean trouve=false;
 		
 		for(TdsElement n:this.table){
-			if(n.idf==idfp && n.scope==scopep){
+			if(n.idf==idfp && ((Variable)n).scope==scopep){
 				a=n;
 				trouve=true;
 				break;
@@ -81,7 +83,7 @@ public class TDS {
 		}
 		if(trouve==false){
 			 try {
-				throw new Exception();
+				throw new VarUndefinedException(idfp);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -94,14 +96,14 @@ public class TDS {
 	
 	
 	
-	public static TdsElement search(ArrayList<TdsElement> t,int idfp,String scopep){
+	public static TdsElement search(ArrayList<TdsElement> t,int idfp,int scopep){
 		int taille=t.size();
 		int i=0;
 		TdsElement a=null;
 		boolean trouve=false;
 		
 		for(TdsElement n:t){
-			if(n.idf==idfp && n.scope==scopep){
+			if(n.idf==idfp && ((Variable)n).scope==scopep){
 				a=n;
 				trouve=true;
 				break;

@@ -2,10 +2,14 @@ package TDS;
 
 public class Variable extends TdsElement {
 	int val;
+	int scope;
+	String type;
 
-	public Variable(int idf,String cat,String nomp,String type,String scopep,int valp){
-		super(idf, cat,nomp, type,scopep);
+	public Variable(int idf,String nomp,int scopep,int valp,String typep){
+		super(idf, "identificateur",nomp);
 		this.val=valp;
+		this.scope=scopep;
+		this.type=typep;
 	}
 
 	
