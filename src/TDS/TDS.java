@@ -147,4 +147,14 @@ public class TDS {
 	public String afficheInformation(){
 		return this.toString();
 	}
+
+
+	public ArrayList<TdsElement> getTable() {
+		return table;
+	}
+
+
+	public void setTable(ArrayList<TdsElement> table) {
+		this.table = table;
+	}
 }

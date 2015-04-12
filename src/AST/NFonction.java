@@ -2,7 +2,7 @@ package AST;
 
 import java.util.ArrayList;
 
-import TDS.TDS;
+import TDS.*;
 
 //une fonction a forcement comme scope, globale
 public class NFonction extends NoeudElement {
@@ -18,6 +18,20 @@ public class NFonction extends NoeudElement {
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub
 		return "Noeud fonction => #type : " + this.categorie+", #ref : " + this.ref+ " [informations recupéré dans le tds : "+tds.search(this.ref)+"]";
+	}
+	
+	public int getnlocalvar(TDS tds){
+		int nbvar=0;
+		Fonction a=(Fonction)tds.search(this.ref);
+		nbvar=a.getNbLoc();
+		return nbvar;
+	}
+	
+	public String getname(TDS tds){
+		String nom=null;
+		TdsElement a=tds.search(this.ref);
+		nom=a.getNom();
+		return nom;
 	}
 }
 

@@ -74,8 +74,8 @@ public class ASMgenerator {
 	 * Génère la base du programme ASM
 	 * 	- Fait un appel à main directement
 	 * Generer code sert a afficher en ASM la base du fichier.uasm selon l'algorihtme vu en cours.
-	Un test a été effectué sur des AST et TSD vides,
-	La sortie ASM est dans un fichier: 
+		Un test a été effectué sur des AST et TSD vides,
+		La sortie ASM est dans un fichier: 
 	 * @param node
 	 * @param buff
 	 */
@@ -97,19 +97,58 @@ public class ASMgenerator {
 	}
 	
 	public void generated_Data(NoeudElement node, StringBuffer buff){
+		for(TdsElement element : this.tds.getTable()){
+			if ((element.getCat()==("variable")) && (((Variable)element).getScope()==-1) && (((Variable)element).getType()=="int") ){
+				buff.append("\t"+element.getNom()+":LONG("+((Variable)element).getVal()+")");
+			}
+		}
 	}
 	
+	/**
+	 * Début de la génération ASM
+	 * 	- Demande la génération de chaques fonctions
+	 * 
+	 * @param node
+	 * @param buff
+	 */
 	public void generated_Program(NoeudElement node, StringBuffer buff,int indent){
 		buff.append("|Generation du programme: appel de "+node.getChildren().size()+" fontion(s)|\n");
 		for (NoeudElement child : node.getChildren()) {
-			this.generated_Function( child, buff, indent);
+			this.generated_Function((NFonction) child, buff, indent);
 		}
 	}
 	
 	
-	public void generated_Function(NoeudElement node, StringBuffer buff, int indent){
+	
+	/**
+	 * Génére la structure de base d'une fonction
+	 * 	- Les variables locales sont déclarées en allouant la place nécessaire en pile
+	 * 
+	 * @param node On récupère un noeud FONCTION
+	 * @param buff
+	 */
+	public void generated_Function(NFonction node, StringBuffer buff, int indent){
+		
+		int nbVarLocal = node.getnlocalvar(this.tds);
+		String id = node.getname(this.tds);
+				
+		//buf.append("|============ Header ================|\n");
+		buff.append( id + ":\n");
+		buff.append("\tPUSH(LP)\n");
+		buff.append("\tPUSH(BP)\n");
+		buff.append("\tMOVE(SP, BP)\n");
+		buff.append("\tALLOCATE(" + nbVarLocal + ")\n");
+		
+		this.generated_Bloc(node.getFG(), buff, indent+1);
+		
+		buff.append("\tDEALLOCATE(" + nbVarLocal + ")\n");
+		buff.append("\tPOP(BP)\n");
+		buff.append("\tPOP(LP)\n");
+		buff.append("\tJMP(LP)\n");
 	}
 	
-	
+	public void generated_Bloc(NoeudElement node, StringBuffer buff, int indent){
+		
+	}
 	
 }

@@ -2,7 +2,16 @@
 .include beta.uasm
 	CMOVE(stack, SP)
 BR(start)
-|Generation du programme: appel de 0 fontion(s)|
+|Generation du programme: appel de 1 fontion(s)|
+main:
+	PUSH(LP)
+	PUSH(BP)
+	MOVE(SP, BP)
+	ALLOCATE(0)
+	DEALLOCATE(0)
+	POP(BP)
+	POP(LP)
+	JMP(LP)
 |============ Début programme ================|
 start:
 	CALL(main)

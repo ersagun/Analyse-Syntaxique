@@ -16,4 +16,34 @@ public class Variable extends TdsElement {
 	public String toString(){
 		return "idf : "+this.idf+" , cat : "+this.cat+" , nom : "+this.nom+", type : "+this.type+" , scope : "+this.scope+" , val : "+this.val;
 	}
+
+
+	public int getScope() {
+		return scope;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	public void setScope(int scope) {
+		this.scope = scope;
+	}
+
+
+	public int getVal() {
+		return val;
+	}
+
+
+	public void setVal(int val) {
+		this.val = val;
+	}
 }

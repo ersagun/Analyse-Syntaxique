@@ -7,6 +7,14 @@ package TDS;
  *
  */
 public abstract class TdsElement {
+	public String getCat() {
+		return cat;
+	}
+
+	public void setCat(String cat) {
+		this.cat = cat;
+	}
+
 	int idf;
 	String cat;
 	String nom;
@@ -32,6 +40,14 @@ public abstract class TdsElement {
 			}
 		}
 		return result;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 
 	public abstract String toString();
