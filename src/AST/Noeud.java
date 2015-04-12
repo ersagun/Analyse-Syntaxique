@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import TDS.TDS;
 
 public class Noeud {
-/**
 	String type;
 	int ref;
 	// Variable utilisé seulement quand un noeud contient une constante
@@ -59,7 +58,7 @@ public class Noeud {
 		this.scope="";
 	}
 
-	**/
+
 
 /**
 	public String toString() {

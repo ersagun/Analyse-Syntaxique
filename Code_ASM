@@ -1,0 +1,9 @@
+|============ Header ================|
+.include beta.uasm
+	CMOVE(stack, SP)
+BR(start)
+|============ Début programme ================|
+start:
+	CALL(main)
+	HALT()
+stack:
