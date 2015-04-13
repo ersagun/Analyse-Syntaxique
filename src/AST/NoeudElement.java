@@ -59,4 +59,24 @@ public abstract class NoeudElement {
 	public void setCategorie(String categorie) {
 		this.categorie = categorie;
 	}
+	
+	//PROBLEME
+		
+	public static String afficheLesFils(NoeudElement racine,TDS tds,String v) {
+		int size=racine.listeNoeud.size();
+		for(int i = 0;i<=size-1;i++){
+			v=v+racine.afficherToutesCesFils(tds)+NoeudElement.afficheLesFils(racine.listeNoeud.get(i),tds,v)+"\n";
+		}
+		return v;
+		}
+	
+	public String afficherToutesCesFils(TDS tds){
+		int size=this.listeNoeud.size();
+		String a="";
+		for(int i = 0;i<=size-1;i++){
+			a=a+this.listeNoeud.get(i).afficherNoeud(tds)+"\n";
+		}
+		return a;
+	}
+
 }

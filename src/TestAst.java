@@ -102,18 +102,19 @@ public class TestAst {
 		plus2.ajouterFG(const3);
 		plus2.ajouterFD(vari2);
 
-
-		
+		String v="";
+		String s=NoeudElement.afficheLesFils(racine,tds,v);
+		System.out.println(s);
 	
 		//voila affichage alors, j'aai du mal pour faire la fonction recursive qui parcours du coup j'ai fait a la main ^^ pour toute question sur l'arbe ou tds n'hesitez pas
-		
+		/**
 		System.out.println(racine.afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(0).listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(0).listeNoeud.get(1).afficherNoeud(tds));
 
-		
+	
 		
 		
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).afficherNoeud(tds));
@@ -130,5 +131,55 @@ public class TestAst {
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(1).listeNoeud.get(1).afficherNoeud(tds));
 
+		
+		System.out.println("--------------------------------------------------------------------------------------------------");
+		
+		*/
+		
+		/**
+
+ * Test g�n�ration de code : 
+ * boucle
+int i , j;
+void main(){
+	i = 0; j = 0;
+	while (i <3){
+		j = j + i;
+	}
+ }		
+		**/
+		
+		//Simulation de cpt
+		//int cpt1=0;
+		//TDS tds1 = new TDS();
+		//NoeudElement racine1 = new NRacine();
+		/**
+		
+		TdsElement vari1=new Variable(cpt1,"i",-1,0,"int");
+		tds.ajoute(vari1);
+		cpt1++;
+		TdsElement varj1=new Variable(cpt1,"j",-1,0,"int");
+		tds.ajoute(varj1);
+		cpt1++;
+		TdsElement main1=new Fonction(cpt1,"main",0,0,"void");
+		tds.ajoute(main1);
+		cpt1++;
+		**/
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 }
