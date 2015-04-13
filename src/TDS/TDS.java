@@ -1,14 +1,13 @@
 package TDS;
 
 import java.util.ArrayList;
-
 import Exception.VarExiste;
 import Exception.VarUndefinedException;
 
 /**
  * Cette classe nous permets de stocker toutes les informations 
  * concernant les variables locales, globales, les parametres effectifs, parametres normales, les fonctions etc..
- * @author Ersagun
+ * @author Groupe : Complilation L3 MIAGE 2014-2015
  *
  */
 public class TDS {

@@ -1,7 +1,5 @@
 package AST;
 
-import java.util.ArrayList;
-
 import TDS.TDS;
 
 public class NConstant extends NoeudElement {
@@ -17,4 +15,9 @@ public class NConstant extends NoeudElement {
 	public String afficherNoeud(TDS tds) {
 		return "Noeud constant => #valeur : " + this.valeur;
 	}
+
+	public int getValeur() {
+		return valeur;
+	}
+	
 }

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import TDS.TDS;
 
+/**
+ * 
+ * @author Groupe : Complilation L3 MIAGE 2014-2015
+ *
+ */
 public abstract class NoeudElement {
 
 	String categorie;
@@ -45,5 +50,13 @@ public abstract class NoeudElement {
 	public ArrayList<NoeudElement> getChildren()
 	{
 		return this.listeNoeud;
+	}
+
+	public String getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(String categorie) {
+		this.categorie = categorie;
 	}
 }

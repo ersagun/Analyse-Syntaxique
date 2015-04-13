@@ -1,8 +1,6 @@
 package AST;
 
-import java.util.ArrayList;
-
-import TDS.TDS;
+import TDS.*;
 
 public class NVariable extends NoeudElement {
 	int ref;
@@ -22,4 +20,28 @@ public class NVariable extends NoeudElement {
 		return "Noeud variable => #ref : "+this.ref+", #scope : "+this.scope+" [information recuperé de td grace a la ref : "+tds.search(this.ref, this.scope)+"]";
 	}
 
+
+	public int getScope() {
+		return scope;
+	}
+
+
+	public void setScope(int scope) {
+		this.scope = scope;
+	}
+
+
+	public int getRef() {
+		return ref;
+	}
+
+
+	public void setRef(int ref) {
+		this.ref = ref;
+	}
+
+	public String get_Value(TDS tds){
+		Variable var=(Variable)tds.search(this.ref);
+		return var.getNom();
+	}
 }

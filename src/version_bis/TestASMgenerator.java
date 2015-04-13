@@ -1,3 +1,4 @@
+package version_bis;
 import TDS.*;
 import AST.*;
 import ASMgenerator.*;
@@ -22,7 +23,7 @@ public class TestASMgenerator {
 			 */
 			TDS tds=new TDS();
 			//cpt=0
-			TdsElement a=new Variable(cpt,"i",-1,0,"int");
+			TdsElement a=new Variable(cpt,"i","globale",0,"int");
 			tds.ajoute(a);
 			cpt++;
 			//TdsElement a_bis=new Variable(cpt,"i",-1,0,"int");

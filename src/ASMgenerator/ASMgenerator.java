@@ -2,11 +2,17 @@ package ASMgenerator;
 
 import TDS.*;
 import AST.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * 
+ * @author Groupe : Complilation L3 MIAGE 2014-2015
+ *
+ */
 public class ASMgenerator {
 
 	public TDS tds;
@@ -27,17 +33,20 @@ public class ASMgenerator {
 	 */
 	
 	/**
-	 * Retourne la génération ASM sous une chaine et dans un fichier
-	 * generer indent permet de gerer  les indentations
-	 * @return
+	 * Retourne la génération ASM sous une chaine 
+	 * @return code ASM
 	 */
-	
 	public String generateToString(){
 		StringBuffer buf = new StringBuffer();
 		this.generated_Code(node, buf);
 		return buf.toString();
 	}
 	
+	/**
+	 * avec le nom de fichier en paramètre, permet d'ecrire dans un fichier
+	 * le code asm
+	 * @param filename
+	 */
 	public void generateToFile(String filename){
 		try{
 			String content = this.generateToString();
@@ -63,8 +72,12 @@ public class ASMgenerator {
 		}
 	}
 	
-	
-	private void _generateIndent(int indent, StringBuffer buff){
+	/**
+	 * generer indent permet de gerer  les indentations de fichier 	asm
+	 * @param indent
+	 * @param buff
+	 */
+	private void generated_Indent(int indent, StringBuffer buff){
 		for (int i = 0; i < indent; i++) {
 			buff.append("\t");
 		}
@@ -73,9 +86,7 @@ public class ASMgenerator {
 	/**
 	 * Génère la base du programme ASM
 	 * 	- Fait un appel à main directement
-	 * Generer code sert a afficher en ASM la base du fichier.uasm selon l'algorihtme vu en cours.
-		Un test a été effectué sur des AST et TSD vides,
-		La sortie ASM est dans un fichier: 
+	 * Generer code sert a afficher en ASM la base du fichier.uasm selon l'algorihtme vu en cours. 
 	 * @param node
 	 * @param buff
 	 */
@@ -97,11 +108,14 @@ public class ASMgenerator {
 		buff.append("stack:\n");
 	}
 	
+	/**
+	 * Permet de generer et initialiser les var globales
+	 * @param node
+	 * @param buff
+	 */
 	public void generated_Data(NoeudElement node, StringBuffer buff){
-		System.out.println("Géneration des données\n");
-		TdsElement element;
-		for(int i=0; i< this.tds.getTable().size();i++){
-			element=this.tds.getTable().get(i);
+		System.out.println("\tGéneration des données: variables globales\n");
+		for(TdsElement element : this.tds.getTable()){
 			if ((element.getCat()==("identificateur")) && (((Variable)element).getScope()==-1) && (((Variable)element).getType()=="int") ){
 				buff.append("\t"+element.getNom()+":LONG("+((Variable)element).getVal()+")\n");
 			}
@@ -122,8 +136,6 @@ public class ASMgenerator {
 		}
 	}
 	
-	
-	
 	/**
 	 * Génére la structure de base d'une fonction
 	 * 	- Les variables locales sont déclarées en allouant la place nécessaire en pile
@@ -133,6 +145,8 @@ public class ASMgenerator {
 	 */
 	public void generated_Function(NFonction node, StringBuffer buff, int indent){
 		
+		
+		System.out.println("\tGéneration des fonctions\n");
 		int nbVarLocal = node.getnlocalvar(this.tds);
 		String id = node.getname(this.tds);
 				
@@ -143,7 +157,7 @@ public class ASMgenerator {
 		buff.append("\tMOVE(SP, BP)\n");
 		buff.append("\tALLOCATE(" + nbVarLocal + ")\n");
 		
-		this.generated_Bloc(node.getFG(), buff, indent+1);
+		this.generated_Bloc(node, buff, indent+1);
 		
 		buff.append("\tDEALLOCATE(" + nbVarLocal + ")\n");
 		buff.append("\tPOP(BP)\n");
@@ -151,8 +165,306 @@ public class ASMgenerator {
 		buff.append("\tJMP(LP)\n");
 	}
 	
+	/**
+	 * Genere le bloc d'instruction de chaque fils de fonctions
+	 * @param node
+	 * @param buff
+	 * @param indent
+	 */
 	public void generated_Bloc(NoeudElement node, StringBuffer buff, int indent){
+			System.out.println("\t\tGéneration des blocs\n");
+			for (NoeudElement child : node.getChildren()){
+				
+				this.generated_Instruction( child, buff, indent);
+			}
+		
+	}
+
+	
+	/**
+	 * Génère une instruction.
+	 * L'instruction est une ligne par defaut dans une fonction
+	 * @todo retour
+	 * @todo si
+	 * @todo while
+	 */
+	public void generated_Instruction(NoeudElement node, StringBuffer buff, int indent){
+		System.out.println("\t\tGéneration Instructions\n");
+		
+		if(node.getCategorie() instanceof String){
+			switch((String)node.getCategorie()){
+				case "affectation":
+					this.generate_Affectation((NAffectation) node, buff, indent+1);
+					break;
+
+				case "retour":
+					this.generated_Return( node, buff, indent+1);
+					break;
+					
+				// Cas d'une alternative
+				case "si":
+					this.generated_If(node, buff, indent+1);
+					break;
+					
+				// Cas du while
+				case "while":
+					this.generated_While(node, buff, indent+1);
+					break;
+					
+				default:
+					break;
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param node
+	 * @param buff
+	 * @param indent
+	 */
+	private void generate_Affectation(NAffectation node, StringBuffer buff,int indent) {
+		System.out.println("\t\t\tGéneration Affectation\n");
+		this.generated_Indent(indent, buff);
+		buff.append("|== Debut (=) ==|\n");
+		
+		/**
+		 * Partie droite
+		 */
+		
+		this.generated_Expression(node.getFD(), buff, indent);
+		/**
+		 * Affectation du resultat à la partie gauche
+		 */
+		// Si le resultat de droite vient d'une fonction Il est stocké dans R0
+		if(node.getFD() instanceof NAppelFonction){
+			this.generated_Indent(indent, buff);
+			buff.append("PUSH(R10) | retour fonction placé dans la pile\n");
+		}
+		
+		// Récuperation du resultat
+		this.generated_Indent(indent, buff);
+		buff.append("POP(R0) | valeur à insérer dans l'IDF\n");
+		
+		NVariable elt = (NVariable)(node.getFG());
+		
+		switch(elt.getScope()){
+		
+		// Var globale on change la valeur en MC
+		case -1:
+			this.generated_Indent(indent, buff);buff.append("ST(R0, " + elt.getRef() + ")\n");
+			break;
+			
+		// nom de la fonction dans laquelle elle est
+		default:
+			
+			switch(elt.getCategorie()){
+			
+				// Variable locale on change la valeur dans la pile
+				// Sa place a été alloué en début de fonction normalement
+				case "variable":
+					this.generated_Indent(indent, buff);buff.append("PUTFRAME(R0, 4 * " + elt.getRef() + ")\n");
+				break;
+			}
+			/*
+			switch(n.filsG.categorie){
+				case 'param'
+					>> PUTFRAME(R0, -(3 + elt.index)*4) // 0 premier parametre envoyé
+			}
+			*/
+		break;
+	}
+	this.generated_Indent(indent, buff);buff.append("|== Fin (=) ==|\n");
+	buff.append("\n");
 		
 	}
 	
+	/**
+	 * Génère une expression
+	 * - Une expression est une partie d'instruction
+	 * - une operation
+	 * - un atome (constante, idf, appelfonction)
+	 * -lire
+	 */
+	private void generated_Expression(NoeudElement node, StringBuffer buff, int indent) {
+		System.out.println("\t\t\tGéneration Expression:"+(String)node.getCategorie()+"\n");
+		if(node.getCategorie() instanceof String){
+					
+					switch((String)node.getCategorie()){
+						case "constant":
+							this.generated_Atome(node, buff, indent+1);
+							break;
+		
+						case "identificateur":
+							this.generated_Atome(node, buff, indent+1);
+							break;
+							
+						case "appel_fonction":
+							this.generated_Atome(node, buff, indent+1);
+							break;
+							
+						case "operation":
+							this.generated_Operation((NOperation)node, buff, indent+1);
+							break;
+							
+						case "read":
+							break;
+							
+						default:
+							break;
+					}
+				}
+				
+	}
+	
+	/**
+	 * Génère un atome
+	 * - Un atome est un facteur ou partie de facteur
+	 * - IDF / NUM / appel / (expression)
+	 * - x / 5 / f() / (..)
+	 * @todo generer_Call
+	 * @todo generer idf
+	 */
+	private void generated_Atome(NoeudElement node, StringBuffer buff, int indent){
+		
+		// Nombre : on mets sa valeur dans la pile
+		if((Integer)((NConstant)node).getValeur() instanceof Integer){
+			
+			Integer elt = (Integer)((NConstant)node).getValeur();
+			System.out.println("\t\tGéneration atome:"+elt+"\n");
+			this.generated_Indent(indent, buff);buff.append("|= NOMBRE =|\n");
+			this.generated_Indent(indent, buff);buff.append("CMOVE(" + elt + ", R0)\n");
+			this.generated_Indent(indent, buff);buff.append("PUSH(R0)\n");
+		}
+		// Variable : on mets sa valeur dans la pile
+		else if(((NVariable)node) instanceof NVariable){
+			this.generated_Indent(indent, buff);buff.append("|= IDF =|\n");
+			this.generated_Idf((NVariable)node, buff, indent);
+		}
+		// Appel
+		else if(node instanceof NAppelFonction){
+			this.generated_Call((NAppelFonction)node, buff, indent);
+		}
+		// PO expression PF
+		else{
+			this.generated_Expression(node, buff, indent);
+		}
+		buff.append("\n");
+	}
+	
+
+	/**
+	 * Genere les operation +/- avec facteurs et parenthèses
+	 * @param node
+	 * @param buff
+	 * @param indent
+	 * @todo generer_facteur
+	 */
+	private void generated_Operation(NOperation node, StringBuffer buff, int indent) {
+		if(node.getVal() instanceof String){
+			switch((String)(node.getVal())){
+				case "+":
+					System.out.println("\t\t\t"+node.getVal());
+					this.generated_Indent(indent, buff);buff.append("|== Debut (+) ==|\n");
+					
+					// Expr gauche
+					this.generated_Expression(node.getChildren().get(0), buff, indent + 1);
+					// Facteur droit
+					this.generated_Facteur(node.getChildren().get(1), buff, indent + 1);
+					
+					// Si l'expr de droite est un appel on doit récuperer le resultat
+					if(node.getFD() instanceof NAppelFonction){
+						this.generated_Indent(indent, buff);
+						buff.append("PUSH(R10) | retour fonction placé dans la pile\n");
+					}
+					
+					this.generated_Indent(indent, buff);buff.append("POP(R1)\n");
+					this.generated_Indent(indent, buff);buff.append("POP(R0)\n");
+					this.generated_Indent(indent, buff);buff.append("ADD(R0, R1, R2)\n");
+					this.generated_Indent(indent, buff);buff.append("PUSH(R2)\n");
+					this.generated_Indent(indent, buff);buff.append("|== Fin (+) ==|\n");
+					
+					break;
+				case "-":
+					this.generated_Indent(indent, buff);buff.append("|== Debut (-) ==|\n");
+					
+					this.generated_Expression(node.getFG(), buff, indent + 1);
+					this.generated_Facteur(node.getFD(), buff, indent + 1);
+					
+					// Si l'expr de droite est un appel on doit récuperer le resultat
+					if(node.getFD() instanceof NAppelFonction){
+						this.generated_Indent(indent, buff);
+						buff.append("PUSH(R10) | retour fonction placé dans la pile\n");
+					}
+					this.generated_Indent(indent, buff);buff.append("POP(R1)\n");
+					this.generated_Indent(indent, buff);buff.append("POP(R0)\n");
+					this.generated_Indent(indent, buff);buff.append("SUB(R0, R1, R2)\n");
+					this.generated_Indent(indent, buff);buff.append("PUSH(R2)\n");
+					this.generated_Indent(indent, buff);buff.append("|== Fin (-) ==|\n");
+					break;
+				
+				// ça peut être "*"
+				default:
+					this.generated_Facteur(node, buff, indent);
+					break;
+			}
+		}
+		// facteur
+		else{
+			this.generated_Facteur(node, buff, indent);
+		}
+		
+	}
+
+	/**
+	 * @TOD0
+	 * @param node
+	 * @param buff
+	 * @param indent
+	 */
+	private void generated_Call(NAppelFonction node, StringBuffer buff,
+			int indent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @todo
+	 * Génère un facteur
+	 * - Un facteur est une expression ou partie d'expression
+	 * - DIV     / MUL     / atome
+	 * - .. / .. / .. * .. / atome
+	 */
+	private void generated_Facteur(NoeudElement noeudElement,
+			StringBuffer buff, int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void generated_Idf(NoeudElement node2, StringBuffer buff, int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void generated_If(NoeudElement node2, StringBuffer buff, int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void generated_While(NoeudElement node2, StringBuffer buff, int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void generated_Return(NoeudElement node2, StringBuffer buff, int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void generated_Write(NoeudElement node2, StringBuffer buff, int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+		
 }

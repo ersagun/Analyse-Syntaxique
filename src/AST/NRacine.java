@@ -1,7 +1,5 @@
 package AST;
 
-import java.util.ArrayList;
-
 import TDS.TDS;
 
 public class NRacine extends NoeudElement {

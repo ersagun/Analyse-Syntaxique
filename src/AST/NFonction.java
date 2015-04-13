@@ -1,7 +1,5 @@
 package AST;
 
-import java.util.ArrayList;
-
 import TDS.*;
 
 //une fonction a forcement comme scope, globale
