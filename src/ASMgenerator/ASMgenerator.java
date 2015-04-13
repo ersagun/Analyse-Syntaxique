@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import version_bis.Node;
+
 /**
  * 
  * @author Groupe : Complilation L3 MIAGE 2014-2015
@@ -144,8 +146,6 @@ public class ASMgenerator {
 	 * @param buff
 	 */
 	public void generated_Function(NFonction node, StringBuffer buff, int indent){
-		
-		
 		System.out.println("\tGéneration des fonctions\n");
 		int nbVarLocal = node.getnlocalvar(this.tds);
 		String id = node.getname(this.tds);
@@ -177,7 +177,6 @@ public class ASMgenerator {
 				
 				this.generated_Instruction( child, buff, indent);
 			}
-		
 	}
 
 	
@@ -249,33 +248,33 @@ public class ASMgenerator {
 		NVariable elt = (NVariable)(node.getFG());
 		
 		switch(elt.getScope()){
-		
-		// Var globale on change la valeur en MC
-		case -1:
-			this.generated_Indent(indent, buff);buff.append("ST(R0, " + elt.getRef() + ")\n");
-			break;
 			
-		// nom de la fonction dans laquelle elle est
-		default:
-			
-			switch(elt.getCategorie()){
-			
-				// Variable locale on change la valeur dans la pile
-				// Sa place a été alloué en début de fonction normalement
-				case "variable":
-					this.generated_Indent(indent, buff);buff.append("PUTFRAME(R0, 4 * " + elt.getRef() + ")\n");
+			// Var globale on change la valeur en MC
+			case -1:
+				this.generated_Indent(indent, buff);buff.append("ST(R0, " + elt.getRef() + ")\n");
 				break;
-			}
-			/*
-			switch(n.filsG.categorie){
-				case 'param'
-					>> PUTFRAME(R0, -(3 + elt.index)*4) // 0 premier parametre envoyé
-			}
-			*/
-		break;
-	}
-	this.generated_Indent(indent, buff);buff.append("|== Fin (=) ==|\n");
-	buff.append("\n");
+				
+			// nom de la fonction dans laquelle elle est
+			default:
+				
+				switch(elt.getCategorie()){
+				
+					// Variable locale on change la valeur dans la pile
+					// Sa place a été alloué en début de fonction normalement
+					case "variable":
+						this.generated_Indent(indent, buff);buff.append("PUTFRAME(R0, 4 * " + elt.getRef() + ")\n");
+					break;
+				}
+				/*
+				switch(n.filsG.categorie){
+					case 'param'
+						>> PUTFRAME(R0, -(3 + elt.index)*4) // 0 premier parametre envoyé
+				}
+				*/
+			break;
+		}
+		this.generated_Indent(indent, buff);buff.append("|== Fin (=) ==|\n");
+		buff.append("\n");
 		
 	}
 	
@@ -288,32 +287,31 @@ public class ASMgenerator {
 	 */
 	private void generated_Expression(NoeudElement node, StringBuffer buff, int indent) {
 		System.out.println("\t\t\tGéneration Expression:"+(String)node.getCategorie()+"\n");
-		if(node.getCategorie() instanceof String){
-					
-					switch((String)node.getCategorie()){
-						case "constant":
-							this.generated_Atome(node, buff, indent+1);
-							break;
+		if(node.getCategorie() instanceof String){		
+			switch((String)node.getCategorie()){
+				case "constant":
+					this.generated_Atome(node, buff, indent+1);
+					break;
 		
-						case "identificateur":
-							this.generated_Atome(node, buff, indent+1);
-							break;
+				case "identificateur":
+					this.generated_Atome(node, buff, indent+1);
+					break;
 							
-						case "appel_fonction":
-							this.generated_Atome(node, buff, indent+1);
-							break;
+				case "appel_fonction":
+					this.generated_Atome(node, buff, indent+1);
+					break;
 							
-						case "operation":
-							this.generated_Operation((NOperation)node, buff, indent+1);
-							break;
+				case "operation":
+					this.generated_Operation((NOperation)node, buff, indent+1);
+					break;
 							
-						case "read":
-							break;
+				case "read":
+					break;
 							
-						default:
-							break;
-					}
-				}
+				default:
+					break;
+			}
+		}
 				
 	}
 	
@@ -327,7 +325,7 @@ public class ASMgenerator {
 	 */
 	private void generated_Atome(NoeudElement node, StringBuffer buff, int indent){
 		
-		// Nombre : on mets sa valeur dans la pile
+		// Nombre : on met sa valeur dans la pile
 		if((Integer)((NConstant)node).getValeur() instanceof Integer){
 			
 			Integer elt = (Integer)((NConstant)node).getValeur();
@@ -336,7 +334,7 @@ public class ASMgenerator {
 			this.generated_Indent(indent, buff);buff.append("CMOVE(" + elt + ", R0)\n");
 			this.generated_Indent(indent, buff);buff.append("PUSH(R0)\n");
 		}
-		// Variable : on mets sa valeur dans la pile
+		// Variable : on met sa valeur dans la pile
 		else if(((NVariable)node) instanceof NVariable){
 			this.generated_Indent(indent, buff);buff.append("|= IDF =|\n");
 			this.generated_Idf((NVariable)node, buff, indent);
@@ -422,8 +420,7 @@ public class ASMgenerator {
 	 * @param buff
 	 * @param indent
 	 */
-	private void generated_Call(NAppelFonction node, StringBuffer buff,
-			int indent) {
+	private void generated_Call(NAppelFonction node, StringBuffer buff, int indent) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -435,8 +432,7 @@ public class ASMgenerator {
 	 * - DIV     / MUL     / atome
 	 * - .. / .. / .. * .. / atome
 	 */
-	private void generated_Facteur(NoeudElement noeudElement,
-			StringBuffer buff, int i) {
+	private void generated_Facteur(NoeudElement noeudElement, StringBuffer buff, int i) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -466,5 +462,14 @@ public class ASMgenerator {
 		
 	}
 
+	private void generated_Read(NoeudElement node2, StringBuffer buff, int indent){
+		this.generated_Indent(indent, buff);
+		buff.append("|== Debut (read()) ==|\n");
+		this.generated_Indent(indent, buff);
+		buff.append("PUSH(R0)\n");
+		this.generated_Indent(indent, buff);
+		buff.append("|== Fin (read()) ==|\n");
 		
+		buff.append("\n");
+	}	
 }
