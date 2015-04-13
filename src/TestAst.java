@@ -50,7 +50,7 @@ public class TestAst {
 		//creation de noeud affectation
 		NoeudElement affect=new NOperation("=");
 		//fils gauche de affectation var i
-		NoeudElement var=new NVariable(0,3);
+		NoeudElement var=new NVariable(0,-1);
 		//fils droite de affectation val 0
 		NoeudElement val=new NConstant(0);
 		//ajouter les fils a affectation
@@ -60,7 +60,7 @@ public class TestAst {
 		//creation de noeud daffectation 2
 		NoeudElement affect2=new NOperation("="); 
 		//recuperation de la variable j
-		NoeudElement varj=new NVariable(1,3);
+		NoeudElement varj=new NVariable(1,-1);
 		
 		//creation du fils droite de l'affectation donc le moins 
 		NoeudElement moins = new NOperation("-");
@@ -150,25 +150,36 @@ void main(){
 		**/
 		
 		//Simulation de cpt
-		//int cpt1=0;
-		//TDS tds1 = new TDS();
-		//NoeudElement racine1 = new NRacine();
-		/**
+		int cpt1=0;
+		TDS tds1 = new TDS();
+		NoeudElement racine1 = new NRacine();
+		
 		
 		TdsElement vari1=new Variable(cpt1,"i",-1,0,"int");
-		tds.ajoute(vari1);
+		tds1.ajoute(vari1);
 		cpt1++;
 		TdsElement varj1=new Variable(cpt1,"j",-1,0,"int");
-		tds.ajoute(varj1);
+		tds1.ajoute(varj1);
 		cpt1++;
 		TdsElement main1=new Fonction(cpt1,"main",0,0,"void");
-		tds.ajoute(main1);
+		tds1.ajoute(main1);
 		cpt1++;
-		**/
 		
 		
+		NoeudElement fonction_main1=new NFonction(2);
+		NoeudElement affect11=new NOperation("=");
+		//fils gauche de affectation var i
+		NoeudElement var1=new NVariable(0,-1);
+		//fils droite de affectation val 0
+		NoeudElement val1=new NConstant(0);
+		//ajouter les fils a affectation
 		
-		
+		NoeudElement affect22=new NOperation("=");
+		//fils gauche de affectation var j
+		NoeudElement var2=new NVariable(1,-1);
+		//fils droite de affectation val 0
+		NoeudElement val2=new NConstant(0);
+		//ajouter les fils a affectation
 		
 		
 		
