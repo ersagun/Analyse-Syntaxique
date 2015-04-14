@@ -3,16 +3,16 @@ package AST;
 import TDS.TDS;
 
 public class NCondition extends NoeudElement {
-
-	public NCondition(String categoriep) {
-		super(categoriep);
-		// TODO Auto-generated constructor stub
+	String condition;
+	public NCondition(String condition) {
+		super("condition");
+		this.condition=condition;
 	}
 
 	@Override
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub
-		return null;
+		return  "Noeud condition => #condition : " + this.condition;
 	}
 
 }

@@ -3,9 +3,11 @@ package AST;
 import TDS.TDS;
 
 public class NAppelFonction extends NoeudElement {
-
-	public NAppelFonction(String categoriep) {
-		super(categoriep);
+	int ref;
+	public NAppelFonction(int ref) {
+		super("appelFonction");
+		this.ref=ref;
+		
 		// TODO Auto-generated constructor stub
 	}
 

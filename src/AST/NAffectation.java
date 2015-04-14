@@ -4,9 +4,10 @@ import AST.NoeudElement;
 
 
 public class NAffectation extends NoeudElement {
-
-	public NAffectation(String t) {
+	String val;
+	public NAffectation(String c) {
 		super("affectation");
+		this.val=c;
 		
 	}
 	@Override

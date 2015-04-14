@@ -16,6 +16,7 @@ main:
 			PUSH(R0)
 
 		POP(R0) | valeur à insérer dans l'IDF
+		ST(R0, 0)
 		|== Fin (=) ==|
 
 		|== Debut (=) ==|
@@ -36,6 +37,7 @@ main:
 			PUSH(R2)
 			|== Fin (-) ==|
 		POP(R0) | valeur à insérer dans l'IDF
+		ST(R0, 1)
 		|== Fin (=) ==|
 
 	DEALLOCATE(0)

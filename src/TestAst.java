@@ -21,6 +21,8 @@ public class TestAst {
 		/**
 		 * Création et insertion des tds elements
 		 */
+		
+		/**
 		TDS tds=new TDS();
 		//cpt=0
 		TdsElement a=new Variable(cpt,"i",-1,0,"int");
@@ -102,12 +104,14 @@ public class TestAst {
 		plus2.ajouterFG(const3);
 		plus2.ajouterFD(vari2);
 
+		
 		String v="";
-		String s=NoeudElement.afficheLesFils(racine,tds,v);
-		System.out.println(s);
-	
+		System.out.println(NoeudElement.afficheLesFils(racine,tds,v));
+**/
 		//voila affichage alors, j'aai du mal pour faire la fonction recursive qui parcours du coup j'ai fait a la main ^^ pour toute question sur l'arbe ou tds n'hesitez pas
-		/**
+/**
+		System.out.println("--------------------------------------------------------------------------------------------------");
+		
 		System.out.println(racine.afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).afficherNoeud(tds));
 		System.out.println(racine.listeNoeud.get(0).listeNoeud.get(0).afficherNoeud(tds));
@@ -134,7 +138,8 @@ public class TestAst {
 		
 		System.out.println("--------------------------------------------------------------------------------------------------");
 		
-		*/
+**/
+
 		
 		/**
 
@@ -148,6 +153,10 @@ void main(){
 	}
  }		
 		**/
+		
+		//IN THE END, la fonction affichage de l'arbre recusive est reussi !!! :p a 02h50 xD seul probleme, je n'arrive pas afficher la racine mais 
+		//on s'en fou on sait qu'il est la. La boucle while se fait de la facon suivante: while est un fils d'une fonction tout le temps et ce fils nommé while contien 
+		//un seul et unique enfant gaté la condition, ensuite le corps qui est donc plussieur operation . . . Pour toute question n'hesitez pas 
 		
 		//Simulation de cpt
 		int cpt1=0;
@@ -167,30 +176,57 @@ void main(){
 		
 		
 		NoeudElement fonction_main1=new NFonction(2);
-		NoeudElement affect11=new NOperation("=");
+		NoeudElement affect11=new NAffectation("=");
 		//fils gauche de affectation var i
 		NoeudElement var1=new NVariable(0,-1);
 		//fils droite de affectation val 0
 		NoeudElement val1=new NConstant(0);
 		//ajouter les fils a affectation
 		
-		NoeudElement affect22=new NOperation("=");
+		NoeudElement affect22=new NAffectation("=");
 		//fils gauche de affectation var j
 		NoeudElement var2=new NVariable(1,-1);
 		//fils droite de affectation val 0
 		NoeudElement val2=new NConstant(0);
 		//ajouter les fils a affectation
 		
+		NoeudElement nwhile=new NWhile();
+		NoeudElement ncond=new NCondition("i <3");
+		NoeudElement naffectdswhile=new NAffectation("=");
+		//fils gauche de affectation var j
+		NoeudElement varj2=new NVariable(1,-1);
 		
 		
+		NoeudElement plus=new NOperation("+");
+		NoeudElement varj22=new NVariable(1,-1);
+		
+		//fils gauche de affectation var j
+		NoeudElement vari22=new NVariable(0,-1);
 		
 		
+		affect11.ajouterFG(var1);
+		affect11.ajouterFD(val1);
 		
+		affect22.ajouterFG(var2);
+		affect22.ajouterFD(val2);
 		
+		nwhile.ajouter1fils(ncond);
+		ncond.ajouter1fils(naffectdswhile);
+		naffectdswhile.ajouterFG(varj2);
+		naffectdswhile.ajouterFD(plus);
+		plus.ajouterFG(varj22);
+		plus.ajouterFD(vari22);
 		
+		racine1.ajouter1fils(fonction_main1);
+		NoeudElement[] tableauDoperationDansLaFonction=new NoeudElement[3];
+		tableauDoperationDansLaFonction[0]=affect11;
+		tableauDoperationDansLaFonction[1]=affect22;
+		tableauDoperationDansLaFonction[2]=nwhile;
+		fonction_main1.ajouterNFils(tableauDoperationDansLaFonction);
 		
-		
-		
+		String v="";
+		String s=NoeudElement.afficheLesFils(racine1,tds1,v);
+		System.out.println(s);
 		
 	}
 }

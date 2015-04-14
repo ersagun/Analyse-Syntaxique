@@ -48,8 +48,8 @@ public class TestASMgenerator {
 			//affectation un i=0
 			//creation de noeud affectation
 			NoeudElement affect=new NAffectation("=");
-			//fils gauche de affectation var i
-			NoeudElement var=new NVariable(0,3);
+			//fils gauche de affectation var i ATTENTION ! ICI LA VARIABLE EST GLOBALE DONC LE SCOPE EST MOINS UN JE ME SUIS TROMPE (Ersagun)
+			NoeudElement var=new NVariable(0,-1);
 			//fils droite de affectation val 0
 			NoeudElement val=new NConstant(0);
 			//ajouter les fils a affectation
@@ -58,8 +58,8 @@ public class TestASMgenerator {
 			//affectation deux j = (2+i) - (3+i)
 			//creation de noeud daffectation 2
 			NoeudElement affect2=new NAffectation("="); 
-			//recuperation de la variable j
-			NoeudElement varj=new NVariable(1,3);
+			//recuperation de la variable j     PAREIL (ERSAGUN)
+			NoeudElement varj=new NVariable(1,-1);
 			
 			//creation du fils droite de l'affectation donc le moins 
 			NoeudElement moins = new NOperation("-");
