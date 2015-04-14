@@ -8,9 +8,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import version_bis.Node;
-import version_bis.NodeContentAppel;
-
 /**
  * 
  * @author Groupe : Complilation L3 MIAGE 2014-2015
@@ -184,7 +181,6 @@ public class ASMgenerator {
 	/**
 	 * Génère une instruction.
 	 * L'instruction est une ligne par defaut dans une fonction
-	 * @todo retour
 	 * @todo si
 	 * @todo while
 	 */
@@ -307,6 +303,7 @@ public class ASMgenerator {
 					break;
 							
 				case "read":
+					this.generated_Read(node, buff, indent);
 					break;
 							
 				default:
@@ -322,7 +319,6 @@ public class ASMgenerator {
 	 * - IDF / NUM / appel / (expression)
 	 * - x / 5 / f() / (..)
 	 * @todo generer_Call
-	 * @todo generer idf
 	 */
 	private void generated_Atome(NoeudElement node, StringBuffer buff, int indent){
 		
@@ -414,46 +410,69 @@ public class ASMgenerator {
 		}
 		
 	}
-
+	
 	/**
-	 * @TOD0
+	 * Génere un idf, il peut etre global...
+	 * ou local, dans ce cas il est soit une simple variable soit un parametre
 	 * @param node
 	 * @param buff
 	 * @param indent
 	 */
-	private void generated_Call(NAppelFonction node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
+	private void generated_Idf(NVariable node, StringBuffer buff, int indent) {
+		
+		// Globale ou fonction
+		switch(node.getScope()){
+		
+			// Var globale on change la valeur en MC
+			case -1:
+				this.generated_Indent(indent, buff);
+				buff.append("LD(" + node.getRef() + ", R0)\n");
+				break;
+				
+			// fonction
+			default:
+				
+				switch(node.getCategorie()){
+				
+					// Variable locale on r�cup�re la valeur dans la pile
+					case "variable":
+						this.generated_Indent(indent, buff);
+						buff.append("GETFRAME(R0, 4 * " + node.getRef() + ")\n");
+					break;
+					
+					// IDF parametre � la fonction
+					case "parametre":
+						this.generated_Indent(indent, buff);
+						buff.append("GETFRAME(R0, - (3 + " + node.getRef() + ") * 4)\n");
+						break;
+				}
+			break;
+		}
+		this.generated_Indent(indent, buff);
+		buff.append("PUSH(R0)\n");
 		
 	}
-
+	
 	/**
-	 * @todo
-	 * Génère un facteur
-	 * - Un facteur est une expression ou partie d'expression
-	 * - DIV     / MUL     / atome
-	 * - .. / .. / .. * .. / atome
+	 * Permet de garder la valeur de retour
+	 * @param node
+	 * @param buff
+	 * @param indent
 	 */
-	private void generated_Facteur(NoeudElement noeudElement, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void generated_Idf(NoeudElement node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void generated_If(NoeudElement node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void generated_While(NoeudElement node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void generated_Return(NoeudElement node, StringBuffer buff, int indent) {
+		this.generated_Indent(indent, buff);
+		buff.append("|== Debut (retour) ==|\n");
+		
+		this.generated_Expression(node.getFG(), buff, indent+1);
+		
+		// R�cuperation du resultat de l'expression dans R0
+		this.generated_Indent(indent, buff);
+		buff.append("POP(R0)\n");
+		this.generated_Indent(indent, buff);
+		buff.append("MOVE(R0, R10)\n"); // mise du resultat dans R10 (stockage conventionnel de retour de fonction)
+		this.generated_Indent(indent, buff);
+		buff.append("|== Fin (retour) ==|\n");
+		buff.append("\n");
 
 	}
 	
@@ -489,4 +508,41 @@ public class ASMgenerator {
 		this.generated_Indent(indent, buff); buff.append("|== Fin (read()) ==|\n");
 		buff.append("\n");
 	}	
+
+	/**
+	 * @TOD0
+	 * @param node
+	 * @param buff
+	 * @param indent
+	 */
+	private void generated_Call(NAppelFonction node, StringBuffer buff, int indent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @todo
+	 * Génère un facteur
+	 * - Un facteur est une expression ou partie d'expression
+	 * - DIV     / MUL     / atome
+	 * - .. / .. / .. * .. / atome
+	 */
+	private void generated_Facteur(NoeudElement noeudElement, StringBuffer buff, int indent) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+
+	private void generated_If(NoeudElement node, StringBuffer buff, int indent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void generated_While(NoeudElement node, StringBuffer buff, int indent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }
