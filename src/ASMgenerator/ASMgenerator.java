@@ -363,9 +363,9 @@ public class ASMgenerator {
 					this.generated_Indent(indent, buff); buff.append("|== Debut (+) ==|\n");
 					
 					// Expr gauche
-					this.generated_Expression(node.getChildren().get(0), buff, indent + 1);
+					this.generated_Expression(node.getFG(), buff, indent + 1);
 					// Facteur droit
-					this.generated_Facteur(node.getChildren().get(1), buff, indent + 1);
+					this.generated_Facteur((NOperation)node.getFD(), buff, indent + 1);
 					
 					// Si l'expr de droite est un appel on doit récuperer le resultat
 					if(node.getFD() instanceof NAppelFonction){
@@ -384,7 +384,7 @@ public class ASMgenerator {
 					this.generated_Indent(indent, buff); buff.append("|== Debut (-) ==|\n");
 					
 					this.generated_Expression(node.getFG(), buff, indent + 1);
-					this.generated_Facteur(node.getFD(), buff, indent + 1);
+					this.generated_Facteur((NOperation)node.getFD(), buff, indent + 1);
 					
 					// Si l'expr de droite est un appel on doit récuperer le resultat
 					if(node.getFD() instanceof NAppelFonction){
@@ -521,14 +521,52 @@ public class ASMgenerator {
 	}
 
 	/**
-	 * @todo
 	 * Génère un facteur
 	 * - Un facteur est une expression ou partie d'expression
 	 * - DIV     / MUL     / atome
 	 * - .. / .. / .. * .. / atome
 	 */
-	private void generated_Facteur(NoeudElement noeudElement, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
+	private void generated_Facteur(NOperation node, StringBuffer buff, int indent) {
+		// facteur DIV atome
+				// facteur MUL atome
+				if(node.getVal() instanceof String){
+					switch((String)(node.getVal())){
+						case "/":
+							this.generated_Indent(indent, buff);buff.append("|== Debut (/) ==|\n");
+							
+							this.generated_Facteur((NOperation)node.getFG(), buff, indent+1);
+							this.generated_Atome(node.getFD(), buff, indent+1);
+							
+							this.generated_Indent(indent, buff);buff.append("POP(R1)\n");
+							this.generated_Indent(indent, buff);buff.append("POP(R0)\n");
+							this.generated_Indent(indent, buff);buff.append("DIV(R0, R1, R2)\n");
+							this.generated_Indent(indent, buff);buff.append("PUSH(R2)\n");
+							this.generated_Indent(indent, buff);buff.append("|== Fin (/) ==|\n");
+							break;
+							
+						case "*":
+							this.generated_Indent(indent, buff);buff.append("|== Debut (*) ==|\n");
+							
+							this.generated_Facteur((NOperation)node.getFG(), buff, indent+1);
+							this.generated_Atome(node.getFD(), buff, indent+1);
+							
+							this.generated_Indent(indent, buff);buff.append("POP(R1)\n");
+							this.generated_Indent(indent, buff);buff.append("POP(R0)\n");
+							this.generated_Indent(indent, buff);buff.append("MUL(R0, R1, R2)\n");
+							this.generated_Indent(indent, buff);buff.append("PUSH(R2)\n");
+							this.generated_Indent(indent, buff);buff.append("|== Fin (/) ==|\n");
+							break;
+						default:
+							// �a peut �tre un + donc on va vers atome
+							this.generated_Atome(node, buff, indent);
+							break;
+					}
+					buff.append("\n");
+				}
+				// Atome
+				else{
+					this.generated_Atome(node, buff, indent);
+				}
 		
 	}
 	
