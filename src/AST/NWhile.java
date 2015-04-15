@@ -6,6 +6,8 @@ public class NWhile extends NoeudElement {
 
 	public NWhile() {
 		super("while");
+		this.ajouterFG(new NCondition("racine-condition"));
+		this.ajouterFD(new NOperation("racine-operation"));
 		// TODO Auto-generated constructor stub
 	}
 

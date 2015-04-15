@@ -56,9 +56,10 @@ public class AST2 {
 
 		//Creation de noeud while
 		NoeudElement wayle=new NWhile();
-		NoeudElement condition=new NCondition();
 		NoeudElement conditionWhile=new NCondition("i",-1,"<",3,tds);
-		
+		//ici on peut ajouter autant de condition qu'on veut
+		wayle.getFG().ajouter1fils(conditionWhile);
+	
 		// noeud wayle complet il reste FD qui est donc le corps de while
 		
 		NoeudElement affectj=new NAffectation("j",-1,"=",tds);
@@ -74,12 +75,12 @@ public class AST2 {
 		// affect2 complet
 		
 		
-		wayle.ajouterFG(condition);
-		condition.ajouter1fils(conditionWhile);
+	
 
 
 		affectj.ajouterFD(plus);
-		wayle.ajouterFD(affectj);
+		//ici on peut ajouter autant d'operation qu'on veut
+		wayle.getFD().ajouter1fils(affectj);
 	
 
 		// adjonction des deux affectations et le noeud while a la fonction main
