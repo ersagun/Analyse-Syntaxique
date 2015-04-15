@@ -5,7 +5,8 @@ public class Parametre extends TdsElement {
 int rang;
 int scope;
 String type;
-int valeur
+int valeur;
+
 public Parametre(int idf,String nomp,int scopep,int rangp,String typep,int valp){
 	super(idf, "param",nomp );
 	this.rang=rangp;
@@ -15,6 +16,11 @@ public Parametre(int idf,String nomp,int scopep,int rangp,String typep,int valp)
 }
 
 public String toString(){
-	return "idf : "+this.idf+" , cat : "+this.cat+" , nom : "+this.nom+", type : "+this.type+" , scope : "+this.scope+" , rang : "+this.rang;
+	return "idf : "+this.id+" , cat : "+this.cat+" , nom : "+this.nom+", type : "+this.type+" , scope : "+this.scope+" , rang : "+this.rang;
+}
+
+public int getScope() {
+	// TODO Auto-generated method stub
+	return this.scope;
 }
 }

@@ -60,8 +60,7 @@ public abstract class NoeudElement {
 		this.categorie = categorie;
 	}
 	
-	//PROBLEME
-		
+	
 	public static String afficheLesFils(NoeudElement racine,TDS tds,String v) {
 		int size=racine.listeNoeud.size();
 		String s="";

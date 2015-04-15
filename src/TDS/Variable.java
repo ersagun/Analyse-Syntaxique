@@ -5,8 +5,8 @@ public class Variable extends TdsElement {
 	int scope;
 	String type;
 
-	public Variable(int idf,String nomp,int scopep,int valp,String typep){
-		super(idf, "identificateur",nomp);
+	public Variable(int id,String nomp,int scopep,int valp,String typep){
+		super(id, "identificateur",nomp);
 		this.val=valp;
 		this.scope=scopep;
 		this.type=typep;
@@ -14,7 +14,7 @@ public class Variable extends TdsElement {
 
 	
 	public String toString(){
-		return "idf : "+this.idf+" , cat : "+this.cat+" , nom : "+this.nom+", type : "+this.type+" , scope : "+this.scope+" , val : "+this.val;
+		return "idf : "+this.id+" , cat : "+this.cat+" , nom : "+this.nom+", type : "+this.type+" , scope : "+this.scope+" , val : "+this.val;
 	}
 
 
@@ -25,6 +25,10 @@ public class Variable extends TdsElement {
 
 	public String getType() {
 		return type;
+	}
+	
+	public int getId(){
+		return id;
 	}
 
 

@@ -34,6 +34,7 @@ public class TDS {
 	
 	
 	
+	// IDF et SCOPE
 	public TdsElement search(int idfp,int scopep){
 		int taille=this.table.size();
 		int i=0;
@@ -41,22 +42,28 @@ public class TDS {
 		boolean trouve=false;
 		
 		for(TdsElement n:this.table){
-			if(n.idf==idfp && ((Variable)n).scope==scopep){
-				a=n;
-				trouve=true;
-				break;
-			}
-		}
-		
-		if(trouve==false){
-			for(TdsElement n:this.table){
-				if(n.idf==idfp){
+			if(n instanceof Variable){	
+				if(((Variable)n).id==idfp && ((Variable)n).scope==scopep){
 					a=n;
 					trouve=true;
 					break;
 				}
 			}
 		}
+	
+		
+		if(trouve==false){
+			for(TdsElement n:this.table){
+				if(n instanceof Vlocale){	
+					if(((Vlocale)n).id==idfp && ((Vlocale)n).scope==scopep){
+						a=n;
+						trouve=true;
+						break;
+					}
+				}
+			}
+				
+			}
 		if(trouve==false){
 			 try {
 				throw new Exception();
@@ -69,32 +76,79 @@ public class TDS {
 		return a;
 	}
 	
+	
+	//IDF
 	public TdsElement search(int idfp){
 		int taille=this.table.size();
 		int i=0;
 		TdsElement a=null;
 		boolean trouve=false;
 		
-		for(TdsElement n:this.table){
-			if(n.idf==idfp){
-				a=n;
-				trouve=true;
-				break;
+			for(TdsElement n:this.table){
+					
+					if(n.id==idfp){
+						a=n;
+						trouve=true;
+						break;
+					}
+				}
+			
+		if(trouve==false){
+			 try {
+				throw new VarUndefinedException(idfp);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		
-		if(trouve==false){
-			for(TdsElement n:this.table){
-				if(n.idf==idfp){
+		return a;
+	}
+	
+
+	//NOM et SCOPE
+	public TdsElement searchVariable(String nom,int scope){
+		TdsElement a=null;
+		boolean trouve=false;
+		
+		outerloop:
+		for(TdsElement n:this.table){
+			if(n instanceof Variable && trouve==false){				
+				if(((Variable)n).nom==nom && ((Variable)n).scope==scope){
 					a=n;
 					trouve=true;
-					break;
+					break outerloop;
 				}
 			}
 		}
 		if(trouve==false){
+	    outerloop:
+		for(TdsElement n:this.table){
+			if(n instanceof Vlocale ){		
+				if(((Vlocale)n).nom==nom && ((Vlocale)n).scope==scope){
+				a=n;
+				trouve=true;
+				break outerloop;
+				}
+			}
+		}
+		}
+		if(trouve==false){
+		outerloop:
+		for(TdsElement n:this.table){
+			if(n instanceof Parametre){		
+				if(((Parametre)n).nom==nom && ((Parametre)n).scope==scope){
+				a=n;
+				trouve=true;
+				break outerloop;
+				}
+			}
+		}
+		}
+
+		if(trouve==false){
 			 try {
-				throw new VarUndefinedException(idfp);
+				throw new VarUndefinedException(nom);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -114,7 +168,7 @@ public class TDS {
 		boolean trouve=false;
 		
 		for(TdsElement n:t){
-			if(n.idf==idfp && ((Variable)n).scope==scopep){
+			if(n.id==idfp && ((Variable)n).scope==scopep){
 				a=n;
 				trouve=true;
 				break;
@@ -123,7 +177,7 @@ public class TDS {
 		
 		if(trouve==false){
 			for(TdsElement n:t){
-				if(n.idf==idfp){
+				if(n.id==idfp){
 					a=n;
 					trouve=true;
 					break;
@@ -154,5 +208,13 @@ public class TDS {
 
 	public void setTable(ArrayList<TdsElement> table) {
 		this.table = table;
+	}
+	
+	public String afficheTDS(){
+		String s="";
+		for (TdsElement tdse : this.table) {
+		    System.out.println(tdse.toString());
+		}
+		return s;
 	}
 }

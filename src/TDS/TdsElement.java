@@ -15,12 +15,12 @@ public abstract class TdsElement {
 		this.cat = cat;
 	}
 
-	int idf;
+	int id;
 	String cat;
 	String nom;
 
 	public TdsElement(int idfp, String catp, String nomp) {
-		this.idf = idfp;
+		this.id = idfp;
 		this.cat = catp;
 		this.nom = nomp;
 	}
