@@ -39,7 +39,7 @@ public class NAffectation extends NoeudElement {
 	
 	@Override
 	public String afficherNoeud(TDS tds) {
-		return 	"Noeud operation => #type : =";
+		return 	"Noeud Affectation => #type : =";
 	}
 
 }
