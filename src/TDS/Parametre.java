@@ -5,12 +5,13 @@ public class Parametre extends TdsElement {
 int rang;
 int scope;
 String type;
-
-public Parametre(int idf,String cat,String nomp,String type,int scopep,int rangp,String typep){
+int valeur
+public Parametre(int idf,String nomp,int scopep,int rangp,String typep,int valp){
 	super(idf, "param",nomp );
 	this.rang=rangp;
 	this.scope=scopep;
 	this.type=typep;
+	this.valeur=valp;
 }
 
 public String toString(){
