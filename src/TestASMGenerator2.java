@@ -2,7 +2,7 @@ import ASMgenerator.*;
 import AST.*;
 import TDS.*;
 
-public class TestASMGenerato2 {
+public class TestASMGenerator2 {
 
 	public static void main(String[] args) {
 		System.out
