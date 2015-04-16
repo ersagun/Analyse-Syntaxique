@@ -92,7 +92,7 @@ String sv = NoeudElement.afficheLesFils(racine, tds, vs);
 System.out.println(sv);
 System.out.println("--------------------------------------------------------------------------------------------------");
 ASMgenerator asm= new ASMgenerator(tds,racine);
-asm.generateToFile("Code_ASM1.uasm");
+asm.generateToFile("Code_ASM2.uasm");
 
 	}
 
