@@ -5,10 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import fr.ul.miage.exemple.generated.*;
+import fr.ul.miage.compilator.*;
 
 
-public class Main {
 	/**	
 	public static String[] listerRepertoire(File repertoire){ 
 
@@ -57,4 +56,45 @@ public class Main {
 		
 		**/
 
+
+/**
+ * 
+ */
+
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+import fr.ul.miage.analyse.generated.*;
+/**
+ * 
+ * @author
+ */
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+	    if (args.length == 0) {
+	        System.out.println("Usage : java Main <inputfile>");
+	        System.exit(1);
+	    }
+
+	    
+		try {
+			ParserCup parser = new ParserCup(new AnalyseurLexical(new FileReader(args[0])));
+			
+			parser.parse();
+		} catch (FileNotFoundException e1) {
+			System.out.println("Fichier introuvable");
+			System.exit(1);
+		} catch (Exception e) {
+			System.out.println("Erreur de syntaxe");
+                        e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
 }
+
