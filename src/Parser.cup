@@ -1,3 +1,7 @@
+package fr.ul.miage.analyse.generated;
+import TDS.*;
+import AST.*;
+
 /*
  * analyseur syntaxique  du :
  * Projet interpreteur
@@ -8,8 +12,31 @@
  * Auteurs : NDIAYE & THIAM
  */ 
 
-package fr.ul.miage.analyse.generated;
+action code {:
 
+//TDS principale
+TDS tds=new TDS();
+
+//AST la racine 
+NoeudElement ast=new NRacine();
+
+//Compteur de SCOPE
+int scope;
+
+//Compteur de Rang
+int rang;
+
+//Compteur cpt_id
+int cpt_tdsId=0;
+
+:}
+
+parser code{:
+
+public String afficheTDS(){
+return action_obj.tds.afficheTDS();
+}
+:}
 
 
 /* la grammaire */
@@ -50,7 +77,7 @@ commande ::=    fonction
             |   ensembledeclarationGLOBALE
             ;
 
-ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE PV
+ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE PV {: Variable var=new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0, ((String)t));tds.ajoute(var);cpt_tdsId++; :}
                               |    INT:t IDF:i PV
                               |    INT:t IDF:i EGAL expressionGLOBALE:e PV
                               ;
