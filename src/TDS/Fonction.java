@@ -25,4 +25,17 @@ public class Fonction extends TdsElement {
 	public int getNbLoc() {
 		return nbLoc;
 	}
+	
+	public String getType(){
+		return this.type;
+	}
+	
+	
+	public int getId(){
+		return this.id;
+	}
+	
+	public String getNom(){
+		return this.nom;
+	}
 }

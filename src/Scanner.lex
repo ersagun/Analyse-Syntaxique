@@ -62,8 +62,8 @@ OPERATEURCOMPARAISON    =   "<" | ">" | "<=" | ">=" | "==" | "!="
 ","         {  echo(); return new Symbol(ParserSym.VIRG); }
 "{"         {  echo(); return new Symbol(ParserSym.ACCO); }
 "}"         {  echo(); return new Symbol(ParserSym.ACCF); }
-"int"       {  echo(); return new Symbol(ParserSym.INT,yytext()); }
-"void"      {  echo(); return new Symbol(ParserSym.VOID,yytext()); }
+"int"       {  echo(); return new Symbol(ParserSym.INT,new String(yytext())); }
+"void"      {  echo(); return new Symbol(ParserSym.VOID,new String(yytext())); }
 "return"    {  echo(); return new Symbol(ParserSym.RETURN,yytext()); }
 
 
@@ -81,6 +81,6 @@ OPERATEURCOMPARAISON    =   "<" | ">" | "<=" | ">=" | "==" | "!="
 
 
 {NUM}       { echo(); return new Symbol(ParserSym.NUM, new Integer(yytext()));}
-{IDF}       { echo(); return new Symbol(ParserSym.IDF, yytext());}
+{IDF}       { echo(); return new Symbol(ParserSym.IDF, new String(yytext()));}
 {SEP}       { echo();  }
 {COM}       { echo();  }

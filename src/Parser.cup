@@ -29,12 +29,38 @@ int rang;
 //Compteur cpt_id
 int cpt_tdsId=0;
 
+//ValeurAttributDeclaration
+int atomeGlob=0;
+
+//Valeur affectation
+int atome=0;
+
+//Compteur parametre de fonction
+int cpt_param=0;
+
+//Compteur variable local ds fonction
+
+int cpt_var_loc=0;
+
+//le dernier id Fonct
+int idFonct=-1;
+
+//le dernier type de retour de fonction
+String lastType="void";
+
+//le dernier nom de fonction
+String lfonctName="main";
 :}
+
+
 
 parser code{:
 
-public String afficheTDS(){
-return action_obj.tds.afficheTDS();
+public String afficheTDSetAST(){
+String s="";
+return "\n\n TDS :"+action_obj.tds.afficheTDS()+"\n\n -----------------------------\n\n AST:\n"+NoeudElement.afficheLesFils(action_obj.ast,action_obj.tds,s)+"\n";
+
+
 }
 :}
 
@@ -42,13 +68,19 @@ return action_obj.tds.afficheTDS();
 /* la grammaire */
 
 terminal ADD, MUL, PO, PF, EGAL, PV, SUB, DIV, ACCO, ACCF, VIRG;
-terminal NUM;
-terminal IDF, INT, VOID, RETURN, WRITE, READ;
+terminal Integer NUM;
+terminal String IDF;
+terminal String INT;
+terminal String VOID;
+terminal RETURN, WRITE, READ;
 terminal  WHILE, IF, ELSE, BOOLEEN, NOT, OPERATEURCOMPARAISON;
 
-non terminal expression, facteur, atome;
-non terminal expressionGLOBALE, facteurGLOBALE, atomeGLOBALE;
-non terminal affectation;
+non terminal Integer expression; 
+non terminal Integer facteur;
+non terminal Integer atome;
+non terminal expressionGLOBALE, facteurGLOBALE;
+non terminal Integer atomeGLOBALE;
+non terminal NAffectation affectation;
 non terminal instruction;
 non terminal  ecriture;
 non terminal  listinstruction, listparametre;
@@ -61,7 +93,8 @@ non terminal  appelfonction;
 non terminal  fonction;
 non terminal listcommande, commande;
 non terminal listdeclarationparametre;
-non terminal ensembledeclarationGLOBALE, suitedeclarationGLOBALE;
+non terminal ensembledeclarationGLOBALE;
+non terminal Variable suitedeclarationGLOBALE;
 
 non terminal  programme;
 
@@ -77,14 +110,31 @@ commande ::=    fonction
             |   ensembledeclarationGLOBALE
             ;
 
-ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE PV {: Variable var=new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0, ((String)t));tds.ajoute(var);cpt_tdsId++; :}
-                              |    INT:t IDF:i PV
-                              |    INT:t IDF:i EGAL expressionGLOBALE:e PV
+ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE:sdg PV 		{: tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0, ((String)t)));cpt_tdsId++;sdg.setType(((String)t));
+																						   tds.ajoute(((Variable)sdg));
+																						:}
+																						
+																						
+                              |    INT:t IDF:i PV {: tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0, ((String)t)));
+                              						 cpt_tdsId++; 
+                              					  :}
+                              
+                              
+                              |    INT:t IDF:i EGAL expressionGLOBALE:e PV {: tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), -1, atomeGlob, ((String)t)));
+                              												  cpt_tdsId++; 
+                              											   :}
                               ;
 
-suitedeclarationGLOBALE   ::=   IDF:i VIRG suitedeclarationGLOBALE 
-                            |   IDF:i EGAL expressionGLOBALE:e
-                            |   IDF:i
+suitedeclarationGLOBALE   ::=   IDF:i VIRG suitedeclarationGLOBALE {: RESULT=new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0,"undefined");
+																	  cpt_tdsId++; 
+																   :}
+																   
+                            |   IDF:i EGAL expressionGLOBALE:e {:((Variable)tds.searchVariable(((String)i),-1)).setVal(((Integer)e)); 
+                            								   :}
+                            								   
+                            |   IDF:i {:RESULT=new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0,"undefined");
+                            		   cpt_tdsId++;
+                            		   :}
                             ;
 
 expressionGLOBALE      ::=  expressionGLOBALE:e1  ADD facteurGLOBALE:e2
@@ -94,22 +144,38 @@ expressionGLOBALE      ::=  expressionGLOBALE:e1  ADD facteurGLOBALE:e2
 
 facteurGLOBALE         ::=  facteurGLOBALE:e1  MUL  atomeGLOBALE:e2 
                         |   facteurGLOBALE:e1  DIV  atomeGLOBALE:e2
-                        |   atomeGLOBALE:e
+                        |   atomeGLOBALE:e {:atomeGlob=((int)e);:}
                         ;
 
-atomeGLOBALE           ::=  NUM:e
-                        |   IDF:e
+atomeGLOBALE           ::=  NUM:e {:RESULT=new Integer(e);:}
+                        |   IDF:e {:RESULT=new Integer(((Integer)((Variable)tds.searchVariable(((String)e),-1)).getVal()));:}
                         |   PO expressionGLOBALE:e PF
                         ;
 
 
-fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  listinstruction:l  ACCF
-          |  VOID:v IDF:nomFonct PO listdeclarationparametre PF ACCO listinstruction:l ACCF
+fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  listinstruction:l  ACCF{:lfonctName=nomFonct;
+																									 idFonct=(Integer)cpt_tdsId;cpt_var_loc=0;
+																									 cpt_param=0;
+																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), ((String)t)));
+																									 lastType=t;
+																									 cpt_tdsId++; 
+																									 ast.ajouter1fils(new NFonction(((Integer)((Fonction)tds.searchFonction(((String)nomFonct),((Integer)cpt_param),((Integer)cpt_var_loc))).getId())));
+																									 :}
+
+
+          |  VOID:v IDF:nomFonct PO listdeclarationparametre PF ACCO listinstruction:l ACCF{:lfonctName=((String)nomFonct);
+          																					idFonct=(Integer)cpt_tdsId;
+          																					cpt_var_loc=0;
+          																					cpt_param=0;
+																							tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), ((String)v)));
+																							cpt_tdsId++;
+																							ast.ajouter1fils(new NFonction(((Integer)((Fonction)tds.searchFonction(((String)nomFonct),((Integer)cpt_param),((Integer)cpt_var_loc))).getId())));
+																							:}
           |  IDF:nomFonct PO listdeclarationparametre PF ACCO listinstruction:l ACCF
           ;
 
 listdeclarationparametre ::= INT IDF VIRG listdeclarationparametre
-                           |  INT IDF
+                           |  INT IDF {:cpt_param++;:}
                            |  
                            ;
 
@@ -118,7 +184,7 @@ listinstruction ::= instruction:inst listinstruction:l
                  |  
                  ;
 
-instruction     ::= affectation:aff
+instruction     ::= affectation:aff {:ast.searchFonction(((String)lfonctName),lastType,tds).ajouter1fils(aff);:}
                   | ecriture:ec
                   | ensembledeclaration:decl
                   | conditionnelle:cond
@@ -140,16 +206,17 @@ expressionbooleenne ::= expression:e1 OPERATEURCOMPARAISON:comp expression:e2
                       | BOOLEEN:b
                       ;
 
-ensembledeclaration  ::=    INT:t  IDF:i  VIRG suitedeclaration PV
-                       |    INT:t IDF:i PV
+ensembledeclaration  ::=    INT:t  IDF:i  VIRG suitedeclaration PV {:cpt_var_loc++;:}
+                       |    INT:t IDF:i PV {:cpt_var_loc++;:}
                        ;
 
-suitedeclaration ::=    IDF:i VIRG suitedeclaration 
+suitedeclaration ::=    IDF:i VIRG suitedeclaration {:cpt_var_loc++;:}
                     |   IDF:i EGAL expression:e
-                    |   IDF:i
+                    |   IDF:i {:cpt_var_loc++;:}
                     ;
             
-affectation   ::=   IDF:i  EGAL expression:e PV
+affectation   ::=   IDF:i  EGAL expression:e PV {:RESULT=new NAffectation(((String)i), ((Integer)((Variable)tds.searchVariable(((String)i))).getId()), "=",((int)e), tds);:}
+												 
                |    INT IDF:i  EGAL expression:e PV
                   ;
 
@@ -167,17 +234,18 @@ ecriture        ::= WRITE PO expression:e PF PV
             
 expression      ::= expression:e1  ADD facteur:e2
                   | expression:e1  SUB  facteur:e2 
-                  | facteur:e 
+                  | facteur:e {:atome=((int)e);:}
                   ;
 
 facteur         ::= facteur:e1  MUL  atome:e2 
                   | facteur:e1  DIV  atome:e2
-                  | atome:e
+                  | atome:e {:RESULT=new Integer(e);:}
+                  
                   | appelfonction:ap
                   ;
 
-atome           ::= NUM:e
-                  | IDF:e
+atome           ::= NUM:e {:RESULT=new Integer(e);:}
+                  | IDF:e {:RESULT=new Integer(((Integer)((Variable)tds.search(((String)e))).getVal()));:}
                   | READ PO PF
                   | PO expression:e PF
                   ;

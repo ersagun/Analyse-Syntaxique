@@ -52,4 +52,9 @@ public abstract class TdsElement {
 
 	public abstract String toString();
 
+	public int getId() {
+		// TODO Auto-generated method stub
+		return this.id;
+	}
+
 }

@@ -43,7 +43,7 @@ public class Variable extends TdsElement {
 
 
 	public int getVal() {
-		return val;
+		return this.val;
 	}
 
 

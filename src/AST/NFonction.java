@@ -26,10 +26,13 @@ public class NFonction extends NoeudElement {
 	}
 	
 	public String getname(TDS tds){
-		String nom=null;
 		TdsElement a=tds.search(this.ref);
-		nom=a.getNom();
+		String nom=a.getNom();
 		return nom;
+	}
+	
+	public int getId(TDS tds){
+		return this.ref;
 	}
 }
 
