@@ -2,7 +2,7 @@ package AST;
 
 import TDS.TDS;
 
-public class NConstant extends NoeudElement {
+public class NConstant extends NOperation {
 	int valeur;
 	
 	//creation de noeud de constant

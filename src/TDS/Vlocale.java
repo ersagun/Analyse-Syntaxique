@@ -25,5 +25,13 @@ public class Vlocale extends TdsElement {
 	public int getVal() {
 		return this.val;
 	}
+	
+	public int getId(){
+		return this.id;
+	}
+	
+	public void setVal(int v){
+		this.val=v;
+	}
 
 }

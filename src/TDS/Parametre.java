@@ -23,4 +23,16 @@ public int getScope() {
 	// TODO Auto-generated method stub
 	return this.scope;
 }
+
+public void setScope(int s){
+	this.scope=s;
+}
+
+public int getId(){
+	return this.id;
+}
+public void setVal(int v){
+	this.valeur=v;
+}
+
 }

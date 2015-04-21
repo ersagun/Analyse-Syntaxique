@@ -59,7 +59,7 @@ public class NAffectation extends NoeudElement {
 			found=true;
 		}
 		this.ajouterFG(varr);
-		this.ajouterFD(new NConstant(val));
+		//this.ajouterFD(new NConstant(val));
 	
 	}
 	

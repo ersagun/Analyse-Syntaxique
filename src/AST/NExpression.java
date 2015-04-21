@@ -8,6 +8,11 @@ public class NExpression extends NoeudElement {
 		super(categoriep);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public NExpression() {
+		super("expression");
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public String afficherNoeud(TDS tds) {

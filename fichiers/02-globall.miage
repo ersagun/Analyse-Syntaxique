@@ -7,7 +7,7 @@
  
  void main(){
 	k = 1;
-	j = 3;
-	k = 4;
+	j = k;
+	k = i;
  }
  

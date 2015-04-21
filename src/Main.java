@@ -13,7 +13,7 @@ public class Main {
 			parser.parse();
 			System.out.println("TDS :");
 			System.out.println(parser.afficheTDSetAST());
-			
+			parser.afficheLastTDS();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
