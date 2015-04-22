@@ -3,7 +3,7 @@ package AST;
 import TDS.TDS;
 
 public class NAppelFonction extends NoeudElement {
-	int ref;
+	public int ref;
 	public NAppelFonction(int ref) {
 		super("appelFonction");
 		this.ref=ref;

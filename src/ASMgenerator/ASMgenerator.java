@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import version_bis.Node;
+import version_bis.NodeContentAppel;
+
 /**
  * 
  * @author Groupe : Complilation L3 MIAGE 2014-2015
@@ -454,6 +457,41 @@ public class ASMgenerator {
 	}
 	
 	/**
+	 * @TOD0
+	 * @param node
+	 * @param buff
+	 * @param indent
+	 */
+	private void generated_Call(NAppelFonction node, StringBuffer buff, int indent) {
+		// TODO Auto-generated method stub
+		int childs = node.getChildren().size();
+		
+		this.generated_Indent(indent, buff);buff.append("|== Debut (appel) ==|\n");
+		
+		
+		// Remplissage de la pile parametre
+		this.generated_Indent(indent+1, buff);
+		buff.append("|== Envoi des paramètres ==|\n");
+		for (NoeudElement child : node.getChildren()){
+			this.generated_Expression(child, buff, indent+1);
+		}
+		
+		// Appel fonction
+		this.generated_Indent(indent, buff);
+		buff.append("CALL(" + node.ref  + ")\n");
+		
+		// Vidage de la pile parametre
+		for (int i = 0; i < childs; i++){
+			this.generated_Indent(indent, buff);buff.append("POP(R1) | d�pilement arguments\n");
+		}
+		
+		// Si la fonction a un retour on push le retour (contenu dans R0)
+		
+		this.generated_Indent(indent, buff);buff.append("|== Fin (appel) ==|\n");
+		buff.append("\n");
+	}
+	
+	/**
 	 * Permet de garder la valeur de retour
 	 * @param node
 	 * @param buff
@@ -509,16 +547,6 @@ public class ASMgenerator {
 		buff.append("\n");
 	}	
 
-	/**
-	 * @TOD0
-	 * @param node
-	 * @param buff
-	 * @param indent
-	 */
-	private void generated_Call(NAppelFonction node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/**
 	 * Génère un facteur
