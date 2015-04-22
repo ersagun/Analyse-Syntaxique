@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import version_bis.Node;
 import version_bis.NodeContentAppel;
+import version_bis.NodeContentCondition;
 
 /**
  * 
@@ -482,7 +483,7 @@ public class ASMgenerator {
 		
 		// Vidage de la pile parametre
 		for (int i = 0; i < childs; i++){
-			this.generated_Indent(indent, buff);buff.append("POP(R1) | d�pilement arguments\n");
+			this.generated_Indent(indent, buff);buff.append("POP(R1) | dépilement arguments\n");
 		}
 		
 		// Si la fonction a un retour on push le retour (contenu dans R0)
@@ -600,15 +601,55 @@ public class ASMgenerator {
 	
 
 
-	private void generated_If(NoeudElement node, StringBuffer buff, int indent) {
+	private void generated_If(NIf node, StringBuffer buff, int indent) {
 		// TODO Auto-generated method stub
-		
 	}
 
-	private void generated_While(NoeudElement node, StringBuffer buff, int indent) {
+	private void generated_While(NWhile node, StringBuffer buff, int indent) {
 		// TODO Auto-generated method stub
+		this.generated_Indent(indent, buff);buff.append("|== Debut (while) ==|\n");
+		this.generated_Indent(indent, buff);buff.append("while:\n");
 		
+		// Génération de la condition
+		this.generated_Condition(node.getFG(), buff, indent+1);
+		
+		
+		this.generated_Indent(indent+1, buff);buff.append("BEQ(R2, endwhile) | condition fausse\n");
+				
+		// Génération du bloc
+		this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc while) ==|\n");
+		
+		this.generated_Bloc(node.getChildren().get(1), buff, indent+1);
+		
+
+		this.generated_Indent(indent, buff);buff.append("BR(while)\n");
+		this.generated_Indent(indent, buff);buff.append("endwhile:\n");
+		buff.append("\n");
 	}
 
-
+	private void generated_Condition(NCondition node , StringBuffer buff, int indent){
+		this.generated_Indent(indent, buff);buff.append("|== Debut (condition) ==|\n");
+		
+		this.generated_Expression(node.getFG(), buff, indent+1);
+		this.generated_Expression(node.getFD(), buff, indent+1);
+		
+		this.generated_Indent(indent, buff);buff.append("POP(R1)\n");
+		this.generated_Indent(indent, buff);buff.append("POP(R0)\n");
+		
+		switch(node.condition){
+			case "<":
+				this.generated_Indent(indent, buff);buff.append("CMPLT(R0, R1, R2)\n");
+				break;
+				
+			case ">":
+				this.generated_Indent(indent, buff);buff.append("CMPLT(R1, R0, R2)\n");
+				break;
+				
+			// Condition vide (toujours true)
+			default:
+				this.generated_Indent(indent, buff);buff.append("CMOVE(1, R2)\n");
+				break;
+		}
+		buff.append("\n");
+	}
 }
