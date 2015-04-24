@@ -98,7 +98,7 @@ public class ASMgenerator {
 		System.out.println("Génration du programme\n");
 		buff.append("|============ Header ================|\n");
 		buff.append(".include beta.uasm\n");
-		buff.append("\tCMOVE(stack, SP)\n");
+		buff.append("\tCMOVE(pile, SP)\n");
 		buff.append("BR(start)\n");
 		
 		this.generated_Data(node,buff);
@@ -109,7 +109,7 @@ public class ASMgenerator {
 		buff.append("start:\n");
 		buff.append("\tCALL(main)\n");
 		buff.append("\tHALT()\n");
-		buff.append("stack:\n");
+		buff.append("pile:\n");
 	}
 	
 	/**
@@ -309,6 +309,15 @@ public class ASMgenerator {
 				case "read":
 					this.generated_Read(node, buff, indent);
 					break;
+				
+				case "write":
+					this.generated_Write(node, buff, indent);
+					break;
+				
+				case "appelFonction":
+					this.generated_Call((NAppelFonction)node, buff, indent);
+					break;
+					
 							
 				default:
 					break;
@@ -633,6 +642,7 @@ public class ASMgenerator {
 			this.generated_Indent(indent, buff);buff.append("else:\n");
 			this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc else) ==|\n");
 			
+			this.generated_Bloc(node.getChildren().get(2), buff, indent+1);
 		}
 		// G�n�ration du then ou else
 		/*String childContent = (String)(node.getChildren().get(2).getContent());
