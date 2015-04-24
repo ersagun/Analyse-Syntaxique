@@ -1,6 +1,6 @@
 |============ Header ================|
 .include beta.uasm
-	CMOVE(stack, SP)
+	CMOVE(pile, SP)
 BR(start)
 	i:LONG(0)
 	j:LONG(0)
@@ -71,4 +71,4 @@ main:
 start:
 	CALL(main)
 	HALT()
-stack:
+.=pile
