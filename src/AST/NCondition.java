@@ -19,6 +19,14 @@ public class NCondition extends NoeudElement {
 
 	}
 
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+
 	public NCondition(int i, String cond, String s, int scope, TDS tds) {
 		super("operation");
 		this.condition = cond;
