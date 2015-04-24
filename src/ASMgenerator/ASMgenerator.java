@@ -8,10 +8,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import version_bis.Node;
+import version_bis.NodeContentCondition;
+
 
 /**
  * 
- * @author Groupe : Complilation L3 MIAGE 2014-2015
+ * @author Groupe 22 : Complilation L3 MIAGE 2014-2015
  *
  */
 public class ASMgenerator {
@@ -600,7 +603,54 @@ public class ASMgenerator {
 
 
 	private void generated_If(NIf node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
+		this.generated_Indent(indent, buff);buff.append("|== Debut (if) ==|\n");
+		this.generated_Indent(indent, buff);buff.append("if:\n");
+		
+		// G�n�ration de la condition
+		this.generated_Condition((NCondition)node.getFG(), buff, indent+1);
+		
+		// Si y'a un bloc else
+		if(node.getChildren().size() > 2){
+			// On saute au else si la condition est fausse
+			this.generated_Indent(indent+1, buff);buff.append("BEQ(R2, else) | condition fausse\n");
+		}
+		else{
+			// Sinon on saute � la fin si la condition est fausse
+			this.generated_Indent(indent+1, buff);buff.append("BEQ(R2, endif) | condition fausse\n");
+		}
+				
+		// G�n�ration du bloc
+		this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc if) ==|\n");
+		
+		this.generated_Bloc(node.getFD(), buff, indent+1);
+		
+		
+		// Si y'a un bloc else
+		if(node.getChildren().size() > 2){
+			// On branche la fin du if pour pas aller dans le elset
+			this.generated_Indent(indent+1, buff);buff.append("BR(endif)\n");
+			
+			this.generated_Indent(indent, buff);buff.append("else:\n");
+			this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc else) ==|\n");
+			
+		}
+		// G�n�ration du then ou else
+		/*String childContent = (String)(node.getChildren().get(2).getContent());
+		switch (childContent){
+			case "then":
+				break;
+				
+			case "else":
+				this.generated_Indent(indent, buff);buff.append("else:\n");
+				break;
+				
+			case "elseif":
+				//@todo
+				break;
+		}*/
+		//if(node.getChildren().get(2).getContent() instanceof String)
+		this.generated_Indent(indent, buff);buff.append("endif:\n");
+		buff.append("\n");
 	}
 
 	private void generated_While(NWhile node, StringBuffer buff, int indent) {
