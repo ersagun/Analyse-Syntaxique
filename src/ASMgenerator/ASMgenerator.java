@@ -9,12 +9,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import version_bis.Node;
-import version_bis.NodeContentAppel;
 import version_bis.NodeContentCondition;
+
 
 /**
  * 
- * @author Groupe : Complilation L3 MIAGE 2014-2015
+ * @author Groupe 22 : Complilation L3 MIAGE 2014-2015
  *
  */
 public class ASMgenerator {
@@ -98,7 +98,7 @@ public class ASMgenerator {
 		System.out.println("Génration du programme\n");
 		buff.append("|============ Header ================|\n");
 		buff.append(".include beta.uasm\n");
-		buff.append("\tCMOVE(stack, SP)\n");
+		buff.append("\tCMOVE(pile, SP)\n");
 		buff.append("BR(start)\n");
 		
 		this.generated_Data(node,buff);
@@ -109,7 +109,7 @@ public class ASMgenerator {
 		buff.append("start:\n");
 		buff.append("\tCALL(main)\n");
 		buff.append("\tHALT()\n");
-		buff.append("stack:\n");
+		buff.append("pile:\n");
 	}
 	
 	/**
@@ -203,12 +203,12 @@ public class ASMgenerator {
 					
 				// Cas d'une alternative
 				case "si":
-					this.generated_If(node, buff, indent+1);
+					this.generated_If((NIf)node, buff, indent+1);
 					break;
 					
 				// Cas du while
 				case "while":
-					this.generated_While(node, buff, indent+1);
+					this.generated_While((NWhile)node, buff, indent+1);
 					break;
 					
 				default:
@@ -309,6 +309,15 @@ public class ASMgenerator {
 				case "read":
 					this.generated_Read(node, buff, indent);
 					break;
+				
+				case "write":
+					this.generated_Write(node, buff, indent);
+					break;
+				
+				case "appelFonction":
+					this.generated_Call((NAppelFonction)node, buff, indent);
+					break;
+					
 							
 				default:
 					break;
@@ -326,17 +335,18 @@ public class ASMgenerator {
 	 */
 	private void generated_Atome(NoeudElement node, StringBuffer buff, int indent){
 		
-		// Nombre : on met sa valeur dans la pile
-		if((Integer)((NConstant)node).getValeur() instanceof Integer){
+		
+		if((node) instanceof NConstant){
 			
 			Integer elt = (Integer)((NConstant)node).getValeur();
-			System.out.println("\t\tGéneration atome:"+elt+"\n");
+			System.out.println("\t\tGéneration constante:"+elt+"\n");
 			this.generated_Indent(indent, buff); buff.append("|= NOMBRE =|\n");
 			this.generated_Indent(indent, buff); buff.append("CMOVE(" + elt + ", R0)\n");
 			this.generated_Indent(indent, buff); buff.append("PUSH(R0)\n");
 		}
 		// Variable : on met sa valeur dans la pile
-		else if(((NVariable)node) instanceof NVariable){
+		else if((node) instanceof NVariable){
+			System.out.println("\t\tGéneration idf:"+((NVariable)node).get_Value(this.tds)+"\n");
 			this.generated_Indent(indent, buff); buff.append("|= IDF =|\n");
 			this.generated_Idf((NVariable)node, buff, indent);
 		}
@@ -359,17 +369,17 @@ public class ASMgenerator {
 	 * @param indent
 	 * @todo generer_facteur
 	 */
-	private void generated_Operation(NOperation node, StringBuffer buff, int indent) {
-		if(node.getVal() instanceof String){
-			switch((String)(node.getVal())){
+	private void generated_Operation(NoeudElement node, StringBuffer buff, int indent) {
+		if(node instanceof NOperation){
+			System.out.println("\t\t\tOperateur: "+((NOperation)node).getVal());
+			switch((String)(((NOperation)node).getVal())){
 				case "+":
-					System.out.println("\t\t\t"+node.getVal());
 					this.generated_Indent(indent, buff); buff.append("|== Debut (+) ==|\n");
 					
 					// Expr gauche
 					this.generated_Expression(node.getFG(), buff, indent + 1);
 					// Facteur droit
-					this.generated_Facteur((NOperation)node.getFD(), buff, indent + 1);
+					this.generated_Facteur(node.getFD(), buff, indent + 1);
 					
 					// Si l'expr de droite est un appel on doit récuperer le resultat
 					if(node.getFD() instanceof NAppelFonction){
@@ -423,7 +433,7 @@ public class ASMgenerator {
 	 * @param indent
 	 */
 	private void generated_Idf(NVariable node, StringBuffer buff, int indent) {
-		
+		System.out.println("\t\t\t\tGenerer IDF");
 		// Globale ou fonction
 		switch(node.getScope()){
 		
@@ -555,11 +565,11 @@ public class ASMgenerator {
 	 * - DIV     / MUL     / atome
 	 * - .. / .. / .. * .. / atome
 	 */
-	private void generated_Facteur(NOperation node, StringBuffer buff, int indent) {
+	private void generated_Facteur(NoeudElement node, StringBuffer buff, int indent) {
 		// facteur DIV atome
 				// facteur MUL atome
-				if(node.getVal() instanceof String){
-					switch((String)(node.getVal())){
+				if(node instanceof 	NOperation){
+					switch((String)(((NOperation)node).getVal())){
 						case "/":
 							this.generated_Indent(indent, buff);buff.append("|== Debut (/) ==|\n");
 							
@@ -602,19 +612,68 @@ public class ASMgenerator {
 
 
 	private void generated_If(NIf node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
+		this.generated_Indent(indent, buff);buff.append("|== Debut (if) ==|\n");
+		this.generated_Indent(indent, buff);buff.append("if:\n");
+		
+		// G�n�ration de la condition
+		this.generated_Condition((NCondition)node.getFG(), buff, indent+1);
+		
+		// Si y'a un bloc else
+		if(node.getChildren().size() > 2){
+			// On saute au else si la condition est fausse
+			this.generated_Indent(indent+1, buff);buff.append("BEQ(R2, else) | condition fausse\n");
+		}
+		else{
+			// Sinon on saute � la fin si la condition est fausse
+			this.generated_Indent(indent+1, buff);buff.append("BEQ(R2, endif) | condition fausse\n");
+		}
+				
+		// G�n�ration du bloc
+		this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc if) ==|\n");
+		
+		this.generated_Bloc(node.getFD(), buff, indent+1);
+		
+		
+		// Si y'a un bloc else
+		if(node.getChildren().size() > 2){
+			// On branche la fin du if pour pas aller dans le elset
+			this.generated_Indent(indent+1, buff);buff.append("BR(endif)\n");
+			
+			this.generated_Indent(indent, buff);buff.append("else:\n");
+			this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc else) ==|\n");
+			
+			this.generated_Bloc(node.getChildren().get(2), buff, indent+1);
+		}
+		// G�n�ration du then ou else
+		/*String childContent = (String)(node.getChildren().get(2).getContent());
+		switch (childContent){
+			case "then":
+				break;
+				
+			case "else":
+				this.generated_Indent(indent, buff);buff.append("else:\n");
+				break;
+				
+			case "elseif":
+				//@todo
+				break;
+		}*/
+		//if(node.getChildren().get(2).getContent() instanceof String)
+		this.generated_Indent(indent, buff);buff.append("endif:\n");
+		buff.append("\n");
 	}
 
 	private void generated_While(NWhile node, StringBuffer buff, int indent) {
-		// TODO Auto-generated method stub
+		System.out.println("\t\t\tGenerer while");
 		this.generated_Indent(indent, buff);buff.append("|== Debut (while) ==|\n");
 		this.generated_Indent(indent, buff);buff.append("while:\n");
 		
 		// Génération de la condition
-		this.generated_Condition(node.getFG(), buff, indent+1);
+		this.generated_Condition((NCondition)node.getFG().getFG(), buff, indent+1);
 		
 		
-		this.generated_Indent(indent+1, buff);buff.append("BEQ(R2, endwhile) | condition fausse\n");
+		this.generated_Indent(indent+1, buff);
+		buff.append("BEQ(R2, endwhile) | condition fausse\n");
 				
 		// Génération du bloc
 		this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc while) ==|\n");
@@ -627,16 +686,18 @@ public class ASMgenerator {
 		buff.append("\n");
 	}
 
+
 	private void generated_Condition(NCondition node , StringBuffer buff, int indent){
+		System.out.println("\t\t\tGenerer condition");
 		this.generated_Indent(indent, buff);buff.append("|== Debut (condition) ==|\n");
 		
-		this.generated_Expression(node.getFG(), buff, indent+1);
+		this.generated_Expression((NoeudElement)node.getFG(), buff, indent+1);
 		this.generated_Expression(node.getFD(), buff, indent+1);
 		
 		this.generated_Indent(indent, buff);buff.append("POP(R1)\n");
 		this.generated_Indent(indent, buff);buff.append("POP(R0)\n");
 		
-		switch(node.condition){
+		switch(node.getCondition()){
 			case "<":
 				this.generated_Indent(indent, buff);buff.append("CMPLT(R0, R1, R2)\n");
 				break;

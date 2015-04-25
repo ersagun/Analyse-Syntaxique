@@ -1,0 +1,12 @@
+|============ Header ================|
+.include beta.uasm
+	CMOVE(stack, SP)
+BR(start)
+	i:LONG(3)
+	j:LONG(0)
+|Generation du programme: appel de 0 fontion(s)|
+|============ Début programme ================|
+start:
+	CALL(main)
+	HALT()
+stack:

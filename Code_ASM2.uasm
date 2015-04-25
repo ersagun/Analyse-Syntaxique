@@ -1,0 +1,81 @@
+|============ Header ================|
+.include beta.uasm
+	CMOVE(stack, SP)
+BR(start)
+	i:LONG(0)
+	j:LONG(0)
+|Generation du programme: appel de 1 fontion(s)|
+main:
+	PUSH(LP)
+	PUSH(BP)
+	MOVE(SP, BP)
+	ALLOCATE(0)
+		|== Debut (=) ==|
+			|= NOMBRE =|
+			CMOVE(0, R0)
+			PUSH(R0)
+
+
+		POP(R0) | valeur à insérer dans l'IDF
+		ST(R0, 0)
+		|== Fin (=) ==|
+
+		|== Debut (=) ==|
+			|= NOMBRE =|
+			CMOVE(0, R0)
+			PUSH(R0)
+
+
+		POP(R0) | valeur à insérer dans l'IDF
+		ST(R0, 1)
+		|== Fin (=) ==|
+
+		|== Debut (while) ==|
+		while:
+			|== Debut (condition) ==|
+					|= IDF =|
+					LD(0, R0)
+					PUSH(R0)
+
+					|= NOMBRE =|
+					CMOVE(3, R0)
+					PUSH(R0)
+
+
+			POP(R1)
+			POP(R0)
+			CMPLT(R0, R1, R2)
+
+			BEQ(R2, endwhile) | condition fausse
+			|== Debut (bloc while) ==|
+				|== Debut (=) ==|
+					|== Debut (+) ==|
+							|= IDF =|
+							LD(1, R0)
+							PUSH(R0)
+
+						|= IDF =|
+						LD(0, R0)
+						PUSH(R0)
+
+					POP(R1)
+					POP(R0)
+					ADD(R0, R1, R2)
+					PUSH(R2)
+					|== Fin (+) ==|
+				POP(R0) | valeur à insérer dans l'IDF
+				ST(R0, 1)
+				|== Fin (=) ==|
+
+		BR(while)
+		endwhile:
+
+	DEALLOCATE(0)
+	POP(BP)
+	POP(LP)
+	JMP(LP)
+|============ Début programme ================|
+start:
+	CALL(main)
+	HALT()
+stack:
