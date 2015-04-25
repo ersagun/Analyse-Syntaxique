@@ -13,6 +13,8 @@ public class NOperation extends NoeudElement {
 		
 	}	
 	
+	/**
+	
 	public NOperation(int i, String opp, String s,int scope,TDS tds){
 		super("operation");
 		this.val=opp;
@@ -112,14 +114,8 @@ public class NOperation extends NoeudElement {
 		this.ajouterFG(var);
 		this.ajouterFD(var2);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+	**/
+
 	
 	
 	

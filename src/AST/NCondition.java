@@ -18,9 +18,9 @@ public class NCondition extends NoeudElement {
 		this.condition = condition;
 
 	}
-
+/**
 	public NCondition(int i, String cond, String s, int scope, TDS tds) {
-		super("operation");
+		super("condition");
 		this.condition = cond;
 		boolean found = false;
 		NoeudElement var = null;
@@ -77,7 +77,7 @@ public class NCondition extends NoeudElement {
 		this.ajouterFG(var);
 		this.ajouterFD(constant);
 
-	}
+	}**/
 
 	public NCondition(NoeudElement a, String condition, NoeudElement b) {
 		super("condition");

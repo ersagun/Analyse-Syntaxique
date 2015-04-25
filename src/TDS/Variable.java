@@ -5,10 +5,10 @@ public class Variable extends TdsElement {
 	int scope;
 	String type;
 
-	public Variable(int id,String nomp,int scopep,int valp,String typep){
+	public Variable(int id,String nomp,int valp,String typep){
 		super(id, "identificateur",nomp);
 		this.val=valp;
-		this.scope=scopep;
+		this.scope=-1;
 		this.type=typep;
 	}
 
@@ -49,5 +49,9 @@ public class Variable extends TdsElement {
 
 	public void setVal(int val) {
 		this.val = val;
+	}
+	
+	public void setId(int id){
+		this.id=id;
 	}
 }

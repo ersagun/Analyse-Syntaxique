@@ -9,11 +9,10 @@ public class Main {
 	public static void main(String[] args) {
 		ParserCup parser;
 		try {
-			parser = new ParserCup(new AnalyseurLexical(new FileInputStream("./fichiers/02-globall.miage")));
+			parser = new ParserCup(new AnalyseurLexical(new FileInputStream("./fichiers/06-local.miage")));
 			parser.parse();
 			System.out.println("TDS :");
 			System.out.println(parser.afficheTDSetAST());
-			parser.afficheLastTDS();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

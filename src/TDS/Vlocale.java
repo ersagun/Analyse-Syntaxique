@@ -6,7 +6,7 @@ public class Vlocale extends TdsElement {
 	String type;
 	int val;
 
-	public Vlocale(int id,String cat,String nomp,String typep,int scopep,int rangp,int val){
+	public Vlocale(int id,String nomp,String typep,int scopep,int rangp,int val){
 		super(id, "variableLocal",nomp);
 		this.rang=rangp;
 		this.scope=scopep;
@@ -32,6 +32,10 @@ public class Vlocale extends TdsElement {
 	
 	public void setVal(int v){
 		this.val=v;
+	}
+	
+	public void setScope(int s){
+		this.scope=s;
 	}
 
 }

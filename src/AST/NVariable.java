@@ -7,17 +7,17 @@ public class NVariable extends NoeudElement {
 	int scope;
 	
 	//creation de noeud de identificateur comme variable i
-	public NVariable(int refp,int scopep) {
+	public NVariable(int refp) {
 		super("identificateur");
 		this.ref = refp;
-		this.scope=scopep;
+		this.scope=-1;
 	}
 	
 
 	@Override
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub
-		return "Noeud variable => #ref : "+this.ref+", #scope : "+this.scope+" [information recuperé de td grace a la ref : "+tds.search(this.ref, this.scope)+"]";
+		return "Noeud variable => #ref : "+this.ref+", #scope : "+this.scope+" [information recuperé de td grace a la ref : "+tds.searchVariable(this.ref)+"]";
 	}
 
 

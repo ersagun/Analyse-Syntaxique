@@ -26,9 +26,9 @@ public abstract class NoeudElement {
 		listeNoeud.add(n);
 	}
 
-	public void ajouterNFils(NoeudElement[] nNoeud) {
-		for (int i = 0; i <= nNoeud.length - 1; i++) {
-			listeNoeud.add(nNoeud[i]);
+	public void ajouterNFils(ArrayList<NoeudElement> nNoeud) {
+		for (int i = 0; i <= nNoeud.size()-1 - 1; i++) {
+			listeNoeud.add(nNoeud.get(i));
 		}
 	}
 
@@ -63,7 +63,7 @@ public abstract class NoeudElement {
 	public static String afficheLesFils(NoeudElement racine, TDS tds, String v) {
 		int size = racine.listeNoeud.size();
 		String s = "";
-		for (int i = size - 1; i >= 0; i--) {
+		for (int i = size-1; i >= 0; i--) {
 			s = racine.listeNoeud.get(i).afficherNoeud(tds) + "\n";
 			v = s
 					+ NoeudElement.afficheLesFils(racine.listeNoeud.get(i),

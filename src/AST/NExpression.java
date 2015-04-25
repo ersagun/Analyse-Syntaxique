@@ -9,15 +9,15 @@ public class NExpression extends NoeudElement {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public NExpression() {
+	public NExpression(NoeudElement op) {
 		super("expression");
-		// TODO Auto-generated constructor stub
+		this.ajouter1fils(op);
 	}
 
 	@Override
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub
-		return null;
+		return "Noeud Expression => #type : =nexpression";
 	}
 
 }

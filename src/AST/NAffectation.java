@@ -5,14 +5,21 @@ import AST.NoeudElement;
 
 public class NAffectation extends NoeudElement {
 	String val;
-	
 	public NAffectation(String c) {
 		super("affectation");
 		this.val=c;
 		
 	}
 	
-	public NAffectation(String var,int scope,String c,TDS tds){
+	public NAffectation(NoeudElement idf,NExpression ne,String c){
+		super("affectation");
+		this.ajouterFG(idf);
+		this.ajouterFD(ne);
+		this.val=c;
+	}
+	
+	/**
+	public NAffectation(String var,int scope,String c,TDS tds,NExpression ne){
 		super("affectation");
 		this.val=c;
 		
@@ -34,10 +41,11 @@ public class NAffectation extends NoeudElement {
 			found=true;
 		}
 		this.ajouterFG(varr);
+		this.ajouterFD(ne);
 	
 	}
 	
-	public NAffectation(String var,int scope,String c,int val,TDS tds){
+	public NAffectation(String var,int scope,String c,int val,TDS tds, NExpression ne){
 		super("affectation");
 		this.val=c;
 		
@@ -59,11 +67,11 @@ public class NAffectation extends NoeudElement {
 			found=true;
 		}
 		this.ajouterFG(varr);
-		//this.ajouterFD(new NConstant(val));
+		this.ajouterFD(ne);
 	
 	}
 	
-	
+	**/
 	
 	@Override
 	public String afficherNoeud(TDS tds) {

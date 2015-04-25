@@ -45,7 +45,7 @@ public class AST1 {
 		racine.ajouter1fils(fonction_main);
 
 		// creation de noeud affectation
-		NoeudElement affect = new NAffectation("i" + "", -1, "=",0, tds);
+		NoeudElement affect = new NAffectation("i" + "", -1, "=",0, tds,);
 
 		// creation de noeud affectation2
 		NoeudElement affect2 = new NAffectation("j", -1, "=", tds);

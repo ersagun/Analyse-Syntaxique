@@ -1,6 +1,7 @@
 package TDS;
 
 import java.util.ArrayList;
+
 import Exception.VarExiste;
 import Exception.VarUndefinedException;
 
@@ -303,5 +304,11 @@ public class TDS {
 		    System.out.println(tdse.toString());
 		}
 		return s;
+	}
+
+
+	public String searchVariable(int ref) {
+		// TODO Auto-generated method stub
+		return this.table.get(ref).toString();
 	}
 }

@@ -12,307 +12,533 @@ import AST.*;
  */ 
 
 action code {:
+			//TDS principale
+			TDS tds=new TDS();
 
-//TDS principale
-TDS tds=new TDS();
+			//AST la racine 
+			NoeudElement ast=new NRacine();
 
-//AST la racine 
-NoeudElement ast=new NRacine();
+			//Compteur de SCOPE
+			int scope;
 
-//Compteur de SCOPE
-int scope;
+			//Compteur de Rang
+			int rang;
 
-//Compteur de Rang
-int rang;
+			//Compteur cpt_id
+			int cpt_tdsId=0;
 
-//Compteur cpt_id
-int cpt_tdsId=0;
+			//ValeurAttributDeclaration
+			int atomeGlob=0;
 
-//ValeurAttributDeclaration
-int atomeGlob=0;
+			//Valeur affectation
+			int atome=0;
 
-//Valeur affectation
-int atome=0;
+			//Compteur parametre de fonction
+			int cpt_param=0;
 
-//Compteur parametre de fonction
-int cpt_param=0;
+			//Compteur variable local ds fonction
 
-//Compteur variable local ds fonction
+			int cpt_var_loc=0;
 
-int cpt_var_loc=0;
+			//le dernier id Fonct
+			int idFonct=-1;
 
-//le dernier id Fonct
-int idFonct=-1;
+			//le dernier type de retour de fonction
+			String lastType="void";
 
-//le dernier type de retour de fonction
-String lastType="void";
-
-//le dernier nom de fonction
-String lfonctName="main";
-
-//les instructions
-NoeudElement instruction=null;
-:}
+			//le dernier nom de fonction
+			String lfonctName="main";
+			
+			//list contenant des listes d'instructionsinstructions
+			NOutil instruction=new NOutil();
+			
+			//list contenant des fonctions 
+			NOutil fonction=new NOutil();
+			
+			:}
 
 
 
 parser code{:
-
-public String afficheTDSetAST(){
-String s="";
-return "\n\n TDS :"+action_obj.tds.afficheTDS()+"\n\n -----------------------------\n\n AST:\n"+NoeudElement.afficheLesFils(action_obj.ast,action_obj.tds,s)+"\n";
-
-
-}
-
-
-public void afficheLastTDS(){
-//System.out.println(action_obj.tds.afficheTDS());
-}
-:}
-
+			public String afficheTDSetAST(){
+				String s="";
+				return "\n\n TDS :"+action_obj.tds.afficheTDS()+"\n\n -----------------------------\n\n AST:\n"+NoeudElement.afficheLesFils(action_obj.ast,action_obj.tds,s)+"\n";
+			}
+			:}
 
 /* la grammaire */
 
 terminal ADD, MUL, PO, PF, EGAL, PV, SUB, DIV, ACCO, ACCF, VIRG;
+
 terminal Integer NUM;
+
 terminal String IDF;
+
 terminal String INT;
+
 terminal String VOID;
+
 terminal RETURN, WRITE, READ;
+
 terminal  WHILE, IF, ELSE, BOOLEEN, NOT, OPERATEURCOMPARAISON;
 
-non terminal NOperation expression; 
-non terminal NOperation facteur;
-non terminal Integer atome;
-non terminal expressionGLOBALE, facteurGLOBALE;
-non terminal Integer atomeGLOBALE;
-non terminal NAffectation affectation;
-non terminal NoeudElement instruction;
-non terminal  ecriture;
-non terminal NoeudElement listinstruction; 
-non terminal listparametre;
-non terminal  expressionbooleenne;
-non terminal  conditionnelle, iteration;
-non terminal  ensembledeclaration, suitedeclaration;
-non terminal  appelfonction;
+/*************************************************************/
 
+non terminal NExpression expression; 
+
+non terminal facteur;
+
+non terminal atome;
+
+non terminal expressionGLOBALE, facteurGLOBALE;
+
+non terminal Integer atomeGLOBALE;
+
+non terminal NAffectation affectation;
+
+non terminal instruction;
+
+non terminal ecriture;
+
+non terminal listinstruction; 
+
+non terminal listparametre;
+
+non terminal expressionbooleenne;
+
+non terminal conditionnelle, iteration;
+
+non terminal ensembledeclaration, suitedeclaration;
+
+non terminal NAppelFonction appelfonction;
 
 non terminal NFonction  fonction;
+
 non terminal listcommande, commande;
-non terminal Parametre listdeclarationparametre;
+
+non terminal listdeclarationparametre;
+
 non terminal ensembledeclarationGLOBALE;
-non terminal Variable suitedeclarationGLOBALE;
+
+non terminal suitedeclarationGLOBALE;
 
 non terminal  programme;
 
 
+
 programme       ::= listcommande
                     ;
+                    
+                    
           
-listcommande    ::= commande listcommande
+listcommande    ::= commande:c listcommande 
+											
                   |
                   ;
+                  
+                  
 
-commande ::=    fonction:f {:ast.ajouter1fils(((NFonction)f));:}
-            |   ensembledeclarationGLOBALE
-            ;
+commande ::=  fonction:f {:
+							ast.ajouter1fils(((NFonction)f));
+						:}
+              | ensembledeclarationGLOBALE
+              ;
 
-ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE:sdg PV 		{: tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0, ((String)t)));
-																						   cpt_tdsId++;
-																						   sdg.setType(((String)t));
-																						   tds.ajoute(((Variable)sdg));
+
+ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE:sdg PV 		{: 
+ 																							tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i),0, ((String)t)));
+																						   	cpt_tdsId++;
+																							if(sdg instanceof NOutil){
+																								for(int j=0;j<=((NOutil)sdg).getList().size()-1;j++){
+																									Variable var=(Variable) ((NOutil)sdg).getList().get(j);
+																									var.setType(t);
+																									var.setId(cpt_tdsId);
+																									tds.ajoute(var);
+																									cpt_tdsId++;
+																								}
+																							}
+																							if(sdg instanceof Variable){
+																							Variable v=((Variable)sdg);
+																							v.setType(t);
+																							v.setId(cpt_tdsId);
+																							tds.ajoute(v);
+																							cpt_tdsId++;
+																							}
+																						  
 																						:}
 																						
 																						
-                              |    INT:t IDF:i PV {: tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0, ((String)t)));
-                              						 cpt_tdsId++; 
+                              |    INT:t IDF:i PV {:
+                              						tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), 0, ((String)t)));
+                              						cpt_tdsId++; 
                               					  :}
                               
                               
-                              |    INT:t IDF:i EGAL expressionGLOBALE:e PV {: tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), -1, atomeGlob, ((String)t)));
-                              												  cpt_tdsId++; 
+                              |    INT:t IDF:i EGAL expressionGLOBALE:e PV {:
+                              												tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), ((Integer)e), ((String)t)));
+                              												 cpt_tdsId++; 
                               											   :}
                               ;
                               
                               
 
-suitedeclarationGLOBALE   ::=   IDF:i VIRG suitedeclarationGLOBALE {: RESULT=new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0,"undefined");
-																	  cpt_tdsId++;
+suitedeclarationGLOBALE   ::=   IDF:i VIRG suitedeclarationGLOBALE:sdg {: NOutil no=new NOutil(); 
+																		  no.getList().add(new Variable(((Integer)cpt_tdsId), ((String)i), 0,"undefined"));
+																		no.getList().add(((TdsElement)sdg));
+																		RESULT=no;
 																   :}
 																   
-                            |   IDF:i EGAL expressionGLOBALE:e {:((Variable)tds.searchVariable(((String)i),-1)).setVal(((Integer)e)); 
+                            |   IDF:i EGAL expressionGLOBALE:e {:
+                             									RESULT=new Variable(((Integer)cpt_tdsId), ((String)i),((Integer)e),"undefined");
+                             									
                             								   :}
                             								   
-                            |   IDF:i {:RESULT=new Variable(((Integer)cpt_tdsId), ((String)i), -1, 0,"undefined");
-                            		   cpt_tdsId++;
+                            |   IDF:i {:
+                            		   RESULT=new Variable(((Integer)cpt_tdsId), ((String)i),0,"undefined");
+                            		
                             		   :}
                             ;
 
+
+
 expressionGLOBALE      ::=  expressionGLOBALE:e1  ADD facteurGLOBALE:e2  //dans les exemples les variables globales sont initializé
                         |   expressionGLOBALE:e1  SUB  facteurGLOBALE:e2 //dans les exemples les variables globales sont initializé
-                        |   facteurGLOBALE:e 
+                        |   facteurGLOBALE:e {:
+                        					 RESULT=e;
+                        					 :}
                         ;
+                        
+                        
 
 facteurGLOBALE         ::=  facteurGLOBALE:e1  MUL  atomeGLOBALE:e2 //dans les exemples les variables globales sont initializé
                         |   facteurGLOBALE:e1  DIV  atomeGLOBALE:e2 //dans les exemples les variables globales sont initializé
-                        |   atomeGLOBALE:attommeglob {:atomeGlob=((int)attommeglob);:}
-                        ;
-
-atomeGLOBALE           ::=  NUM:e {:RESULT=new Integer(e);:}
-                        |   IDF:e {:RESULT=new Integer(((Integer)((Variable)tds.searchVariable(((String)e),-1)).getVal()));:}
-                        |   PO expressionGLOBALE:e PF
+                        |   atomeGLOBALE:atomeglob {:
+                        							RESULT=atomeglob;
+                        							:}
                         ;
 
 
-fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  listinstruction:l  ACCF{: if(p!=null){
-																									 	((Parametre)p).setScope(cpt_tdsId);
-																									 	tds.ajoute(p);
-																									 }
-																									 
+
+atomeGLOBALE           ::=  NUM:e {:
+									RESULT=new Integer(e);
+									:}
+                        |   IDF:e {:
+                        			int valeur=((Integer)((Variable)tds.searchVariable(((String)e),-1)).getVal());
+                        			RESULT=new Integer(valeur);
+                        			:}
+                        |   PO expressionGLOBALE:e PF{::}
+                        ;
+
+
+fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  listinstruction:l  ACCF{:
+																									
+																									 scope=cpt_tdsId;
 																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), ((String)t)));
-																									 RESULT=new NFonction(((Integer)cpt_tdsId));
+																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
+																									 NBloc bloc=new NBloc();
+																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
+																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
+																									 }
+																									 if(l instanceof NReturn){
+																									 	bloc.ajouter1fils(((NReturn)l));
+																									 }
 																									 cpt_tdsId++; 
 																									 cpt_param=0;
 																									 cpt_var_loc=0;
-																									
-																									 :}
-
-
-          |  VOID:v IDF:nomFonct PO listdeclarationparametre:p PF ACCO listinstruction:l ACCF{:		 if(p!=null){
-																									 	((Parametre)p).setScope(cpt_tdsId);
-																									 	tds.ajoute(p);
-																									 }
-																									 
+																									 instruction.initializeInstructions();
+																									 fonct.ajouter1fils(bloc);
+																									 fonction.ajouter1fils(fonct);
+																									 RESULT=fonct;
+																									:}
+          |  VOID:v IDF:nomFonct PO listdeclarationparametre:p PF ACCO listinstruction:l ACCF{:
+          																					 		scope=cpt_tdsId;
 																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), ((String)v)));
 																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
-																									 fonct.ajouter1fils(l);
-																									 RESULT=fonct;
-																									 cpt_tdsId++; 
-																									 cpt_param=0;
-																									 cpt_var_loc=0;
-																									 
-																									 :}
-          |  IDF:nomFonct PO listdeclarationparametre:p PF ACCO listinstruction:l ACCF{:					
-          																							if(p!=null){
-																									 	((Parametre)p).setScope(cpt_tdsId);
-																									 	tds.ajoute(p);
+																									 NBloc bloc=new NBloc();
+																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
+																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
 																									 }
-																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), "void"));
-																									 RESULT=new NFonction(((Integer)cpt_tdsId));
+																									 if(l instanceof NReturn){
+																									 	bloc.ajouter1fils(((NReturn)l));
+																									 }
 																									 cpt_tdsId++; 
 																									 cpt_param=0;
 																									 cpt_var_loc=0;
-																									 
-																									 :}
+																									 instruction.initializeInstructions();
+																									 fonct.ajouter1fils(bloc);
+																									 fonction.ajouter1fils(fonct);
+																									 RESULT=fonct;														 
+																							:}
+          |  IDF:nomFonct PO listdeclarationparametre:p PF ACCO listinstruction:l ACCF{:
+          																				 			 scope=cpt_tdsId;
+																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), "void"));
+																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
+																									 NBloc bloc=new NBloc();
+																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
+																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
+																									 }
+																									 if(l instanceof NReturn){
+																									 	bloc.ajouter1fils(((NReturn)l));
+																									 }
+																									 cpt_tdsId++; 
+																									 cpt_param=0;
+																									 cpt_var_loc=0;
+																									 instruction.initializeInstructions();
+																									 fonct.ajouter1fils(bloc);
+																									 //fonction.ajouter1fils(fonct);
+																									 RESULT=fonct;
+																						:}
           ;
+          
+          
 
-listdeclarationparametre ::= INT:t IDF:i VIRG listdeclarationparametre:p {:           RESULT=new Parametre(((Integer)cpt_tdsId), ((String)i), 00, cpt_param, ((String)t),0);
-																							 cpt_tdsId++;
-																						   cpt_param++; :}
+listdeclarationparametre ::= INT:t IDF:i VIRG listdeclarationparametre:p {:tds.ajoute(new Parametre(((Integer)cpt_tdsId), ((String)i), 0, cpt_param, ((String)t),0));
+																			cpt_tdsId++;
+																			cpt_param++;
+																			:}
 																						   
-                           |  INT:t IDF:i {:											   RESULT=new Parametre(((Integer)cpt_tdsId), ((String)i), 00, cpt_param, ((String)t),0);
-																							 cpt_tdsId++;
-																						   cpt_param++;:}
+                           |  INT:t IDF:i {:
+                           					tds.ajoute(new Parametre(((Integer)cpt_tdsId), ((String)i), 0, cpt_param, ((String)t),0));
+											cpt_tdsId++;
+											cpt_param++;
+											:}
                            |  
                            ;
 
-listinstruction ::= instruction:inst listinstruction:l{:RESULT=inst;:}
-                 |  RETURN expression:e PV
+listinstruction ::= instruction:inst listinstruction:l{:
+														instruction.getInstructions().add(((NoeudElement)inst));
+														:}
+                 |  RETURN expression:e PV{: 
+                 							NReturn nr=new NReturn();
+                 							nr.ajouter1fils(((NoeudElement)e));
+                 							RESULT=nr;
+                 							:}
                  |  
                  ;
 
-instruction     ::= affectation:aff {:RESULT=aff;:}
-                  | ecriture:ec
-                  | ensembledeclaration:decl
-                  | conditionnelle:cond
-                  | iteration:it
-                  | appelfonction:ap PV
+
+instruction     ::= affectation:aff {:
+									RESULT=aff;
+									:}
+                  | ecriture:ec{::}
+                  | ensembledeclaration:decl{::}
+                  | conditionnelle:cond{::}
+                  | iteration:it{::}
+                  | appelfonction:ap PV{:
+                  						RESULT=ap;
+                  						:}
                   ;
 
-conditionnelle ::= IF PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF
-                 | IF PO expressionbooleenne:expBool PF ACCO listinstruction:l1 ACCF ELSE ACCO listinstruction:l2 ACCF 
-                  
-                 ;
 
-iteration ::= WHILE PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF
+conditionnelle ::= IF PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF{::}
+                 | IF PO expressionbooleenne:expBool PF ACCO listinstruction:l1 ACCF ELSE ACCO listinstruction:l2 ACCF{::}
+				  ;
+
+iteration ::= WHILE PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF{::}
             ;
 
 
-expressionbooleenne ::= expression:e1 OPERATEURCOMPARAISON:comp expression:e2
-                      | NOT expressionbooleenne
-                      | BOOLEEN:b
+expressionbooleenne ::= expression:e1 OPERATEURCOMPARAISON:comp expression:e2{::}
+                      | NOT expressionbooleenne{::}
+                      | BOOLEEN:b{::}
                       ;
 
-ensembledeclaration  ::=    INT:t  IDF:i  VIRG suitedeclaration PV {:cpt_var_loc++;:}
-                       |    INT:t IDF:i PV {:cpt_var_loc++;:}
+
+
+ensembledeclaration  ::=    INT:t  IDF:i  VIRG suitedeclaration:sd PV {:
+																	tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)t),((Integer)scope),((Integer)cpt_var_loc),0));                     												
+                       												NVlocale a=new NVlocale(cpt_tdsId,scope);
+                       												if(sd instanceof NEnsDec){                       												
+                       													((NEnsDec)sd).ajouter1fils(a);
+                       													NEnsDec ensdec=((NEnsDec)sd);
+                       													cpt_var_loc++;
+                        												cpt_tdsId++;
+                       													RESULT=((NEnsDec)ensdec);
+                       												}
+                       												if(sd instanceof NVlocale){
+                       													NEnsDec ensdec=new NEnsDec();
+                       													ensdec.ajouter1fils(a);
+                       													ensdec.ajouter1fils(((NVlocale)sd));
+                       													RESULT=((NEnsDec)ensdec);
+                       													}
+                       												if(sd instanceof NAffectation){
+                       													NEnsDec ensdec=new NEnsDec();
+                       													ensdec.ajouter1fils(a);
+                       													ensdec.ajouter1fils(((NAffectation)sd));
+                       													RESULT=((NEnsDec)ensdec);
+                       													}
+																	:}
+                       |    INT:t IDF:i PV {:
+                      						tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)t),((Integer)scope),((Integer)cpt_var_loc),0));
+                       						NVlocale a=new NVlocale(cpt_tdsId,scope);
+                      						cpt_var_loc++;
+                       						cpt_tdsId++;
+                      	 					RESULT=a;
+                       
+                       						:}
                        ;
 
-suitedeclaration ::=    IDF:i VIRG suitedeclaration {:cpt_var_loc++;:}
-                    |   IDF:i EGAL expression:e
-                    |   IDF:i {:cpt_var_loc++;:}
+
+
+
+
+suitedeclaration ::=    IDF:i VIRG suitedeclaration:sd {:
+														NEnsDec ens=new NEnsDec();
+														tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
+														NVlocale a=new NVlocale(cpt_tdsId,scope);
+														ens.ajouter1fils(a);
+														ens.ajouter1fils(((NoeudElement)sd));
+														cpt_tdsId++;
+														cpt_var_loc++;
+														RESULT =ens;
+														:}
+                    |   IDF:i EGAL expression:e {:
+                    								tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
+													NVlocale a=new NVlocale(cpt_tdsId,scope);
+													cpt_tdsId++;
+													cpt_var_loc++;
+													NAffectation na=new NAffectation(((NoeudElement)a),e,"=");
+													RESULT=na;                								
+                    							:}
+                    |   IDF:i {:
+								tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
+								NVlocale a=new NVlocale(cpt_tdsId,scope);
+								cpt_tdsId++;
+								cpt_var_loc++;
+								RESULT=a;				                    
+                    			:}
                     ;
-            
+     
+     
+     
+     
+      
 affectation   ::=   IDF:i  EGAL expression:e PV {:
-
-
-if(tds.searchVariable(((String)i)) instanceof Variable){
-((Variable)tds.searchVariable(((String)i))).setVal(atome);
-NAffectation a=new NAffectation(((String)i), ((Integer)((Variable)tds.searchVariable(((String)i))).getId()), "=", tds);
-a.ajouterFD(e);
-RESULT=a;
-}
-if(tds.searchVariable(((String)i)) instanceof Vlocale){
-((Vlocale)tds.searchVariable(((String)i))).setVal(atome);
-NAffectation a=new NAffectation(((String)i), ((Integer)((Vlocale)tds.searchVariable(((String)i))).getId()), "=", tds);
-a.ajouterFD(e);
-RESULT=a;
-}
-if(tds.searchVariable(((String)i)) instanceof Parametre){
-((Parametre)tds.searchVariable(((String)i))).setVal(atome);
-NAffectation a=new NAffectation(((String)i), ((Integer)((Parametre)tds.searchVariable(((String)i))).getId()), "=", tds);
-a.ajouterFD(e);
-RESULT=a;
-}
-
-
-
-:}
+													if(tds.searchVariable(((String)i)) instanceof Variable){
+														((Variable)tds.searchVariable(((String)i))).setVal(atome);
+														int val=((Variable)tds.searchVariable(((String)i))).getId();
+														NVariable v=new NVariable(val);
+														NAffectation a=new NAffectation(v,((NExpression)e),"=");
+														RESULT=a;
+													}
+													if(tds.searchVariable(((String)i)) instanceof Vlocale){
+														((Vlocale)tds.searchVariable(((String)i))).setVal(atome);
+														int val=((Vlocale)tds.searchVariable(((String)i))).getId();
+														NVlocale v=new NVlocale(val,scope);
+														NAffectation a=new NAffectation(v,((NExpression)e),"=");
+														RESULT=a;
+													}
+													if(tds.searchVariable(((String)i)) instanceof Parametre){
+														((Parametre)tds.searchVariable(((String)i))).setVal(atome);
+														int val=((Parametre)tds.searchVariable(((String)i))).getId();
+														NVParam v=new NVParam(val,scope);
+														NAffectation a=new NAffectation(v,((NExpression)e),"=");
+														RESULT=a;
+													}
+													:}
 												 
-               |    INT IDF:i  EGAL expression:e PV
-                  ;
+               |INT IDF:i  EGAL expression:e PV {:
+             									 tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
+              									 cpt_tdsId++; 
+												((Vlocale)tds.searchVariable(((String)i))).setVal(atome);
+												int val=((Vlocale)tds.searchVariable(((String)i))).getId();
+												NVlocale v=new NVlocale(val,scope);
+												NAffectation a=new NAffectation(v,((NExpression)e),"=");
+												cpt_var_loc++;
+												RESULT=a;
+               									:}
+             ;
 
-appelfonction ::=  IDF:nomFonct PO listparametre:l PF
-                 | IDF:nomFonct PO PF
-                  ;
 
-listparametre ::=  expression:e VIRG listparametre:l
-                |  expression:e  
-                ;
+
+
+appelfonction ::=  IDF:nomFonct PO listparametre:l PF  {: 
+														int val=(((Fonction)tds.searchVariable(((String)nomFonct))).getId());
+														RESULT=new NAppelFonction(val,((NListeParam)l));
+
+														:}
+                 | IDF:nomFonct PO PF {:
+                 						int val=(((Fonction)tds.searchVariable(((String)nomFonct))).getId());
+										RESULT=new NAppelFonction(val); 
+                 						:}
+                 ;
+
+
+
+
+
+
+listparametre ::=  expression:e VIRG listparametre:l {:
+														NListeParam lp=new NListeParam();
+														System.out.println(((NoeudElement)e).afficherNoeud(tds));
+														lp.addParam(((NoeudElement)e));
+														lp.addParam(((NoeudElement)l));
+														RESULT=lp;
+														:}
+              		| expression:e  {:
+                					RESULT=e;
+                					:}
+                	;
           
-ecriture        ::= WRITE PO expression:e PF PV
-                ;
+          
+          
+          
+ecriture ::= WRITE PO expression:e PF PV{::}
+          	;
 
             
-expression      ::= expression:e1  ADD facteur:e2
-                  | expression:e1  SUB  facteur:e2 
-                  | facteur:e {:
+            
+            
+expression ::= expression:e1  ADD facteur:e2  {:
+												RESULT=new NExpression(new NOperation(((NoeudElement)e1),"+",((NoeudElement)e2)));
+												:}
+               | expression:e1  SUB  facteur:e2 {:
+                  								RESULT=new NExpression(new NOperation(((NoeudElement)e1),"-",((NoeudElement)e2)));
+                  								:}
+               | facteur:e {:
+                  			RESULT=new NExpression(((NoeudElement)e));
+                  			:}
+               ;
                   
-                  RESULT=e;
-                  :}
-                  ;
-
-facteur         ::= facteur:e1  MUL  atome:e2 
-                  | facteur:e1  DIV  atome:e2
-                  | atome:e {:RESULT=new NConstant(e);
-                  				atome=((int)e);
-                  :}
                   
-                  | appelfonction:ap
-                  ;
 
-atome           ::= NUM:e {:RESULT=new Integer(e);:}
-                  | IDF:e {:RESULT=new Integer(((Integer)((Variable)tds.search(((String)e))).getVal()));:}
-                  | READ PO PF
-                  | PO expression:e PF
-                  ;
+facteur ::= facteur:e1  MUL  atome:e2 {:
+										RESULT=new NExpression(new NOperation(((NoeudElement)e1),"*",((NoeudElement)e2)));
+										:}
+            | facteur:e1  DIV  atome:e2 {:
+                  						RESULT=new NExpression(new NOperation(((NoeudElement)e1),"/",((NoeudElement)e2)));
+                  						:}
+            | atome:e {:
+                  		RESULT=e;
+                  		:}
+                  
+            | appelfonction:ap {:
+                  				RESULT=ap;
+                  				:}
+            ;
+                  
+                  
+
+atome ::= NUM:e {:
+				RESULT=new NConstant((Integer)e);
+				:}
+          | IDF:e {: 
+		 			if(tds.searchVariable(((String)e)) instanceof Variable){
+						NVariable a=new NVariable(tds.searchVariable(((String)e)).getId());
+						RESULT=a;
+					}
+					if(tds.searchVariable(((String)e)) instanceof Vlocale){
+						NVlocale a=new NVlocale(tds.searchVariable(((String)e)).getId(),scope);
+						RESULT=a;
+					}
+					if(tds.searchVariable(((String)e)) instanceof Parametre){
+						NVParam a=new NVParam(tds.searchVariable(((String)e)).getId(),scope);
+						RESULT=a;
+					}
+	   			  :}
+	   			  
+          | READ PO PF{::}
+          | PO expression:e PF {:
+                  				RESULT=((NExpression)e);
+                 				:}
+          ;
