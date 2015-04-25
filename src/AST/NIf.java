@@ -10,6 +10,24 @@ public class NIf extends NoeudElement {
 		super("if");
 		// TODO Auto-generated constructor stub
 	}
+	
+	public NIf(NoeudElement a,NoeudElement b) {
+		super("if");
+		this.ajouterFG(a);
+		this.ajouterFD(b);
+		// TODO Auto-generated constructor stub
+	}
+	
+	public NIf(NoeudElement a,NoeudElement b,NoeudElement c) {
+		super("if");
+		this.ajouter1fils(a);
+		this.ajouter1fils(b);
+		NElse ne=new NElse();
+		ne.ajouter1fils(c);
+		this.ajouter1fils(ne);
+		// TODO Auto-generated constructor stub
+	}
+	
 
 	@Override
 	public String afficherNoeud(TDS tds) {

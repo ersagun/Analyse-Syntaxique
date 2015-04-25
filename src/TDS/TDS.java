@@ -300,6 +300,23 @@ public class TDS {
 			return a;
 		}
 		
+		public TdsElement searchParam(String nom){
+			TdsElement a=null;
+			boolean trouve=false;
+			
+			
+			for(TdsElement n:this.table){
+				if(n instanceof Parametre && trouve==false){				
+					if(((Parametre)n).nom.equals(nom)){
+						a=n;
+						trouve=true;
+						break;
+					}
+				}
+			}
+			return a;
+		}
+		
 	
 	
 	public static TdsElement search(ArrayList<TdsElement> t,int idfp,int scopep){

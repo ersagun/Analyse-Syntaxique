@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args) {
 		ParserCup parser;
 		try {
-			parser = new ParserCup(new AnalyseurLexical(new FileInputStream("./fichiers/09-fonction.miage")));
+			parser = new ParserCup(new AnalyseurLexical(new FileInputStream("./fichiers/12-recursivite.miage")));
 			parser.parse();
 			System.out.println("TDS :");
 			System.out.println(parser.afficheTDSetAST());

@@ -11,6 +11,12 @@ public class NWhile extends NoeudElement {
 		// TODO Auto-generated constructor stub
 	}
 
+	public NWhile(NoeudElement ne1, NoeudElement ne2) {
+		super("while");
+		ajouterFG(ne1);
+		ajouterFD(ne2);
+	}
+
 	@Override
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub

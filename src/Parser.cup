@@ -61,6 +61,8 @@ action code {:
 			//tds tempo pour varloc
 			
 			TDS tdsTempoParam=new TDS();
+			
+			NOutil boiteAtome=new NOutil();
 			:}
 
 
@@ -386,6 +388,7 @@ listdeclarationparametre ::= INT:t IDF:i VIRG listdeclarationparametre:p {:tdsTe
 
 listinstruction ::= instruction:inst listinstruction:l{:
 														instruction.getInstructions().add(((NoeudElement)inst));
+														RESULT=new NInstruction(((NoeudElement)inst));
 														:}
                  |  RETURN expression:e PV{: 
                  							NReturn nr=new NReturn();
@@ -404,25 +407,39 @@ instruction     ::= affectation:aff {:
                   | ensembledeclaration:decl{:    
                   							RESULT=((NoeudElement)decl);
                   							:}
-                  | conditionnelle:cond{::}
-                  | iteration:it{::}
+                  | conditionnelle:cond{:
+                  						RESULT=((NoeudElement)cond);
+                  						:}
+                  | iteration:it{:
+                  				RESULT=((NoeudElement)it);
+                  				:}
                   | appelfonction:ap PV{:
                   						RESULT=ap;
                   						:}
                   ;
 
 
-conditionnelle ::= IF PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF{::}
-                 | IF PO expressionbooleenne:expBool PF ACCO listinstruction:l1 ACCF ELSE ACCO listinstruction:l2 ACCF{::}
-				  ;
+conditionnelle ::= IF PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF{: RESULT=new NIf(((NoeudElement)expBool),((NoeudElement)l));
 
-iteration ::= WHILE PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF{::}
+																					:}
+                 | IF PO expressionbooleenne:expBool PF ACCO listinstruction:l1 ACCF ELSE ACCO listinstruction:l2 ACCF{:
+                 																										RESULT=new NIf(((NoeudElement)expBool),((NoeudElement)l1),((NoeudElement)l2));
+                 																										:}
+				  ;
+iteration ::= WHILE PO expressionbooleenne:expBool PF ACCO listinstruction:l ACCF{:
+																				RESULT=new NWhile(((NoeudElement)expBool),((NoeudElement)l));
+																				:}
             ;
 
 
-expressionbooleenne ::= expression:e1 OPERATEURCOMPARAISON:comp expression:e2{::}
-                      | NOT expressionbooleenne{::}
-                      | BOOLEEN:b{::}
+expressionbooleenne ::= expression:e1 OPERATEURCOMPARAISON:comp expression:e2{:RESULT=new NCondition(((NoeudElement)e1),((String)comp),((NoeudElement)e2));
+																			:}
+                      | NOT expressionbooleenne:eb{:
+                      							RESULT=new NExpression(((NoeudElement)eb));
+                      							:}
+                      | BOOLEEN:b{:
+                      			RESULT=new NBoolean(((String)b));
+                      			:}
                       ;
 
 
@@ -629,14 +646,17 @@ atome ::= NUM:e {:
           | IDF:e {: 
 		 			if(tds.searchVariable(((String)e)) instanceof Variable){
 						NVariable a=new NVariable(tds.searchVariable(((String)e)).getId());
+						boiteAtome.ajouter1fils(a);
 						RESULT=a;
 					}
 					if(tds.searchVariable(((String)e)) instanceof Vlocale){
-						NVlocale a=new NVlocale(tds.searchVariable(((String)e)).getId(),scope);
+						NVlocale a=new NVlocale(((String)e));
+						boiteAtome.ajouter1fils(a);
 						RESULT=a;
 					}
 					if(tds.searchVariable(((String)e)) instanceof Parametre){
-						NVParam a=new NVParam(tds.searchVariable(((String)e)).getId(),scope);
+						NVParam a=new NVParam(((String)e));
+						boiteAtome.ajouter1fils(a);
 						RESULT=a;
 					}
 	   			  :}

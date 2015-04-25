@@ -1,6 +1,6 @@
 /*
- * Test génération de code : 
- * adressage de variable locale, paramËtre et resultat
+ * Test gï¿½nï¿½ration de code : 
+ * adressage de variable locale, paramï¿½tre et resultat
  */
 
 int i = 0;
@@ -8,7 +8,7 @@ int j;
 
 int f(int a){
 	int x;
-	x = a+1;
+	x = i+a;
 	return x;
  }
 

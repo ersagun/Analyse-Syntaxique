@@ -20,10 +20,23 @@ public class NVlocale extends NoeudElement {
 		this.scope=scopep;
 	}
 
+	public NVlocale(String string) {
+		super("varlocal");
+		this.nom=string;
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub
-		return  "Noeud vlocale => #nom : "+this.nom+", #scope : "+this.scope;
+		String s="";
+		if(this.ref!=-2){
+			s= "Noeud vlocale => #nom : "+this.nom+", #scope : "+this.scope;
+		}
+		if(this.nom!=""){
+			s= "Noeud vlocale => #nom : "+this.nom;
+		}
+		return s; 
 	}
 
 	public void setScope(Integer integer) {

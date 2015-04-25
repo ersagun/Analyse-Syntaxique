@@ -4,8 +4,9 @@ import TDS.TDS;
 
 public class NInstruction extends NoeudElement{
 
-	public NInstruction() {
+	public NInstruction(NoeudElement e) {
 		super("instruction");
+		this.ajouter1fils(e);
 		// TODO Auto-generated constructor stub
 	}
 

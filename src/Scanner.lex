@@ -71,8 +71,8 @@ OPERATEURCOMPARAISON    =   "<" | ">" | "<=" | ">=" | "==" | "!="
 "if"                    {  echo(); return new Symbol(ParserSym.IF,yytext()); }
 "else"                  {  echo(); return new Symbol(ParserSym.ELSE,yytext()); }
 "not"                   {  echo(); return new Symbol(ParserSym.NOT,yytext()); }
-{BOOLEEN}               {  echo(); return new Symbol(ParserSym.BOOLEEN, yytext()); }
-{OPERATEURCOMPARAISON}  {  echo(); return new Symbol(ParserSym.OPERATEURCOMPARAISON, yytext()); }
+{BOOLEEN}               {  echo(); return new Symbol(ParserSym.BOOLEEN, new String(yytext())); }
+{OPERATEURCOMPARAISON}  {  echo(); return new Symbol(ParserSym.OPERATEURCOMPARAISON, new String(yytext())); }
 
 
 
