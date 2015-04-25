@@ -1,6 +1,6 @@
 package AST;
 
-import TDS.TDS;
+import TDS.*;
 
 public class NAppelFonction extends NoeudElement {
 	public int ref;

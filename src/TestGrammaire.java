@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 
 import org.junit.Test;
 
+import ASMgenerator.ASMgenerator;
 import AST.NoeudElement;
 import TDS.TDS;
 import fr.ul.miage.analyse.generated.*;
@@ -30,6 +31,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_01_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -43,6 +46,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_02_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -56,6 +61,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_03_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -69,6 +76,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_04_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -82,6 +91,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_05_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}/**
 	

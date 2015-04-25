@@ -87,6 +87,14 @@ public class NCondition extends NoeudElement {
 		;
 	}
 
+	public String getCondition() {
+	return condition;
+}
+
+public void setCondition(String condition) {
+	this.condition = condition;
+}
+
 	@Override
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub
