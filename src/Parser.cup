@@ -55,6 +55,12 @@ action code {:
 			//list contenant des fonctions 
 			NOutil fonction=new NOutil();
 			
+			//tdstempo
+			TDS tdsTempo=new TDS();
+			
+			//tds tempo pour varloc
+			
+			TDS tdsTempoParam=new TDS();
 			:}
 
 
@@ -62,6 +68,7 @@ action code {:
 parser code{:
 			public String afficheTDSetAST(){
 				String s="";
+				action_obj.tds.tri();
 				return "\n\n TDS :"+action_obj.tds.afficheTDS()+"\n\n -----------------------------\n\n AST:\n"+NoeudElement.afficheLesFils(action_obj.ast,action_obj.tds,s)+"\n";
 			}
 			public TDS getTDS(){
@@ -115,7 +122,9 @@ non terminal expressionbooleenne;
 
 non terminal conditionnelle, iteration;
 
-non terminal ensembledeclaration, suitedeclaration;
+non terminal NoeudElement ensembledeclaration;
+
+non terminal suitedeclaration;
 
 non terminal NAppelFonction appelfonction;
 
@@ -238,17 +247,41 @@ atomeGLOBALE           ::=  NUM:e {:
 
 
 fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  listinstruction:l  ACCF{:
+																									scope=cpt_tdsId;
 																									
-																									 scope=cpt_tdsId;
-																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), ((String)t)));
+																									 	 if(tdsTempo.getTable().size()>0){
+																									 	for(int j=0;j<=tdsTempo.getTable().size()-1;j++){
+																											cpt_tdsId++; 
+																											Vlocale te=(Vlocale) tdsTempo.getTable().get(j);
+																											te.setId(cpt_tdsId);
+																											te.setScope(((Integer)scope));
+																											tds.ajoute(te);             
+																										}
+																									 }tdsTempo.getTable().clear();
+		
+		
+																									if(tdsTempoParam.getTable().size()>0){
+																									 	for(int k=0;k<=tdsTempoParam.getTable().size()-1;k++){
+																									 	Parametre par=(Parametre) tdsTempoParam.getTable().get(k);
+																									 	par.setScope(((Integer)scope));
+																									 	tds.ajoute(par); 
+																									 	}
+																									 }tdsTempoParam.getTable().clear();
+																									 
+																									
+																									 
+																									 tds.ajoute(new Fonction(((Integer)scope), ((String)nomFonct), ((Integer)cpt_param), tdsTempo.getTable().size(), ((String)t)));
+																									
+																								
+																									 
 																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
 																									 NBloc bloc=new NBloc();
 																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
 																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
+																									 	
 																									 }
-																									 if(l instanceof NReturn){
-																									 	bloc.ajouter1fils(((NReturn)l));
-																									 }
+																									 
+																									 
 																									 cpt_tdsId++; 
 																									 cpt_param=0;
 																									 cpt_var_loc=0;
@@ -258,59 +291,98 @@ fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  list
 																									 RESULT=fonct;
 																									:}
           |  VOID:v IDF:nomFonct PO listdeclarationparametre:p PF ACCO listinstruction:l ACCF{:
-          																					 		scope=cpt_tdsId;
-																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), ((String)v)));
+          																							scope=cpt_tdsId;
+																									
+																									 if(tdsTempo.getTable().size()>0){
+																									 	for(int j=0;j<=tdsTempo.getTable().size()-1;j++){
+																											cpt_tdsId++; 
+																											Vlocale te=(Vlocale) tdsTempo.getTable().get(j);
+																											te.setId(cpt_tdsId);
+																											te.setScope(((Integer)scope));
+																											tds.ajoute(te);             
+																										}
+																									 }
+																									  tds.ajoute(new Fonction(((Integer)scope), ((String)nomFonct), ((Integer)cpt_param), tdsTempo.getTable().size(), ((String)v)));
+																										tdsTempo.getTable().clear();
+																									 
+																									 
 																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
 																									 NBloc bloc=new NBloc();
 																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
 																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
+																									 	
 																									 }
-																									 if(l instanceof NReturn){
-																									 	bloc.ajouter1fils(((NReturn)l));
-																									 }
+																									// if(l instanceof NReturn){
+																									 //	bloc.ajouter1fils(((NReturn)l));
+																									 //}
 																									 cpt_tdsId++; 
 																									 cpt_param=0;
 																									 cpt_var_loc=0;
 																									 instruction.initializeInstructions();
 																									 fonct.ajouter1fils(bloc);
 																									 fonction.ajouter1fils(fonct);
-																									 RESULT=fonct;														 
+																									 RESULT=fonct;											 
 																							:}
-          |  IDF:nomFonct PO listdeclarationparametre:p PF ACCO listinstruction:l ACCF{:
-          																				 			 scope=cpt_tdsId;
-																									 tds.ajoute(new Fonction(((Integer)cpt_tdsId), ((String)nomFonct), ((Integer)cpt_param), ((Integer)cpt_var_loc), "void"));
+          |  IDF:nomFonct PO listdeclarationparametre:p PF ACCO listinstruction:l ACCF{:          		
+          																							scope=cpt_tdsId;
+																									
+																									 if(tdsTempo.getTable().size()>0){
+																									 	for(int j=0;j<=tdsTempo.getTable().size()-1;j++){
+																											cpt_tdsId++; 
+																											Vlocale te=(Vlocale) tdsTempo.getTable().get(j);
+																											te.setId(cpt_tdsId);
+																											te.setScope(((Integer)scope));
+																											tds.ajoute(te);             
+																										}
+																									 }
+																									  tds.ajoute(new Fonction(((Integer)scope), ((String)nomFonct), ((Integer)cpt_param), tdsTempo.getTable().size(), "void"));
+																										tdsTempo.getTable().clear();
+																									 
+																									  if(tdsTempoParam.getTable().size()>0){
+																									 	for(int k=0;k<=tdsTempoParam.getTable().size()-1;k++){
+																									 	Parametre par=(Parametre) tdsTempoParam.getTable().get(k);
+																									 	par.setScope(((Integer)scope));
+																									 	tds.ajoute(par); 
+																									 	}
+																									 }tdsTempoParam.getTable().clear();
+																									 
+																									 
 																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
 																									 NBloc bloc=new NBloc();
 																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
 																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
+																									 	
 																									 }
-																									 if(l instanceof NReturn){
-																									 	bloc.ajouter1fils(((NReturn)l));
-																									 }
+																									
+																									
+																									
+
 																									 cpt_tdsId++; 
 																									 cpt_param=0;
 																									 cpt_var_loc=0;
 																									 instruction.initializeInstructions();
 																									 fonct.ajouter1fils(bloc);
-																									 //fonction.ajouter1fils(fonct);
+																									 fonction.ajouter1fils(fonct);
 																									 RESULT=fonct;
 																						:}
           ;
           
           
 
-listdeclarationparametre ::= INT:t IDF:i VIRG listdeclarationparametre:p {:tds.ajoute(new Parametre(((Integer)cpt_tdsId), ((String)i), 0, cpt_param, ((String)t),0));
+listdeclarationparametre ::= INT:t IDF:i VIRG listdeclarationparametre:p {:tdsTempoParam.ajoute(new Parametre(((Integer)cpt_tdsId), ((String)i), ((Integer)scope), cpt_param, ((String)t),0));
 																			cpt_tdsId++;
 																			cpt_param++;
 																			:}
 																						   
                            |  INT:t IDF:i {:
-                           					tds.ajoute(new Parametre(((Integer)cpt_tdsId), ((String)i), 0, cpt_param, ((String)t),0));
+                           					tdsTempoParam.ajoute(new Parametre(((Integer)cpt_tdsId), ((String)i), 0, cpt_param, ((String)t),0));
 											cpt_tdsId++;
 											cpt_param++;
 											:}
                            |  
                            ;
+
+
 
 listinstruction ::= instruction:inst listinstruction:l{:
 														instruction.getInstructions().add(((NoeudElement)inst));
@@ -318,6 +390,7 @@ listinstruction ::= instruction:inst listinstruction:l{:
                  |  RETURN expression:e PV{: 
                  							NReturn nr=new NReturn();
                  							nr.ajouter1fils(((NoeudElement)e));
+                 							instruction.getInstructions().add(((NoeudElement)nr));
                  							RESULT=nr;
                  							:}
                  |  
@@ -328,7 +401,9 @@ instruction     ::= affectation:aff {:
 									RESULT=aff;
 									:}
                   | ecriture:ec{::}
-                  | ensembledeclaration:decl{::}
+                  | ensembledeclaration:decl{:    
+                  							RESULT=((NoeudElement)decl);
+                  							:}
                   | conditionnelle:cond{::}
                   | iteration:it{::}
                   | appelfonction:ap PV{:
@@ -353,34 +428,41 @@ expressionbooleenne ::= expression:e1 OPERATEURCOMPARAISON:comp expression:e2{::
 
 
 ensembledeclaration  ::=    INT:t  IDF:i  VIRG suitedeclaration:sd PV {:
-																	tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)t),((Integer)scope),((Integer)cpt_var_loc),0));                     												
-                       												NVlocale a=new NVlocale(cpt_tdsId,scope);
+																	for(int j=0;j<=tdsTempo.getTable().size()-1;j++){
+																		((Vlocale) tdsTempo.getTable().get(j)).setType(((String)t));            
+																	}
+																	
+																	
+																	tdsTempo.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)t),((Integer)scope),((Integer)cpt_var_loc),0)); 
+																	int idff=cpt_tdsId;
+																	NVlocale a=new NVlocale(((String)i),cpt_tdsId);                  												
+                       												NEnsDec enssdec=new NEnsDec();
                        												if(sd instanceof NEnsDec){                       												
                        													((NEnsDec)sd).ajouter1fils(a);
                        													NEnsDec ensdec=((NEnsDec)sd);
-                       													cpt_var_loc++;
-                        												cpt_tdsId++;
-                       													RESULT=((NEnsDec)ensdec);
+                       													enssdec=((NEnsDec)ensdec);
                        												}
                        												if(sd instanceof NVlocale){
                        													NEnsDec ensdec=new NEnsDec();
                        													ensdec.ajouter1fils(a);
                        													ensdec.ajouter1fils(((NVlocale)sd));
-                       													RESULT=((NEnsDec)ensdec);
+                       													enssdec=((NEnsDec)ensdec);
                        													}
                        												if(sd instanceof NAffectation){
                        													NEnsDec ensdec=new NEnsDec();
                        													ensdec.ajouter1fils(a);
                        													ensdec.ajouter1fils(((NAffectation)sd));
-                       													RESULT=((NEnsDec)ensdec);
+                       													enssdec=((NEnsDec)ensdec);
                        													}
+                       													RESULT=((NEnsDec)enssdec);
 																	:}
                        |    INT:t IDF:i PV {:
-                      						tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)t),((Integer)scope),((Integer)cpt_var_loc),0));
-                       						NVlocale a=new NVlocale(cpt_tdsId,scope);
-                      						cpt_var_loc++;
-                       						cpt_tdsId++;
-                      	 					RESULT=a;
+                      						tdsTempo.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)t),((Integer)scope),((Integer)cpt_var_loc),0));
+        									int idff=cpt_tdsId;
+											NVlocale a=new NVlocale(((String)i),cpt_tdsId);     
+								
+                      						cpt_var_loc++;                       						
+                      	 					RESULT=((NVlocale)a);
                        
                        						:}
                        ;
@@ -391,26 +473,27 @@ ensembledeclaration  ::=    INT:t  IDF:i  VIRG suitedeclaration:sd PV {:
 
 suitedeclaration ::=    IDF:i VIRG suitedeclaration:sd {:
 														NEnsDec ens=new NEnsDec();
-														tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
-														NVlocale a=new NVlocale(cpt_tdsId,scope);
+														tdsTempo.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
+														int idff=cpt_tdsId;
+														NVlocale a=new NVlocale(((String)i),cpt_tdsId);     
+												
 														ens.ajouter1fils(a);
 														ens.ajouter1fils(((NoeudElement)sd));
-														cpt_tdsId++;
 														cpt_var_loc++;
 														RESULT =ens;
 														:}
                     |   IDF:i EGAL expression:e {:
-                    								tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
-													NVlocale a=new NVlocale(cpt_tdsId,scope);
-													cpt_tdsId++;
+                    								tdsTempo.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
+													int idff=tds.searchVloc(((String)i)).getId();
+													NVlocale a=new NVlocale(((String)i),cpt_tdsId);     
 													cpt_var_loc++;
 													NAffectation na=new NAffectation(((NoeudElement)a),e,"=");
 													RESULT=na;                								
                     							:}
                     |   IDF:i {:
-								tds.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
-								NVlocale a=new NVlocale(cpt_tdsId,scope);
-								cpt_tdsId++;
+								tdsTempo.ajoute(new Vlocale(cpt_tdsId,((String)i),((String)lastType),((Integer)scope),((Integer)cpt_var_loc),0));
+								int idff=cpt_tdsId;
+								NVlocale a=new NVlocale(((String)i),cpt_tdsId);     
 								cpt_var_loc++;
 								RESULT=a;				                    
                     			:}
@@ -460,16 +543,30 @@ affectation   ::=   IDF:i  EGAL expression:e PV {:
 
 
 appelfonction ::=  IDF:nomFonct PO listparametre:l PF  {: 
-														int val=(((Fonction)tds.searchVariable(((String)nomFonct))).getId());
-														RESULT=new NAppelFonction(val,((NListeParam)l));
+														TdsElement te=((Fonction)tds.searchFonction(((String)nomFonct)));
+														int val=((Integer)((TdsElement)te).getId());
+														NAppelFonction af=new NAppelFonction(val);
+														
+														if(l instanceof NListeParam){
+															for(int i=0;i<=((NListeParam)l).listeParam.size()-1;i++){
+																af.ajouter1fils(((NListeParam)l).listeParam.get(i));
+															}
+														}else{
+																af.ajouter1fils(((NoeudElement)l));
+															}
+														
+														
+														
+														RESULT=af;
 
 														:}
                  | IDF:nomFonct PO PF {:
-                 						int val=(((Fonction)tds.searchVariable(((String)nomFonct))).getId());
-										RESULT=new NAppelFonction(val); 
+                 										TdsElement te=((Fonction)tds.searchFonction(((String)nomFonct)));
+														int val=((Integer)((TdsElement)te).getId());
+														RESULT=new NAppelFonction(val);
+
                  						:}
                  ;
-
 
 
 

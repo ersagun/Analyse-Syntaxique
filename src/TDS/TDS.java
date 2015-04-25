@@ -1,6 +1,9 @@
 package TDS;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import Exception.VarExiste;
 import Exception.VarUndefinedException;
@@ -14,7 +17,20 @@ import Exception.VarUndefinedException;
 public class TDS {
 
 	ArrayList<TdsElement> table;
-	
+	public static Comparator<TdsElement> StuRollno = new Comparator<TdsElement>() {
+
+		public int compare(TdsElement s1, TdsElement s2) {
+
+		   int rollno1 = s1.getId();
+		   int rollno2 = s2.getId();
+
+		   /*For ascending order*/
+		   return rollno1-rollno2;
+
+		   /*For descending order*/
+		   //rollno2-rollno1;
+	   }};
+	   
 	public TDS(){
 		table=new ArrayList<TdsElement>();
 	}
@@ -74,6 +90,43 @@ public class TDS {
 			}
 		}
 		
+		return a;
+	}
+	
+	
+	public TdsElement searchVloc(int idfp,int scopep){
+		int taille=this.table.size();
+		int i=0;
+		TdsElement a=null;
+		boolean trouve=false;
+		
+			for(TdsElement n:this.table){
+				if(n instanceof Vlocale){	
+					if(((Vlocale)n).id==idfp && ((Vlocale)n).scope==scopep){
+						a=n;
+						trouve=true;
+						break;
+					}
+				}
+			}
+		return a;
+	}
+	
+	
+	public TdsElement searchVloc(String i){
+		int taille=this.table.size();
+		TdsElement a=null;
+		boolean trouve=false;
+		
+			for(TdsElement n:this.table){
+				if(n instanceof Vlocale){	
+					if(((Vlocale)n).nom.equals(i)){
+						a=n;
+						trouve=true;
+						break;
+					}
+				}
+			}
 		return a;
 	}
 	
@@ -230,14 +283,14 @@ public class TDS {
 	
 	
 	//NOM et SCOPE
-		public TdsElement searchFonction(String nom,int nb_param,int nb_loc_var){
+		public TdsElement searchFonction(String nom){
 			TdsElement a=null;
 			boolean trouve=false;
 			
 			
 			for(TdsElement n:this.table){
 				if(n instanceof Fonction && trouve==false){				
-					if(((Fonction)n).nom.equals(nom) && ((Fonction)n).nbParam==nb_param && ((Fonction)n).nbLoc==nb_loc_var){
+					if(((Fonction)n).nom.equals(nom)){
 						a=n;
 						trouve=true;
 						break;
@@ -306,6 +359,15 @@ public class TDS {
 		return s;
 	}
 
+	
+	public void tri(){
+		Collections.sort(this.table, TDS.StuRollno);
+	}
+	
+
+	
+	
+	
 
 	public String searchVariable(int ref) {
 		// TODO Auto-generated method stub

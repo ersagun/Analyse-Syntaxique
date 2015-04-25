@@ -1,5 +1,7 @@
 package TDS;
 
+import java.util.Comparator;
+
 /**
  * Cette classe represente les caracteristiques commun d'un element de tds
  * 
@@ -7,6 +9,9 @@ package TDS;
  *
  */
 public abstract class TdsElement {
+	
+	
+	
 	public String getCat() {
 		return cat;
 	}
@@ -57,4 +62,5 @@ public abstract class TdsElement {
 		return this.id;
 	}
 
+	
 }

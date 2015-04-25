@@ -19,7 +19,7 @@ public class TestGrammaireTemporaire {/**
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
 		System.out.println("________________________________________________________________________________________");	
-	}**/
+	}**//**
 
 	@Test
 	public void test_01() throws Exception {
@@ -94,7 +94,7 @@ public class TestGrammaireTemporaire {/**
 		ASMgenerator asm= new ASMgenerator(tds,ast);
 		asm.generateToFile("test_05_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
-	}/**
+	}**/
 	
 	@Test
 	public void test_06() throws Exception {
@@ -107,7 +107,7 @@ public class TestGrammaireTemporaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}/**
 	
 	@Test
 	public void test_07() throws Exception {
@@ -120,7 +120,7 @@ public class TestGrammaireTemporaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}**//**
 	
 	@Test
 	public void test_08() throws Exception {
@@ -133,7 +133,7 @@ public class TestGrammaireTemporaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}/**
 	
 	@Test
 	public void test_09() throws Exception {

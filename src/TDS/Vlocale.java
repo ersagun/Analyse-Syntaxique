@@ -38,4 +38,14 @@ public class Vlocale extends TdsElement {
 		this.scope=s;
 	}
 
+	public void setType(String string) {
+		this.type=string;
+		
+	}
+
+	public void setId(int cpt_tdsId) {
+		this.id=cpt_tdsId;
+		
+	}
+
 }

@@ -17,7 +17,7 @@ public class NVariable extends NoeudElement {
 	@Override
 	public String afficherNoeud(TDS tds) {
 		// TODO Auto-generated method stub
-		return "Noeud variable => #ref : "+this.ref+", #scope : "+this.scope+" [information recuperé de td grace a la ref : "+tds.searchVariable(this.ref)+"]";
+		return "Noeud variable => #nom : "+this.ref+", #scope : "+this.scope+" [information recuperé de td grace a la ref : "+tds.searchVariable(this.ref)+"]";
 	}
 
 
