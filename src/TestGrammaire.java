@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 
 import org.junit.Test;
 
+import AST.NoeudElement;
+import TDS.TDS;
 import fr.ul.miage.analyse.generated.*;
 
 
@@ -24,6 +26,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -33,6 +39,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -42,6 +52,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -51,6 +65,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -60,6 +78,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}/**
 	
@@ -69,6 +91,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -78,6 +104,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -87,6 +117,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -96,6 +130,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -105,6 +143,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -114,6 +156,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -123,6 +169,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -132,6 +182,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -141,6 +195,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -150,6 +208,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -159,6 +221,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -168,6 +234,10 @@ public class TestGrammaire {/**
 		parser.parse();
 		System.out.println("_________________________________________TDS : _________________________________________");
 		System.out.println(parser.afficheTDSetAST());
+		
+		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
+		TDS tds=parser.getTDS();
+		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
 	}**/
 }

@@ -64,6 +64,13 @@ parser code{:
 				String s="";
 				return "\n\n TDS :"+action_obj.tds.afficheTDS()+"\n\n -----------------------------\n\n AST:\n"+NoeudElement.afficheLesFils(action_obj.ast,action_obj.tds,s)+"\n";
 			}
+			public TDS getTDS(){
+				return action_obj.tds;
+			}
+			
+			public NoeudElement getAST(){
+				return action_obj.ast;
+			}
 			:}
 
 /* la grammaire */
