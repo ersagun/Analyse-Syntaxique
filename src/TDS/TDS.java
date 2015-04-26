@@ -234,6 +234,23 @@ public class TDS {
 		return a;
 	}
 	
+	public TdsElement searchVGlob(String nom){
+		TdsElement a=null;
+		boolean trouve=false;
+		
+		outerloop:
+		for(TdsElement n:this.table){
+			if(n instanceof Variable && trouve==false){				
+				if(((Variable)n).nom.equals(nom)){
+					a=n;
+					trouve=true;
+					break outerloop;
+				}
+			}
+		}
+		return a;
+	}
+	
 	
 	//NOM et SCOPE
 		public TdsElement searchVariable(String nom,int scope){
@@ -389,5 +406,18 @@ public class TDS {
 	public String searchVariable(int ref) {
 		// TODO Auto-generated method stub
 		return this.table.get(ref).toString();
+	}
+
+
+	public boolean searchDubleGlob(String string) {
+		boolean val=false;
+		Variable a=null;
+		a=(Variable) this.searchVGlob(string);
+		if(a!=null){
+			val=true;
+		}else{
+			val=false;
+		}
+		return val;
 	}
 }

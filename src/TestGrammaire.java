@@ -197,7 +197,7 @@ public class TestGrammaire {/**
 		ASMgenerator asm= new ASMgenerator(tds,ast);
 		asm.generateToFile("test_12_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
-	}/**
+	}
 	
 	@Test
 	public void test_13() throws Exception {
@@ -262,6 +262,6 @@ public class TestGrammaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}**/
+	}
 }
 

@@ -1,7 +1,7 @@
 package fr.ul.miage.analyse.generated;
 import TDS.*;
 import AST.*;
-
+import Exception.VarExiste;
 /*
  * analyseur syntaxique  du :
  * Projet interpreteur
@@ -163,38 +163,56 @@ commande ::=  fonction:f {:
               ;
 
 
-ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE:sdg PV 		{: 
+ensembledeclarationGLOBALE  ::=    INT:t IDF:i VIRG suitedeclarationGLOBALE:sdg PV 		{: if(!tds.searchDubleGlob(((String)i))){
  																							tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i),0, ((String)t)));
 																						   	cpt_tdsId++;
+																						   	}else{
+																						   	throw new VarExiste();
+																						   	}
 																							if(sdg instanceof NOutil){
 																								for(int j=0;j<=((NOutil)sdg).getList().size()-1;j++){
 																									Variable var=(Variable) ((NOutil)sdg).getList().get(j);
 																									var.setType(t);
 																									var.setId(cpt_tdsId);
+																									if(!tds.searchDubleGlob(((String)var.getNom()))){
 																									tds.ajoute(var);
 																									cpt_tdsId++;
+																									}else{
+																									throw new VarExiste();
+																									}
 																								}
 																							}
 																							if(sdg instanceof Variable){
 																							Variable v=((Variable)sdg);
 																							v.setType(t);
 																							v.setId(cpt_tdsId);
+																							if(!tds.searchDubleGlob(((String)v.getNom()))){
 																							tds.ajoute(v);
 																							cpt_tdsId++;
+																							}else{
+																							throw new VarExiste();
+																							}
 																							}
 																						  
 																						:}
 																						
 																						
-                              |    INT:t IDF:i PV {:
+                              |    INT:t IDF:i PV {:if(!tds.searchDubleGlob(((String)i))){
                               						tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), 0, ((String)t)));
                               						cpt_tdsId++; 
+                              						}else{
+                              						throw new VarExiste();
+                              						}
                               					  :}
                               
                               
                               |    INT:t IDF:i EGAL expressionGLOBALE:e PV {:
+                              												if(!tds.searchDubleGlob(((String)i))){
                               												tds.ajoute(new Variable(((Integer)cpt_tdsId), ((String)i), ((Integer)e), ((String)t)));
                               												 cpt_tdsId++; 
+                              												 }else{
+                              												 throw new VarExiste();
+                              												 }
                               											   :}
                               ;
                               
