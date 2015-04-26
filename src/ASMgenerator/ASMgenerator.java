@@ -148,9 +148,10 @@ public class ASMgenerator {
 	 * @param buff
 	 */
 	public void generated_Function(NFonction node, StringBuffer buff, int indent){
-		System.out.println("\tGéneration des fonctions\n");
 		int nbVarLocal = node.getnlocalvar(this.tds);
 		String id = node.getname(this.tds);
+		System.out.println("\tGéneration des fonctions: "+node.getname(this.tds)+"- Nombre de variabes locales: "+nbVarLocal+"\n");
+
 				
 		//buf.append("|============ Header ================|\n");
 		buff.append( id + ":\n");
@@ -195,16 +196,18 @@ public class ASMgenerator {
 		
 		if(node.getCategorie() instanceof String){
 			switch((String)node.getCategorie()){
+			case "declaration":
+				break;
 				case "affectation":
 					this.generate_Affectation((NAffectation) node, buff, indent+1);
 					break;
 
-				case "retour":
+				case "return":
 					this.generated_Return( node, buff, indent+1);
 					break;
 					
 				// Cas d'une alternative
-				case "si":
+				case "if":
 					this.generated_If((NIf)node, buff, indent+1);
 					break;
 					
@@ -546,6 +549,7 @@ public class ASMgenerator {
 	 * @param indent
 	 */
 	private void generated_Return(NoeudElement node, StringBuffer buff, int indent) {
+		System.out.println("\t\t\tGéneration return:"+((NVariable)node.getFG()).get_Value(this.tds)+"\n");
 		this.generated_Indent(indent, buff);
 		buff.append("|== Debut (retour) ==|\n");
 		
@@ -686,6 +690,7 @@ public class ASMgenerator {
 
 
 	private void generated_If(NIf node, StringBuffer buff, int indent) {
+		System.out.println("\t\t\tGenerer IF: ");
 		this.generated_Indent(indent, buff);buff.append("|== Debut (if) ==|\n");
 		this.generated_Indent(indent, buff);buff.append("if:\n");
 		
@@ -716,7 +721,7 @@ public class ASMgenerator {
 			this.generated_Indent(indent, buff);buff.append("else:\n");
 			this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc else) ==|\n");
 			
-			this.generated_Bloc(node.getChildren().get(2), buff, indent+1);
+			this.generated_Bloc(node.getNiemeFils(), buff, indent+1);
 		}
 		// G�n�ration du then ou else
 		/*String childContent = (String)(node.getChildren().get(2).getContent());
@@ -762,11 +767,27 @@ public class ASMgenerator {
 
 
 	private void generated_Condition(NCondition node , StringBuffer buff, int indent){
-		System.out.println("\t\t\tGenerer condition");
+		System.out.println("\t\t\tGenerer condition: "+ node.getCondition());
 		this.generated_Indent(indent, buff);buff.append("|== Debut (condition) ==|\n");
+		NoeudElement fg=node.getFG();
+		// Expr gauche
+		while (fg instanceof NExpression)
+		{
+			fg=fg.getFG();
+
+		}
+		this.generated_Expression(fg, buff, indent + 1);
 		
-		this.generated_Expression((NoeudElement)node.getFG(), buff, indent+1);
-		this.generated_Expression(node.getFD(), buff, indent+1);
+
+		NoeudElement fd=node.getFD();
+		// Expr gauche
+		while (fd instanceof NExpression)
+		{
+			fd=fd.getFG();
+
+		}
+		this.generated_Expression(fd, buff, indent + 1);
+		
 		
 		this.generated_Indent(indent, buff);buff.append("POP(R1)\n");
 		this.generated_Indent(indent, buff);buff.append("POP(R0)\n");

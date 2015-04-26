@@ -107,7 +107,7 @@ public class TestGrammaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}**/
+	}
 	
 	@Test
 	public void test_07() throws Exception {
@@ -152,7 +152,7 @@ public class TestGrammaire {/**
 		ASMgenerator asm= new ASMgenerator(tds,ast);
 		asm.generateToFile("test_09_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}**/
 	
 	@Test
 	public void test_10() throws Exception {
@@ -199,7 +199,7 @@ public class TestGrammaire {/**
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
-	@Test
+	/**@Test
 	public void test_13() throws Exception {
 		ParserCup parser = new ParserCup(new AnalyseurLexical(new FileInputStream("./fichiers/13-err1.miage")));
 		parser.parse();
@@ -210,7 +210,7 @@ public class TestGrammaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}**/
 	
 	@Test
 	public void test_14() throws Exception {
@@ -222,9 +222,11 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_14_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
-	
+	/**
 	@Test
 	public void test_15() throws Exception {
 		ParserCup parser = new ParserCup(new AnalyseurLexical(new FileInputStream("./fichiers/15-err3.miage")));
@@ -262,6 +264,6 @@ public class TestGrammaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}**/
 }
 

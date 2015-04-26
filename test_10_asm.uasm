@@ -8,6 +8,39 @@ main:
 	PUSH(BP)
 	MOVE(SP, BP)
 	ALLOCATE(0)
+		|== Debut (if) ==|
+		if:
+			|== Debut (condition) ==|
+					|= IDF =|
+					LD(0, R0)
+					PUSH(R0)
+
+					|= NOMBRE =|
+					CMOVE(2, R0)
+					PUSH(R0)
+
+
+			POP(R1)
+			POP(R0)
+			CMPLT(R0, R1, R2)
+
+			BEQ(R2, else) | condition fausse
+			|== Debut (bloc if) ==|
+				|== Debut (=) ==|
+					|= NOMBRE =|
+					CMOVE(0, R0)
+					PUSH(R0)
+
+
+				POP(R0) | valeur à insérer dans l'IDF
+				ST(R0, 1)
+				|== Fin (=) ==|
+
+			BR(endif)
+		else:
+			|== Debut (bloc else) ==|
+		endif:
+
 		|== Debut (=) ==|
 			|= NOMBRE =|
 			CMOVE(1, R0)
