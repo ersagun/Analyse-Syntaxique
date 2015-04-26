@@ -9,6 +9,16 @@ main:
 	MOVE(SP, BP)
 	ALLOCATE(0)
 		|== Debut (=) ==|
+			|= NOMBRE =|
+			CMOVE(0, R0)
+			PUSH(R0)
+
+
+		POP(R0) | valeur à insérer dans l'IDF
+		ST(R0, 0)
+		|== Fin (=) ==|
+
+		|== Debut (=) ==|
 			|== Debut (-) ==|
 					|== Debut (+) ==|
 							|= NOMBRE =|
@@ -49,16 +59,6 @@ main:
 			|== Fin (-) ==|
 		POP(R0) | valeur à insérer dans l'IDF
 		ST(R0, 1)
-		|== Fin (=) ==|
-
-		|== Debut (=) ==|
-			|= NOMBRE =|
-			CMOVE(0, R0)
-			PUSH(R0)
-
-
-		POP(R0) | valeur à insérer dans l'IDF
-		ST(R0, 0)
 		|== Fin (=) ==|
 
 	DEALLOCATE(0)

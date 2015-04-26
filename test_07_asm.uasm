@@ -2,30 +2,31 @@
 .include beta.uasm
 	CMOVE(pile, SP)
 BR(start)
-|Generation du programme: appel de 1 fontion(s)|
+|Generation du programme: appel de 2 fontion(s)|
+f:
+	PUSH(LP)
+	PUSH(BP)
+	MOVE(SP, BP)
+	ALLOCATE(0)
+	DEALLOCATE(0)
+	POP(BP)
+	POP(LP)
+	JMP(LP)
 main:
 	PUSH(LP)
 	PUSH(BP)
 	MOVE(SP, BP)
 	ALLOCATE(0)
 		|== Debut (=) ==|
-			|= NOMBRE =|
-			CMOVE(1, R0)
-			PUSH(R0)
-
-
-		POP(R0) | valeur à insérer dans l'IDF
-		ST(R0, 1)
-		|== Fin (=) ==|
-
-		|== Debut (=) ==|
-			|= NOMBRE =|
-			CMOVE(0, R0)
-			PUSH(R0)
-
+		|== Debut (appel) ==|
+			|== Envoi des paramètres ==|
+		CALL(4)
+		POP(R1) | dépilement arguments
+		POP(R1) | dépilement arguments
+		|== Fin (appel) ==|
 
 		POP(R0) | valeur à insérer dans l'IDF
-		ST(R0, 1)
+		ST(R0, 0)
 		|== Fin (=) ==|
 
 	DEALLOCATE(0)

@@ -9,9 +9,10 @@ main:
 	MOVE(SP, BP)
 	ALLOCATE(0)
 		|== Debut (=) ==|
-			|= IDF =|
-			LD(0, R0)
+			|= NOMBRE =|
+			CMOVE(1, R0)
 			PUSH(R0)
+
 
 		POP(R0) | valeur à insérer dans l'IDF
 		ST(R0, 2)
@@ -27,10 +28,9 @@ main:
 		|== Fin (=) ==|
 
 		|== Debut (=) ==|
-			|= NOMBRE =|
-			CMOVE(1, R0)
+			|= IDF =|
+			LD(0, R0)
 			PUSH(R0)
-
 
 		POP(R0) | valeur à insérer dans l'IDF
 		ST(R0, 2)
