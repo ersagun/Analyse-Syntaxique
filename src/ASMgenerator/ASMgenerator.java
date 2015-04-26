@@ -742,13 +742,13 @@ public class ASMgenerator {
 		buff.append("\n");
 	}
 
-	private void generated_While(NWhile node, StringBuffer buff, int indent) {
-		System.out.println("\t\t\tGenerer while");
+	private void generated_While(NoeudElement node, StringBuffer buff, int indent) {
+		System.out.println("\t\t\tGenerer while"+node.getFD().afficherNoeud(this.tds));
 		this.generated_Indent(indent, buff);buff.append("|== Debut (while) ==|\n");
 		this.generated_Indent(indent, buff);buff.append("while:\n");
 		
 		// Génération de la condition
-		this.generated_Condition((NCondition)node.getFG().getFG(), buff, indent+1);
+		this.generated_Condition((NCondition)node.getFG(), buff, indent+1);
 		
 		
 		this.generated_Indent(indent+1, buff);
@@ -757,7 +757,7 @@ public class ASMgenerator {
 		// Génération du bloc
 		this.generated_Indent(indent+1, buff);buff.append("|== Debut (bloc while) ==|\n");
 		
-		this.generated_Bloc(node.getChildren().get(1), buff, indent+1);
+		this.generated_Bloc(node.getFD(), buff, indent+1);
 		
 
 		this.generated_Indent(indent, buff);buff.append("BR(while)\n");
