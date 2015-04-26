@@ -107,7 +107,7 @@ public class TestGrammaire {/**
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}**/
 	
 	@Test
 	public void test_07() throws Exception {
@@ -119,6 +119,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_07_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -132,6 +134,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_08_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -145,6 +149,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_09_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -158,6 +164,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_10_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -171,6 +179,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_11_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	
@@ -184,8 +194,10 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_12_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
-	}
+	}/**
 	
 	@Test
 	public void test_13() throws Exception {

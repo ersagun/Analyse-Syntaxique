@@ -2,7 +2,16 @@
 .include beta.uasm
 	CMOVE(pile, SP)
 BR(start)
-|Generation du programme: appel de 1 fontion(s)|
+|Generation du programme: appel de 2 fontion(s)|
+f:
+	PUSH(LP)
+	PUSH(BP)
+	MOVE(SP, BP)
+	ALLOCATE(0)
+	DEALLOCATE(0)
+	POP(BP)
+	POP(LP)
+	JMP(LP)
 main:
 	PUSH(LP)
 	PUSH(BP)
@@ -10,31 +19,24 @@ main:
 	ALLOCATE(0)
 		|== Debut (=) ==|
 			|== Debut (-) ==|
-					|== Debut (+) ==|
-							|= NOMBRE =|
-							CMOVE(2, R0)
-							PUSH(R0)
+					|= IDF =|
+					LD(1, R0)
+					PUSH(R0)
 
-
-						|= IDF =|
-						LD(0, R0)
-						PUSH(R0)
-
-					POP(R1)
-					POP(R0)
-					ADD(R0, R1, R2)
-					PUSH(R2)
-					|== Fin (+) ==|
 					|== Debut (+) ==|
 							|= NOMBRE =|
 							CMOVE(3, R0)
 							PUSH(R0)
 
 
-						|= IDF =|
-						LD(0, R0)
-						PUSH(R0)
+						|== Debut (appel) ==|
+							|== Envoi des paramètres ==|
+						CALL(3)
+						POP(R1) | dépilement arguments
+						|== Fin (appel) ==|
 
+
+					PUSH(R10) | retour fonction placé dans la pile
 					POP(R1)
 					POP(R0)
 					ADD(R0, R1, R2)
@@ -47,16 +49,6 @@ main:
 			SUB(R0, R1, R2)
 			PUSH(R2)
 			|== Fin (-) ==|
-		POP(R0) | valeur à insérer dans l'IDF
-		ST(R0, 1)
-		|== Fin (=) ==|
-
-		|== Debut (=) ==|
-			|= NOMBRE =|
-			CMOVE(0, R0)
-			PUSH(R0)
-
-
 		POP(R0) | valeur à insérer dans l'IDF
 		ST(R0, 0)
 		|== Fin (=) ==|

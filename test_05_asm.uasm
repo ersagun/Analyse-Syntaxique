@@ -8,6 +8,58 @@ main:
 	PUSH(BP)
 	MOVE(SP, BP)
 	ALLOCATE(0)
+		|== Debut (=) ==|
+			|== Debut (-) ==|
+					|== Debut (+) ==|
+							|== Debut (*) ==|
+								|= IDF =|
+								LD(1, R0)
+								PUSH(R0)
+
+								|= NOMBRE =|
+								CMOVE(2, R0)
+								PUSH(R0)
+
+							POP(R1)
+							POP(R0)
+							MUL(R0, R1, R2)
+							PUSH(R2)
+							|== Fin (/) ==|
+
+						|= IDF =|
+						LD(2, R0)
+						PUSH(R0)
+
+					POP(R1)
+					POP(R0)
+					ADD(R0, R1, R2)
+					PUSH(R2)
+					|== Fin (+) ==|
+				|== Debut (/) ==|
+					|= NOMBRE =|
+					CMOVE(5, R0)
+					PUSH(R0)
+
+
+					|= NOMBRE =|
+					CMOVE(3, R0)
+					PUSH(R0)
+
+				POP(R1)
+				POP(R0)
+				DIV(R0, R1, R2)
+				PUSH(R2)
+				|== Fin (/) ==|
+
+			POP(R1)
+			POP(R0)
+			SUB(R0, R1, R2)
+			PUSH(R2)
+			|== Fin (-) ==|
+		POP(R0) | valeur à insérer dans l'IDF
+		ST(R0, 0)
+		|== Fin (=) ==|
+
 	DEALLOCATE(0)
 	POP(BP)
 	POP(LP)

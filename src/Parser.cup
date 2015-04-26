@@ -636,6 +636,15 @@ facteur ::= facteur:e1  MUL  atome:e2 {:
             | appelfonction:ap {:
                   				RESULT=ap;
                   				:}
+                  				
+            | PO expression:e PF {:
+                  				RESULT=((NExpression)e);
+                 				:}
+                 				
+                      | expression:e  {:
+                  				RESULT=((NExpression)e);
+                 				:}
+                 				
             ;
                   
                   
@@ -662,7 +671,5 @@ atome ::= NUM:e {:
 	   			  :}
 	   			  
           | READ PO PF{::}
-          | PO expression:e PF {:
-                  				RESULT=((NExpression)e);
-                 				:}
+
           ;
