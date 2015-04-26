@@ -151,7 +151,9 @@ public class ASMgenerator {
 		int nbVarLocal = node.getnlocalvar(this.tds);
 		String id = node.getname(this.tds);
 		System.out.println("\tGéneration des fonctions: "+node.getname(this.tds)+"- Nombre de variabes locales: "+nbVarLocal+"\n");
-
+		for (NoeudElement child : node.getChildren()) {
+			System.out.println("\t"+child.getCategorie()+child.getChildren().size()+"\n");
+		}
 				
 		//buf.append("|============ Header ================|\n");
 		buff.append( id + ":\n");
