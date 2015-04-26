@@ -276,9 +276,9 @@ fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  list
 																									
 																								
 																									 
-																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
+																									 NFonction fonct=new NFonction(((Integer)scope));
 																									 NBloc bloc=new NBloc();
-																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
+																									 for(int i=instruction.getInstructions().size()-1;i>=0;i--){
 																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
 																									 	
 																									 }
@@ -308,9 +308,9 @@ fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  list
 																										tdsTempo.getTable().clear();
 																									 
 																									 
-																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
+																									 NFonction fonct=new NFonction(((Integer)scope));
 																									 NBloc bloc=new NBloc();
-																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
+																									 for(int i=instruction.getInstructions().size()-1;i>=0;i--){
 																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
 																									 	
 																									 }
@@ -351,7 +351,7 @@ fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  list
 																									 
 																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
 																									 NBloc bloc=new NBloc();
-																									 for(int i=0;i<=instruction.getInstructions().size()-1;i++){
+																									 for(int i=instruction.getInstructions().size()-1;i>=0;i--){
 																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
 																									 	
 																									 }
