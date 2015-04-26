@@ -9,6 +9,12 @@ public class NInstruction extends NoeudElement{
 		this.ajouter1fils(e);
 		// TODO Auto-generated constructor stub
 	}
+	public NInstruction() {
+		super("instruction");
+	
+		// TODO Auto-generated constructor stub
+	}
+	
 
 	@Override
 	public String afficherNoeud(TDS tds) {

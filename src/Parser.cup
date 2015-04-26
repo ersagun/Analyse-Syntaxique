@@ -369,7 +369,7 @@ fonction ::= INT:t  IDF:nomFonct  PO  listdeclarationparametre:p  PF  ACCO  list
 																									 
 																									 NFonction fonct=new NFonction(((Integer)cpt_tdsId));
 																									 NBloc bloc=new NBloc();
-																									 for(int i=instruction.getInstructions().size()-1;i>=0;i--){
+																									 for(int i=0;i<=instruction.getInstructions().size()-1;i--){
 																									 	bloc.ajouter1fils(((NoeudElement)instruction.getInstructions().get(i)));
 																									 	
 																									 }
@@ -404,9 +404,11 @@ listdeclarationparametre ::= INT:t IDF:i VIRG listdeclarationparametre:p {:tdsTe
 
 
 
-listinstruction ::= instruction:inst listinstruction:l{:
+listinstruction ::= instruction:inst listinstruction:l{:	
+														NInstruction ins=new NInstruction(((NoeudElement)inst));
 														instruction.getInstructions().add(((NoeudElement)inst));
-														RESULT=new NInstruction(((NoeudElement)inst));
+														RESULT = ((NoeudElement)ins);
+														
 														:}
                  |  RETURN expression:e PV{: 
                  							NReturn nr=new NReturn();
@@ -419,19 +421,24 @@ listinstruction ::= instruction:inst listinstruction:l{:
 
 
 instruction     ::= affectation:aff {:
+									
 									RESULT=aff;
 									:}
                   | ecriture:ec{::}
                   | ensembledeclaration:decl{:    
+                  							
                   							RESULT=((NoeudElement)decl);
                   							:}
                   | conditionnelle:cond{:
+                  						
                   						RESULT=((NoeudElement)cond);
                   						:}
                   | iteration:it{:
+                  				
                   				RESULT=((NoeudElement)it);
                   				:}
                   | appelfonction:ap PV{:
+                  						
                   						RESULT=ap;
                   						:}
                   ;
@@ -597,6 +604,7 @@ appelfonction ::=  IDF:nomFonct PO listparametre:l PF  {:
 														:}
                  | IDF:nomFonct PO PF {:
                  										TdsElement te=((Fonction)tds.searchFonction(((String)nomFonct)));
+                 										System.out.println(te.toString());
 														int val=((Integer)((TdsElement)te).getId());
 														RESULT=new NAppelFonction(val);
 

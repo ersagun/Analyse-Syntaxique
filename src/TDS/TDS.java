@@ -24,11 +24,8 @@ public class TDS {
 		   int rollno1 = s1.getId();
 		   int rollno2 = s2.getId();
 
-		   /*For ascending order*/
 		   return rollno1-rollno2;
 
-		   /*For descending order*/
-		   //rollno2-rollno1;
 	   }};
 	   
 	public TDS(){
@@ -176,7 +173,7 @@ public class TDS {
 			
 		if(trouve==false){
 			 try {
-				throw new VarUndefinedException(nom);
+				 throw new VarUndefinedException(nom);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -306,7 +303,7 @@ public class TDS {
 			
 			
 			for(TdsElement n:this.table){
-				if(n instanceof Fonction && trouve==false){				
+				if(n instanceof Fonction){				
 					if(((Fonction)n).nom.equals(nom)){
 						a=n;
 						trouve=true;

@@ -14,7 +14,14 @@ public class NWhile extends NoeudElement {
 	public NWhile(NoeudElement ne1, NoeudElement ne2) {
 		super("while");
 		ajouterFG(ne1);
-		ajouterFD(ne2);
+		
+		NoeudElement n=new NInstruction();
+		for(int i=0;i<=ne2.listeNoeud.size()-2;i++){
+			n.ajouter1fils(ne2.listeNoeud.get(i));
+			
+		}
+		
+		ajouterFD(n);
 	}
 
 	@Override
