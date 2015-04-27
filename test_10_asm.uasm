@@ -26,16 +26,6 @@ main:
 
 			BEQ(R2, else) | condition fausse
 			|== Debut (bloc if) ==|
-				|== Debut (=) ==|
-					|= NOMBRE =|
-					CMOVE(0, R0)
-					PUSH(R0)
-
-
-				POP(R0) | valeur à insérer dans l'IDF
-				ST(R0, 1)
-				|== Fin (=) ==|
-
 			BR(endif)
 		else:
 			|== Debut (bloc else) ==|
