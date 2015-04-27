@@ -119,8 +119,8 @@ public class TestGrammaire {/**
 		System.out.println("_________________________________________ASM GENERATOR : _________________________________________");
 		TDS tds=parser.getTDS();
 		NoeudElement ast=parser.getAST();
-		//ASMgenerator asm= new ASMgenerator(tds,ast);
-		//asm.generateToFile("test_07_asm.uasm");
+		ASMgenerator asm= new ASMgenerator(tds,ast);
+		asm.generateToFile("test_07_asm.uasm");
 		System.out.println("________________________________________________________________________________________");	
 	}
 	

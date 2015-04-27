@@ -7,8 +7,18 @@ f:
 	PUSH(LP)
 	PUSH(BP)
 	MOVE(SP, BP)
-	ALLOCATE(0)
-	DEALLOCATE(0)
+	ALLOCATE(3)
+		|== Debut (retour) ==|
+				|= NOMBRE =|
+				CMOVE(0, R0)
+				PUSH(R0)
+
+
+		POP(R0)
+		MOVE(R0, R10)
+		|== Fin (retour) ==|
+
+	DEALLOCATE(3)
 	POP(BP)
 	POP(LP)
 	JMP(LP)
@@ -18,12 +28,21 @@ main:
 	MOVE(SP, BP)
 	ALLOCATE(0)
 		|== Debut (=) ==|
-		|== Debut (appel) ==|
-			|== Envoi des paramètres ==|
-		CALL(4)
-		POP(R1) | dépilement arguments
-		POP(R1) | dépilement arguments
-		|== Fin (appel) ==|
+			|== Debut (appel) ==|
+				|== Envoi des paramètres ==|
+					|= IDF =|
+					LD(0, R0)
+					PUSH(R0)
+
+					|= IDF =|
+					LD(1, R0)
+					PUSH(R0)
+
+			CALL(f)
+			POP(R1) | dépilement arguments
+			POP(R1) | dépilement arguments
+			|== Fin (appel) ==|
+
 
 		POP(R0) | valeur à insérer dans l'IDF
 		ST(R0, 0)
