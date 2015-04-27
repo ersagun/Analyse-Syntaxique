@@ -8,8 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import version_bis.Node;
-import version_bis.NodeContentCondition;
+
 
 
 /**
@@ -517,10 +516,11 @@ public class ASMgenerator {
 	 */
 	private void generated_Call(NAppelFonction node, StringBuffer buff, int indent) {
 		// TODO Auto-generated method stub
+		Fonction t=(Fonction) this.tds.search(node.getRef());
+
 		int childs = node.getChildren().size();
 		
 		this.generated_Indent(indent, buff);buff.append("|== Debut (appel) ==|\n");
-		
 		
 		// Remplissage de la pile parametre
 		this.generated_Indent(indent+1, buff);
@@ -531,7 +531,7 @@ public class ASMgenerator {
 		
 		// Appel fonction
 		this.generated_Indent(indent, buff);
-		buff.append("CALL(" + node.ref  + ")\n");
+		buff.append("CALL(" + node.getName(this.tds)  + ")\n");
 		
 		// Vidage de la pile parametre
 		for (int i = 0; i < childs; i++){
@@ -542,6 +542,8 @@ public class ASMgenerator {
 		
 		this.generated_Indent(indent, buff);buff.append("|== Fin (appel) ==|\n");
 		buff.append("\n");
+		
+		
 	}
 	
 	/**

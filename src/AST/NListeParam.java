@@ -25,6 +25,11 @@ public class NListeParam extends NoeudElement {
 		this.listeParam.add(a);
 	}
 	
+	public int size()
+	{
+		return this.listeParam.size();
+	}
+	
 	
 	
 }

@@ -37,7 +37,29 @@ public class NAppelFonction extends NoeudElement {
 		return f;
 	}
 	
+	public NListeParam getListeparam() {
+		return listeparam;
+	}
+
+	public void setListeparam(NListeParam listeparam) {
+		this.listeparam = listeparam;
+	}
+
+	public int getRef() {
+		return ref;
+	}
+
+	public void setRef(int ref) {
+		this.ref = ref;
+	}
+
 	public void ajouterListeParam(NListeParam lp){
 		this.listeparam=lp;
+	}
+	
+	public String getName(TDS tds)
+	{
+		Fonction f=(Fonction)tds.search(this.ref);
+		return f.getNom();
 	}
 }
