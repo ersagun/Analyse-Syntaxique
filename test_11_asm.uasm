@@ -46,27 +46,27 @@ main:
 
 			BEQ(R2, endwhile) | condition fausse
 			|== Debut (bloc while) ==|
+				|== Debut (=) ==|
+					|== Debut (+) ==|
+							|= IDF =|
+							LD(1, R0)
+							PUSH(R0)
+
+						|= IDF =|
+						LD(0, R0)
+						PUSH(R0)
+
+					POP(R1)
+					POP(R0)
+					ADD(R0, R1, R2)
+					PUSH(R2)
+					|== Fin (+) ==|
+				POP(R0) | valeur à insérer dans l'IDF
+				ST(R0, 1)
+				|== Fin (=) ==|
+
 		BR(while)
 		endwhile:
-
-		|== Debut (=) ==|
-			|== Debut (+) ==|
-					|= IDF =|
-					LD(1, R0)
-					PUSH(R0)
-
-				|= IDF =|
-				LD(0, R0)
-				PUSH(R0)
-
-			POP(R1)
-			POP(R0)
-			ADD(R0, R1, R2)
-			PUSH(R2)
-			|== Fin (+) ==|
-		POP(R0) | valeur à insérer dans l'IDF
-		ST(R0, 1)
-		|== Fin (=) ==|
 
 	DEALLOCATE(0)
 	POP(BP)
